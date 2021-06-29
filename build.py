@@ -1,11 +1,18 @@
 #!/usr/bin/python3
+'''
+
+if Windows, run from vcvars64.bat for luarocks build.
+or stop 'mingw32-gcc' not found.
+
+'''
 import subprocess
 import pathlib
+import shutil
 import os
 import platform
 from typing import List
 
-HERE = pathlib.Path(__file__).parent
+HERE = pathlib.Path(__file__).absolute().parent
 NEOVIM_DIR = HERE / 'neovim'
 DEPS = NEOVIM_DIR / '.deps'
 BUILD = NEOVIM_DIR / 'build'
@@ -16,6 +23,13 @@ def install_packages(*packages: List[str]):
         run(['sudo', 'apt', 'install', '-y'] + packages)
 
 
+def decode(b: bytes) -> str:
+    if platform.system() == 'Windows':
+        return b.decode('cp932')
+    else:
+        return b.decode('utf-8')
+
+
 def run(*cmd: List[str]):
     print(' '.join(cmd))
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -24,8 +38,10 @@ def run(*cmd: List[str]):
         if rc is not None:
             break
         output = process.stdout.readline()
-        print(output.decode('utf-8').strip())
-    print(rc)
+        print(decode(output).strip())
+
+    if rc != 0:
+        raise Exception(rc)
 
 
 def install():
@@ -45,19 +61,23 @@ if __name__ == '__main__':
     #
     # build libs
     #
-    if not DEPS.exists():
-        DEPS.mkdir()
+    # if DEPS.exists():
+    #     shutil.rmtree(DEPS)
+    DEPS.mkdir(exist_ok=True)
     os.chdir(DEPS)
     run('cmake', '../third-party')
-    run('cmake', '--build', '.')
+    run('cmake', '--build', '.', '--config', 'RELEASE')
 
     #
     # build nvim
     #
-    if not BUILD.exists():
-        BUILD.mkdir()
+    # if BUILD.exists():
+    #     shutil.rmtree(BUILD)
+    BUILD.mkdir(exist_ok=True)
     os.chdir(BUILD)
     run('cmake', '..')
     run('cmake', '--build', '.')
 
     install()
+
+    # TODO: setup init.lua
