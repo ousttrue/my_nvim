@@ -19,6 +19,18 @@ INSTALL_DIR = HERE / 'install'
 VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat'
 
 
+def init_lua() -> pathlib.Path:
+    if platform.system() == 'Windows':
+        APPDATA_DIR = pathlib.Path(os.environ['APPDATA']).absolute()
+        return APPDATA_DIR.parent / 'Local/nvim/init.lua'
+    else:
+        HOME_DIR = pathlib.Path(os.environ['HOME']).absolute()
+        return HOME_DIR / '.config/nvim/init.lua'
+
+
+INIT_LUA = init_lua()
+
+
 def mkcd(path: pathlib.Path):
     path.mkdir(exist_ok=True)
     os.chdir(path)
@@ -143,7 +155,25 @@ def install():
     # run('cmake', '--build', '.', '--target', 'install')
     run('cmake', '--install', '.', '--config', 'RelWithDebInfo', '--prefix',
         '../../install')
-    # TODO: setup init.lua
+
+    print(INIT_LUA)
+    if not INIT_LUA.parent.exists():
+        INIT_LUA.parent.mkdir(parents=True)
+    INIT_LUA.write_text(f'''
+
+local execute = vim.api.nvim_command
+local fn = vim.fn
+
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  fn.system({{'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path}})
+  execute 'packadd packer.nvim'
+end
+
+vim.cmd[[autocmd BufWritePost plugins.lua PackerCompile]]
+vim.cmd[[set runtimepath^={HERE / 'runtime'}]]
+require 'plugins'
+''')
 
 
 if __name__ == '__main__':
@@ -165,8 +195,8 @@ if __name__ == '__main__':
     #
     if len(sys.argv) == 1:
         # all
-        actions = ['clean', 'deps', 'nvim', 'install']
-        # actions = ['install']
+        # actions = ['clean', 'deps', 'nvim', 'install']
+        actions = ['install']
     else:
         actions = sys.argv[1:]
 
