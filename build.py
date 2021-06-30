@@ -50,7 +50,7 @@ def vcvars64() -> Dict[str, str]:
             # print(k, v)
             new[k] = v
 
-    diff(new, old)
+    # diff(new, old)
 
     if rc != 0:
         raise Exception(rc)
@@ -92,6 +92,30 @@ def install():
         raise NotImplementedError()
 
 
+def deps():
+    #
+    # build libs
+    #
+    # if DEPS.exists():
+    #     shutil.rmtree(DEPS)
+    DEPS.mkdir(exist_ok=True)
+    os.chdir(DEPS)
+    run('cmake', '../third-party')
+    run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
+
+
+def nvim():
+    #
+    # build nvim
+    #
+    # if BUILD.exists():
+    #     shutil.rmtree(BUILD)
+    BUILD.mkdir(exist_ok=True)
+    os.chdir(BUILD)
+    run('cmake', '..')
+    run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
+
+
 if __name__ == '__main__':
 
     #
@@ -106,26 +130,15 @@ if __name__ == '__main__':
 
     # https://github.com/neovim/neovim/wiki/Building-Neovim
 
-    #
-    # build libs
-    #
-    # if DEPS.exists():
-    #     shutil.rmtree(DEPS)
-    DEPS.mkdir(exist_ok=True)
-    os.chdir(DEPS)
-    run('cmake', '../third-party')
-    run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
+    if len(sys.argv) == 1:
+        # all
+        # actions = ['deps', 'nvim', 'install']
+        actions = ['nvim', 'install']
+    else:
+        actions = sys.argv[1:]
 
-    #
-    # build nvim
-    #
-    # if BUILD.exists():
-    #     shutil.rmtree(BUILD)
-    BUILD.mkdir(exist_ok=True)
-    os.chdir(BUILD)
-    run('cmake', '..')
-    run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
-
-    install()
+    for action in actions:
+        print(f'########## {action} ##########')
+        locals()[action]()
 
     # TODO: setup init.lua
