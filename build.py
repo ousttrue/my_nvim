@@ -28,7 +28,7 @@ def diff(new: Dict[str, str], old: Dict[str, str]):
             print(f'{k}: {v} != {old_v}')
 
 
-def vcvars64():
+def vcvars64() -> Dict[str, str]:
     # %comspec% /k cmd
     comspec = os.environ['comspec']
     process = subprocess.Popen(
@@ -55,7 +55,7 @@ def vcvars64():
     if rc != 0:
         raise Exception(rc)
 
-    sys.exit()
+    return new
 
 
 def install_packages(*packages: List[str]):
@@ -94,7 +94,13 @@ def install():
 
 if __name__ == '__main__':
 
-    # vcvars64()
+    #
+    # setup
+    #
+
+    # for luarocks detect vc
+    vc_map = vcvars64()
+    os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
 
     install_packages('libtool-bin', 'cmake')
 
