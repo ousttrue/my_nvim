@@ -159,7 +159,7 @@ def install():
     print(INIT_LUA)
     if not INIT_LUA.parent.exists():
         INIT_LUA.parent.mkdir(parents=True)
-    INIT_LUA.write_text(f'''
+    INIT_LUA.write_text(f'''# this is generated. entry point
 
 local execute = vim.api.nvim_command
 local fn = vim.fn
@@ -173,6 +173,7 @@ end
 vim.cmd[[autocmd BufWritePost plugins.lua PackerCompile]]
 vim.cmd[[set runtimepath^={HERE / 'runtime'}]]
 require 'plugins'
+require 'setup'
 ''')
 
 
