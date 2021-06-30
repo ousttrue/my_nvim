@@ -9,13 +9,53 @@ import subprocess
 import pathlib
 import shutil
 import os
+import sys
 import platform
-from typing import List
+from typing import List, Dict
 
 HERE = pathlib.Path(__file__).absolute().parent
 NEOVIM_DIR = HERE / 'neovim'
 DEPS = NEOVIM_DIR / '.deps'
 BUILD = NEOVIM_DIR / 'build'
+
+VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat'
+
+
+def diff(new: Dict[str, str], old: Dict[str, str]):
+    for k, v in new.items():
+        old_v = old.get(k)
+        if v != old_v:
+            print(f'{k}: {v} != {old_v}')
+
+
+def vcvars64():
+    # %comspec% /k cmd
+    comspec = os.environ['comspec']
+    process = subprocess.Popen(
+        [comspec, '/k', VCBARS64, '&', 'set', '&', 'exit'],
+        stdout=subprocess.PIPE)
+
+    old = {k: v for k, v in os.environ.items()}
+
+    new = {}
+    while True:
+        rc = process.poll()
+        if rc is not None:
+            break
+        output = process.stdout.readline()
+        line = decode(output)
+
+        if '=' in line:
+            k, v = line.strip().split('=', 1)
+            # print(k, v)
+            new[k] = v
+
+    diff(new, old)
+
+    if rc != 0:
+        raise Exception(rc)
+
+    sys.exit()
 
 
 def install_packages(*packages: List[str]):
@@ -54,6 +94,8 @@ def install():
 
 if __name__ == '__main__':
 
+    # vcvars64()
+
     install_packages('libtool-bin', 'cmake')
 
     # https://github.com/neovim/neovim/wiki/Building-Neovim
@@ -66,7 +108,7 @@ if __name__ == '__main__':
     DEPS.mkdir(exist_ok=True)
     os.chdir(DEPS)
     run('cmake', '../third-party')
-    run('cmake', '--build', '.', '--config', 'RELEASE')
+    run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
 
     #
     # build nvim
@@ -76,7 +118,7 @@ if __name__ == '__main__':
     BUILD.mkdir(exist_ok=True)
     os.chdir(BUILD)
     run('cmake', '..')
-    run('cmake', '--build', '.')
+    run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
 
     install()
 
