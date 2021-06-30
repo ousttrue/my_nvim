@@ -15,6 +15,10 @@ vim.cmd[[vmap <C-/> :Commentary<CR>]]
 vim.cmd[[nmap <silent> <Space><Space> :<C-u>Telescope<CR>]]
 vim.cmd[[nmap <silent> ,, :<C-u>NvimTreeToggle<CR>]]
 
+vim.cmd[[let g:netrw_nogx = 1 " disable netrw's gx mapping.]]
+vim.cmd[[nmap gx <Plug>(openbrowser-smart-search)]]
+vim.cmd[[vmap gx <Plug>(openbrowser-smart-search)]]
+
 -- colorscheme
 vim.cmd[[colorscheme nord]]
 
