@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 '''
-
-if Windows, run from vcvars64.bat for luarocks build.
-or stop 'mingw32-gcc' not found.
-
+https://github.com/neovim/neovim/wiki/Building-Neovim
 '''
 import subprocess
 import pathlib
@@ -17,8 +14,14 @@ HERE = pathlib.Path(__file__).absolute().parent
 NEOVIM_DIR = HERE / 'neovim'
 DEPS = NEOVIM_DIR / '.deps'
 BUILD = NEOVIM_DIR / 'build'
+INSTALL_DIR = HERE / 'install'
 
 VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat'
+
+
+def mkcd(path: pathlib.Path):
+    path.mkdir(exist_ok=True)
+    os.chdir(path)
 
 
 def diff(new: Dict[str, str], old: Dict[str, str]):
@@ -84,22 +87,28 @@ def run(*cmd: List[str]):
         raise Exception(rc)
 
 
-def install():
-    if platform.system() == 'Linux':
-        # install to /usr/local/bin
-        run('sudo', 'cmake', '--install', '.')
-    else:
-        pass
+def clean_deps():
+    if DEPS.exists():
+        shutil.rmtree(DEPS)
+
+
+def clean_nvim():
+    if BUILD.exists():
+        shutil.rmtree(BUILD)
+
+
+def clean():
+    clean_deps()
+    clean_nvim()
+    if INSTALL_DIR.exists():
+        shutil.rmtree(INSTALL_DIR)
 
 
 def deps():
-    #
-    # build libs
-    #
-    # if DEPS.exists():
-    #     shutil.rmtree(DEPS)
-    DEPS.mkdir(exist_ok=True)
-    os.chdir(DEPS)
+    '''
+    build libs
+    '''
+    mkcd(DEPS)
     run('cmake', '../third-party')
     run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
 
@@ -117,19 +126,24 @@ def patch(file: pathlib.Path):
 
 
 def nvim():
-    #
-    # build nvim
-    #
-    # if BUILD.exists():
-    #     shutil.rmtree(BUILD)
-    BUILD.mkdir(exist_ok=True)
-    os.chdir(BUILD)
+    '''
+    build nvim
+    '''
+    mkcd(BUILD)
 
     # patch to CMakeLists.txt
     patch(NEOVIM_DIR / 'CMakeLists.txt')
 
     run('cmake', '..')
     run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
+
+
+def install():
+    mkcd(BUILD)
+    # run('cmake', '--build', '.', '--target', 'install')
+    run('cmake', '--install', '.', '--config', 'RelWithDebInfo', '--prefix',
+        '../../install')
+    # TODO: setup init.lua
 
 
 if __name__ == '__main__':
@@ -144,17 +158,16 @@ if __name__ == '__main__':
 
     install_packages('libtool-bin', 'cmake')
 
-    # https://github.com/neovim/neovim/wiki/Building-Neovim
-
+    #
+    # actions
+    #
     if len(sys.argv) == 1:
         # all
-        # actions = ['deps', 'nvim', 'install']
-        actions = ['nvim', 'install']
+        actions = ['clean', 'deps', 'nvim', 'install']
+        # actions = ['install']
     else:
         actions = sys.argv[1:]
 
     for action in actions:
         print(f'########## {action} ##########')
         locals()[action]()
-
-    # TODO: setup init.lua
