@@ -89,7 +89,7 @@ def install():
         # install to /usr/local/bin
         run('sudo', 'cmake', '--install', '.')
     else:
-        raise NotImplementedError()
+        pass
 
 
 def deps():
@@ -104,6 +104,18 @@ def deps():
     run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
 
 
+def vc_option(line: str) -> str:
+    if 'add_compile_options(/W3)' in line:
+        return 'add_compile_options(/W3 /source-charset:utf-8 /wd4244 /wd4267 /wd4996 /wd4566)'
+    else:
+        return line
+
+
+def patch(file: pathlib.Path):
+    lines = [vc_option(line) for line in file.read_text().splitlines()]
+    file.write_text('\n'.join(lines))
+
+
 def nvim():
     #
     # build nvim
@@ -112,6 +124,10 @@ def nvim():
     #     shutil.rmtree(BUILD)
     BUILD.mkdir(exist_ok=True)
     os.chdir(BUILD)
+
+    # patch to CMakeLists.txt
+    patch(NEOVIM_DIR / 'CMakeLists.txt')
+
     run('cmake', '..')
     run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
 
