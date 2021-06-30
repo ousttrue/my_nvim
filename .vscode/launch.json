@@ -5,10 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "default",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/build.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "clean",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/build.py",
+            "args": [
+                "clean"
+            ],
             "console": "integratedTerminal"
         }
     ]

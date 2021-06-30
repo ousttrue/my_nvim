@@ -8,6 +8,7 @@ import shutil
 import os
 import sys
 import platform
+import pip
 from typing import List, Dict
 
 HERE = pathlib.Path(__file__).absolute().parent
@@ -191,13 +192,16 @@ if __name__ == '__main__':
         # ubuntu
         install_packages('libtool-bin', 'cmake')
 
+    # pip
+    pip.main(['install', 'pynvim', 'neovim-remote'])
+
     #
     # actions
     #
     if len(sys.argv) == 1:
         # all
         # actions = ['clean', 'deps', 'nvim', 'install']
-        actions = ['install']
+        actions = ['deps', 'nvim', 'install']
     else:
         actions = sys.argv[1:]
 
