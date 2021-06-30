@@ -63,7 +63,7 @@ def vcvars64() -> Dict[str, str]:
 
 def install_packages(*packages: List[str]):
     if platform.system() == 'Linux':
-        run(['sudo', 'apt', 'install', '-y'] + packages)
+        run('sudo', 'apt', 'install', '-y', *packages)
 
 
 def decode(b: bytes) -> str:
@@ -152,11 +152,13 @@ if __name__ == '__main__':
     # setup
     #
 
-    # for luarocks detect vc
-    vc_map = vcvars64()
-    os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
-
-    install_packages('libtool-bin', 'cmake')
+    if platform.system() == 'Windows':
+        # for luarocks detect vc
+        vc_map = vcvars64()
+        os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
+    else:
+        # ubuntu
+        install_packages('libtool-bin', 'cmake')
 
     #
     # actions
