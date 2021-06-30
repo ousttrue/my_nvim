@@ -21,7 +21,8 @@ VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\
 
 
 def init_lua() -> pathlib.Path:
-    if platform.system() == 'Windows':
+    # if platform.system() == 'Windows':
+    if False:
         APPDATA_DIR = pathlib.Path(os.environ['APPDATA']).absolute()
         return APPDATA_DIR.parent / 'Local/nvim/init.lua'
     else:
