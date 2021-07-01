@@ -2,10 +2,24 @@
 -- https://github.com/nanotee/nvim-lua-guide
 -- https://zenn.dev/slin/articles/2020-11-03-neovim-lua2
 
+vim.cmd([[nnoremap [prefix] <Nop>]])
+vim.cmd("nmap <Space> [prefix]")
+vim.cmd([[nnoremap [bookmark] <Nop>]])
+vim.cmd("nmap , [bookmark]")
+vim.cmd([[nnoremap [external] <Nop>]])
+vim.cmd("nmap ' [external]")
+
 --
 -- colorscheme
 --
 vim.cmd([[colorscheme nord]])
+
+--
+-- terminal
+--
+vim.cmd("tnoremap <Esc> <C-\\><C-n>")
+vim.cmd("command! -nargs=* T split | wincmd j | resize 20 | terminal <args>")
+vim.cmd("autocmd TermOpen * startinsert")
 
 --
 -- settings
@@ -19,12 +33,6 @@ vim.cmd([[set ts=4 sw=4 sts=4 expandtab]])
 -- keymaps
 --
 -- vim.api.nvim_set_keymap( 'n', 'j', 'gj', {noremap = true} )
-vim.cmd([[nnoremap [prefix] <Nop>]])
-vim.cmd("nmap <Space> [prefix]")
-vim.cmd([[nnoremap [bookmark] <Nop>]])
-vim.cmd("nmap , [bookmark]")
-vim.cmd([[nnoremap [external] <Nop>]])
-vim.cmd("nmap ' [external]")
 vim.cmd("nmap <C-Tab> :bn<CR>")
 vim.cmd("nmap <C-S-Tab> :bp<CR>")
 -- paste
@@ -34,11 +42,6 @@ vim.cmd([[nmap <C-n> :lnext<CR>]])
 vim.cmd([[nmap <C-p> :lprevious<CR>]])
 vim.cmd([[nnoremap <C-l> :nohlsearch<CR><C-l>]])
 vim.cmd([[nnoremap q :close<CR> ]])
-
-vim.cmd([[nmap <C-_> :Commentary<CR>]])
-vim.cmd([[vmap <C-_> :Commentary<CR>]])
-vim.cmd([[nmap <C-/> :Commentary<CR>]])
-vim.cmd([[vmap <C-/> :Commentary<CR>]])
 
 vim.cmd([[nmap <silent> [prefix]<Space> :<C-u>Telescope<CR>]])
 vim.cmd([[nmap <silent> [bookmark], :<C-u>Telescope git_files<CR>]])

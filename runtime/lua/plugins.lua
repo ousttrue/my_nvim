@@ -65,7 +65,16 @@ packer.startup(function()
 	-- treesitter
 
 	-- edit
-	use("tpope/vim-commentary")
+	use({
+		"tpope/vim-commentary",
+
+		config = function()
+			vim.cmd([[nmap <C-_> :Commentary<CR>]])
+			vim.cmd([[vmap <C-_> :Commentary<CR>]])
+			vim.cmd([[nmap <C-/> :Commentary<CR>]])
+			vim.cmd([[vmap <C-/> :Commentary<CR>]])
+		end,
+	})
 	use("tpope/vim-surround")
 	use("jiangmiao/auto-pairs")
 
