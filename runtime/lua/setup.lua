@@ -1,3 +1,5 @@
+-- https://neovim.io/doc/user/lua.html
+-- https://github.com/nanotee/nvim-lua-guide
 -- https://zenn.dev/slin/articles/2020-11-03-neovim-lua2
 
 --
@@ -14,6 +16,7 @@ vim.cmd([[set autochdir]])
 --
 -- keymaps
 --
+-- vim.api.nvim_set_keymap( 'n', 'j', 'gj', {noremap = true} )
 vim.cmd([[nnoremap [prefix] <Nop>]])
 vim.cmd("nmap <Space> [prefix]")
 vim.cmd([[nnoremap [bookmark] <Nop>]])
@@ -40,3 +43,4 @@ vim.cmd([[let g:netrw_nogx = 1 " disable netrw's gx mapping.]])
 vim.cmd([[nmap gx <Plug>(openbrowser-smart-search)]])
 vim.cmd([[vmap gx <Plug>(openbrowser-smart-search)]])
 
+vim.cmd("nmap <A-F> :Neoformat<CR>")

@@ -22,7 +22,11 @@ packer.startup(function()
 			{ "nvim-lua/popup.nvim" },
 			{ "nvim-lua/plenary.nvim" },
 			{ "kyazdani42/nvim-web-devicons" },
+			{ "nvim-telescope/telescope-ghq.nvim" },
 		},
+		config = function()
+			require("telescope").load_extension("ghq")
+		end,
 	})
 
 	-- filer
@@ -33,10 +37,14 @@ packer.startup(function()
 		},
 	})
 
+	-- lsp
+	-- https://github.com/iamcco/diagnostic-languageserver
+
 	-- comment
 	use("tpope/vim-commentary")
 
 	-- formatter
+	use("sbdchd/neoformat")
 
 	-- fold
 	-- use("arecarn/vim-fold-cycle")

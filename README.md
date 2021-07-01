@@ -5,4 +5,3 @@
 * stylua
 * ripgrep
 * bat
-
