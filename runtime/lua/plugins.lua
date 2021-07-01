@@ -58,7 +58,10 @@ packer.startup(function()
 	use({
 		"scrooloose/nerdtree",
 		requires = {
-			{ "ryanoasis/vim-devicons", "ryanoasis/nerd-fonts" },
+			{
+				"ryanoasis/vim-devicons",
+				-- "ryanoasis/nerd-fonts",
+			},
 		},
 	})
 
