@@ -3,3 +3,6 @@
 ## cargo install
 
 * stylua
+* ripgrep
+* bat
+

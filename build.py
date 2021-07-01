@@ -20,17 +20,20 @@ INSTALL_DIR = HERE / 'install'
 VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat'
 
 
-def init_lua() -> pathlib.Path:
-    # if platform.system() == 'Windows':
-    if False:
-        APPDATA_DIR = pathlib.Path(os.environ['APPDATA']).absolute()
-        return APPDATA_DIR.parent / 'Local/nvim/init.lua'
+def init_dir() -> pathlib.Path:
+    if platform.system() == 'Windows':
+        if True:
+            APPDATA_DIR = pathlib.Path(os.environ['APPDATA']).absolute()
+            return APPDATA_DIR.parent / 'Local/nvim'
+        else:
+            HOME_DIR = pathlib.Path(os.environ['USERPROFILE']).absolute()
+            return HOME_DIR / '.config/nvim'
     else:
         HOME_DIR = pathlib.Path(os.environ['HOME']).absolute()
-        return HOME_DIR / '.config/nvim/init.lua'
+        return HOME_DIR / '.config/nvim'
 
 
-INIT_LUA = init_lua()
+INIT_DIR = init_dir()
 
 
 def mkcd(path: pathlib.Path):
@@ -158,10 +161,10 @@ def install():
     run('cmake', '--install', '.', '--config', 'RelWithDebInfo', '--prefix',
         '../../install')
 
-    print(INIT_LUA)
-    if not INIT_LUA.parent.exists():
-        INIT_LUA.parent.mkdir(parents=True)
-    INIT_LUA.write_text(f'''# this is generated. entry point
+    print(INIT_DIR)
+    if not INIT_DIR.exists():
+        INIT_DIR.mkdir(parents=True)
+    (INIT_DIR / 'init.lua').write_text(f'''# this is generated. entry point
 
 local execute = vim.api.nvim_command
 local fn = vim.fn
@@ -176,6 +179,13 @@ vim.cmd[[autocmd BufWritePost plugins.lua PackerCompile]]
 vim.cmd[[set runtimepath^={HERE / 'runtime'}]]
 require 'plugins'
 require 'setup'
+''')
+
+    (INIT_DIR / 'ginit.vim').write_text('''
+set mouse=a
+
+GuiTabline 0
+GuiPopupmenu 0
 ''')
 
 

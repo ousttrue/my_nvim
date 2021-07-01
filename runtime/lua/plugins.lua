@@ -3,6 +3,7 @@ vim.cmd([[packadd packer.nvim]])
 local packer = require("packer")
 packer.startup(function()
 	-- pckage
+	-- https://github.com/wbthomason/packer.nvim
 	use("wbthomason/packer.nvim")
 
 	-- colorscheme & statusline
@@ -14,13 +15,23 @@ packer.startup(function()
 	use("rhysd/git-messenger.vim")
 
 	-- fuzzy finder
+	-- https://github.com/nvim-telescope/telescope.nvim
 	use({
 		"nvim-telescope/telescope.nvim",
-		requires = { { "nvim-lua/popup.nvim" }, { "nvim-lua/plenary.nvim" } },
+		requires = {
+			{ "nvim-lua/popup.nvim" },
+			{ "nvim-lua/plenary.nvim" },
+			{ "kyazdani42/nvim-web-devicons" },
+		},
 	})
 
 	-- filer
-	use("kyazdani42/nvim-tree.lua")
+	use({
+		"kyazdani42/nvim-tree.lua",
+		requires = {
+			{ "kyazdani42/nvim-web-devicons" },
+		},
+	})
 
 	-- comment
 	use("tpope/vim-commentary")
@@ -28,7 +39,7 @@ packer.startup(function()
 	-- formatter
 
 	-- fold
-	use("arecarn/vim-fold-cycle")
+	-- use("arecarn/vim-fold-cycle")
 
 	-- gx
 	use("tyru/open-browser.vim")
@@ -53,4 +64,4 @@ packer.startup(function()
 	})
 end)
 
-vim.cmd[[PackerInstall]]
+vim.cmd([[PackerInstall]])
