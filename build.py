@@ -126,7 +126,7 @@ def deps():
     build libs
     '''
     mkcd(DEPS)
-    run('cmake', '../third-party')
+    run('cmake', '../third-party', '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
     run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
 
 
@@ -151,7 +151,9 @@ def nvim():
     # patch to CMakeLists.txt
     patch(NEOVIM_DIR / 'CMakeLists.txt')
 
-    run('cmake', '..')
+    # single configuration(make etc)
+    run('cmake', '..', '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
+    # multi configuration(vc etc)
     run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
 
 
