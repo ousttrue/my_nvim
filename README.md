@@ -5,3 +5,7 @@
 * stylua
 * ripgrep
 * bat
+
+## go
+
+* ghq

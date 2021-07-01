@@ -8,24 +8,40 @@ packer.startup(function()
 
 	-- colorscheme & statusline
 	use("arcticicestudio/nord-vim")
-	use("itchyny/lightline.vim")
+	-- use("itchyny/lightline.vim")
+	use("vim-airline/vim-airline")
 
 	-- git
 	use("tpope/vim-fugitive")
 	use("rhysd/git-messenger.vim")
+	use("airblade/vim-gitgutter")
+	use("junegunn/gv.vim")
 
 	-- fuzzy finder
 	-- https://github.com/nvim-telescope/telescope.nvim
+	-- https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
 	use({
 		"nvim-telescope/telescope.nvim",
 		requires = {
 			{ "nvim-lua/popup.nvim" },
 			{ "nvim-lua/plenary.nvim" },
 			{ "kyazdani42/nvim-web-devicons" },
-			{ "nvim-telescope/telescope-ghq.nvim" },
+			-- { "nvim-telescope/telescope-ghq.nvim" },
+			{ "ousttrue/telescope-ghq.nvim" },
 		},
 		config = function()
 			require("telescope").load_extension("ghq")
+
+			-- local actions = require("telescope.actions")
+			-- require("telescope").setup({
+			-- 	defaults = {
+			-- 		mappings = {
+			-- 			i = {
+			-- 				["<esc>"] = actions.close,
+			-- 			},
+			-- 		},
+			-- 	},
+			-- })
 		end,
 	})
 
@@ -36,12 +52,22 @@ packer.startup(function()
 			{ "kyazdani42/nvim-web-devicons" },
 		},
 	})
+	use({
+		"scrooloose/nerdtree",
+		requires = {
+			{ "ryanoasis/vim-devicons", "ryanoasis/nerd-fonts" },
+		},
+	})
 
 	-- lsp
 	-- https://github.com/iamcco/diagnostic-languageserver
 
-	-- comment
+	-- treesitter
+
+	-- edit
 	use("tpope/vim-commentary")
+	use("tpope/vim-surround")
+	use("jiangmiao/auto-pairs")
 
 	-- formatter
 	use("sbdchd/neoformat")
@@ -56,6 +82,7 @@ packer.startup(function()
 	--
 	-- filetypes
 	--
+	use("sheerun/vim-polyglot")
 
 	-- markdown
 	-- 自動的に遅延読み込みとみなされます。

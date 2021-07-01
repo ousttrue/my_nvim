@@ -12,6 +12,8 @@ vim.cmd([[colorscheme nord]])
 --
 vim.cmd([[set termguicolors]])
 vim.cmd([[set autochdir]])
+vim.cmd([[set hidden]])
+vim.cmd([[set ts=4 sw=4 sts=4 expandtab]])
 
 --
 -- keymaps
@@ -23,6 +25,8 @@ vim.cmd([[nnoremap [bookmark] <Nop>]])
 vim.cmd("nmap , [bookmark]")
 vim.cmd([[nnoremap [external] <Nop>]])
 vim.cmd("nmap ' [external]")
+vim.cmd("nmap <C-Tab> :bn<CR>")
+vim.cmd("nmap <C-S-Tab> :bp<CR>")
 -- paste
 vim.cmd("noremap! <S-Insert> <C-R>+")
 
@@ -37,7 +41,8 @@ vim.cmd([[nmap <C-/> :Commentary<CR>]])
 vim.cmd([[vmap <C-/> :Commentary<CR>]])
 
 vim.cmd([[nmap <silent> [prefix]<Space> :<C-u>Telescope<CR>]])
-vim.cmd([[nmap <silent> ,, :<C-u>Telescope file_browser<CR>]])
+vim.cmd([[nmap <silent> [bookmark], :<C-u>Telescope git_files<CR>]])
+vim.cmd([[nmap <silent> [bookmark]g :<C-u>Telescope ghq list<CR>]])
 
 vim.cmd([[let g:netrw_nogx = 1 " disable netrw's gx mapping.]])
 vim.cmd([[nmap gx <Plug>(openbrowser-smart-search)]])
