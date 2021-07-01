@@ -42,6 +42,9 @@ packer.startup(function()
 			-- 		},
 			-- 	},
 			-- })
+			vim.cmd([[nmap <silent> [prefix]<Space> :<C-u>Telescope<CR>]])
+			vim.cmd([[nmap <silent> [bookmark], :<C-u>Telescope git_files<CR>]])
+			vim.cmd([[nmap <silent> [bookmark]g :<C-u>Telescope ghq list<CR>]])
 		end,
 	})
 
@@ -79,13 +82,25 @@ packer.startup(function()
 	use("jiangmiao/auto-pairs")
 
 	-- formatter
-	use("sbdchd/neoformat")
+	use({
+		"sbdchd/neoformat",
+		config = function()
+			vim.cmd("nmap <A-F> :Neoformat<CR>")
+		end,
+	})
 
 	-- fold
 	-- use("arecarn/vim-fold-cycle")
 
 	-- gx
-	use("tyru/open-browser.vim")
+	use({
+		"tyru/open-browser.vim",
+		config = function()
+			vim.cmd([[let g:netrw_nogx = 1 " disable netrw's gx mapping.]])
+			vim.cmd([[nmap gx <Plug>(openbrowser-smart-search)]])
+			vim.cmd([[vmap gx <Plug>(openbrowser-smart-search)]])
+		end,
+	})
 	-- use("LumaKernel/open-browser.vim")
 
 	--
