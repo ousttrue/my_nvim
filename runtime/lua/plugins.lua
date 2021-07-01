@@ -11,6 +11,10 @@ packer.startup(function()
 	-- use("itchyny/lightline.vim")
 	use("vim-airline/vim-airline")
 
+	-- treesitter
+	-- https://github.com/nvim-treesitter/nvim-treesitter
+	use("nvim-treesitter/nvim-treesitter")
+
 	-- git
 	use("tpope/vim-fugitive")
 	use("rhysd/git-messenger.vim")
@@ -65,10 +69,10 @@ packer.startup(function()
 		},
 	})
 
-	-- lsp
+	-- lsp and dap
+	-- https://github.com/neovim/nvim-lspconfig
 	-- https://github.com/iamcco/diagnostic-languageserver
-
-	-- treesitter
+	use("ousttrue/nvim-dap")
 
 	-- edit
 	use({
