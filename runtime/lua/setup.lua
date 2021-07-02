@@ -9,8 +9,6 @@ if vim.env.USERPROFILE then
 	vim.env.PATH = vim.env.USERPROFILE .. "\\go\\bin;" .. vim.env.PATH
 end
 
-local set = vim.o
-
 vim.api.nvim_set_keymap("n", "[prefix]", "<Nop>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<Space>", "[prefix]", {})
 vim.api.nvim_set_keymap("n", "[bookmark]", "<Nop>", { noremap = true })
@@ -22,25 +20,25 @@ vim.api.nvim_set_keymap("n", "'", "[external]", {})
 -- colorscheme, text, font
 --
 vim.cmd([[colorscheme nord]])
-set.ambiwidth = "single"
-set.termguicolors = true
+vim.o.ambiwidth = "single"
+vim.o.termguicolors = true
 
 --
 -- settings
 --
-set.autochdir = true
-set.hidden = true
-set.ts = 4
-set.sw = 4
-set.sts = 4
-set.expandtab = true
+vim.o.autochdir = true
+vim.o.hidden = true
+vim.o.ts = 4
+vim.o.sw = 4
+vim.o.sts = 4
+vim.o.expandtab = true
 
 --
 -- terminal
 --
 vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
--- set.shell = "pwsh.exe"
--- set.shellcmdflag = "-NoProfile -NoLogo -NonInteractive -Command"
+-- vim.o.shell = "pwsh.exe"
+-- vim.o.shellcmdflag = "-NoProfile -NoLogo -NonInteractive -Command"
 vim.cmd([[command! -nargs=* T split | wincmd j | resize 20 | terminal pwsh.exe <args>]])
 vim.cmd("autocmd TermOpen * startinsert")
 
