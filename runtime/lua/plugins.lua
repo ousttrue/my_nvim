@@ -63,9 +63,8 @@ packer.startup(function()
 			-- 		},
 			-- 	},
 			-- })
-			vim.api.nvim_set_keymap("n", "[prefix]<Space>", ":<C-u>Telescope<CR>", {})
-			vim.api.nvim_set_keymap("n", "[bookmark],", ":<C-u>Telescope git_files<CR>", {})
-			vim.api.nvim_set_keymap("n", "[bookmark]g", ":<C-u>Telescope ghq list<CR>", {})
+			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
+			vim.api.nvim_set_keymap("n", ",,", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
 
