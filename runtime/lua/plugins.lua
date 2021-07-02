@@ -93,6 +93,7 @@ packer.startup(function()
 		"sbdchd/neoformat",
 		config = function()
 			vim.cmd("nmap <A-F> :Neoformat<CR>")
+			vim.cmd("let g:neoformat_enabled_python = ['yapf']")
 		end,
 	})
 

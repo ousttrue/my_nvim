@@ -4,9 +4,12 @@
 -- https://zenn.dev/slin/articles/2020-11-03-neovim-lua2
 
 if vim.env.USERPROFILE then
-	vim.env.PATH = "c:\\Python38;" .. vim.env.PATH
+	vim.env.PATH = "C:\\Python38;" .. vim.env.PATH
+	vim.env.PATH = "C:\\Python38\\Scripts;" .. vim.env.PATH
 	vim.env.PATH = vim.env.USERPROFILE .. "\\go\\bin;" .. vim.env.PATH
 end
+
+local set = vim.o
 
 vim.cmd([[nnoremap [prefix] <Nop>]])
 vim.cmd("nmap <Space> [prefix]")
@@ -19,22 +22,27 @@ vim.cmd("nmap ' [external]")
 -- colorscheme, text, font
 --
 vim.cmd([[colorscheme nord]])
-vim.cmd("set ambiwidth=single")
-vim.cmd([[set termguicolors]])
+set.ambiwidth = "single"
+set.termguicolors = true
+
+--
+-- settings
+--
+set.autochdir = true
+set.hidden = true
+set.ts = 4
+set.sw = 4
+set.sts = 4
+set.expandtab = true
 
 --
 -- terminal
 --
 vim.cmd("tnoremap <Esc> <C-\\><C-n>")
-vim.cmd("command! -nargs=* T split | wincmd j | resize 20 | terminal <args>")
+-- set.shell = "pwsh.exe"
+-- set.shellcmdflag = "-NoProfile -NoLogo -NonInteractive -Command"
+vim.cmd([[command! -nargs=* T split | wincmd j | resize 20 | terminal pwsh.exe <args>]])
 vim.cmd("autocmd TermOpen * startinsert")
-
---
--- settings
---
-vim.cmd([[set autochdir]])
-vim.cmd([[set hidden]])
-vim.cmd([[set ts=4 sw=4 sts=4 expandtab]])
 
 --
 -- keymaps

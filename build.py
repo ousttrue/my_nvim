@@ -185,7 +185,7 @@ require 'setup'
 
     (INIT_DIR / 'ginit.vim').write_text('''
 set mouse=a
-
+Guifont! Cica:h14
 GuiTabline 0
 GuiPopupmenu 0
 ''')
@@ -206,7 +206,7 @@ if __name__ == '__main__':
         install_packages('libtool-bin', 'cmake')
 
     # pip
-    pip.main(['install', 'pynvim', 'neovim-remote'])
+    pip.main(['install', 'pynvim', 'neovim-remote', 'yapf'])
 
     # cargo
     run('cargo install bat stylua')
