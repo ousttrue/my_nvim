@@ -36,6 +36,29 @@ def init_dir() -> pathlib.Path:
 INIT_DIR = init_dir()
 
 
+def home_dir() -> pathlib.Path:
+    if 'USERPROFILE' in os.environ:
+        return pathlib.Path(os.environ['USERPROFILE']).absolute()
+    else:
+        return pathlib.Path(os.environ['HOME']).absolute()
+
+
+HOME_DIR = home_dir()
+
+
+def cargo_exe() -> pathlib.Path:
+    cargo = HOME_DIR / '.cargo/bin/cargo'
+    if cargo.exists():
+        return cargo
+    cargo = HOME_DIR / '.cargo/bin/cargo.exe'
+    if cargo.exists():
+        return cargo
+    raise Exception('no cargo')
+
+
+CARGO = cargo_exe()
+
+
 def mkcd(path: pathlib.Path):
     path.mkdir(exist_ok=True)
     os.chdir(path)
@@ -209,7 +232,9 @@ if __name__ == '__main__':
     pip.main(['install', 'pynvim', 'neovim-remote', 'yapf'])
 
     # cargo
-    run('cargo install bat stylua')
+    run('cargo', 'install', 'bat', 'stylua')
+
+    # TODO: ghq
 
     #
     # actions
