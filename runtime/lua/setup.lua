@@ -52,8 +52,12 @@ vim.cmd("nmap <plus> :bn<CR>")
 vim.cmd("nmap <minus> :bp<CR>")
 -- paste
 vim.cmd("noremap! <S-Insert> <C-R>+")
+-- tab
+vim.cmd("map  <C-l> :tabn<CR>")
+vim.cmd("map  <C-h> :tabp<CR>")
+vim.cmd("map  <C-n> :tabnew<CR>")
+-- vim.cmd([[nmap <C-n> :lnext<CR>]])
+-- vim.cmd([[nmap <C-p> :lprevious<CR>]])
 
-vim.cmd([[nmap <C-n> :lnext<CR>]])
-vim.cmd([[nmap <C-p> :lprevious<CR>]])
 vim.cmd([[nnoremap <C-l> :nohlsearch<CR><C-l>]])
 vim.cmd([[nnoremap q :close<CR> ]])
