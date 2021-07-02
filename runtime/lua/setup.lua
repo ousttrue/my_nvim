@@ -1,6 +1,12 @@
 -- https://neovim.io/doc/user/lua.html
 -- https://github.com/nanotee/nvim-lua-guide
+--   https://github.com/willelz/nvim-lua-guide-ja/blob/master/README.ja.md
 -- https://zenn.dev/slin/articles/2020-11-03-neovim-lua2
+
+if vim.env.USERPROFILE then
+	vim.env.PATH = "c:\\Python38;" .. vim.env.PATH
+	vim.env.PATH = vim.env.USERPROFILE .. "\\go\\bin;" .. vim.env.PATH
+end
 
 vim.cmd([[nnoremap [prefix] <Nop>]])
 vim.cmd("nmap <Space> [prefix]")

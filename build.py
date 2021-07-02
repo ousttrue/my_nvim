@@ -208,6 +208,9 @@ if __name__ == '__main__':
     # pip
     pip.main(['install', 'pynvim', 'neovim-remote'])
 
+    # cargo
+    run('cargo install bat stylua')
+
     #
     # actions
     #
