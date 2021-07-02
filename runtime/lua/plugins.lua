@@ -120,7 +120,13 @@ packer.startup(function()
 	-- lsp
 	-- https://github.com/neovim/nvim-lspconfig
 	-- https://github.com/iamcco/diagnostic-languageserver
-	use("nvim-lua/completion-nvim")
+	use({
+		"nvim-lua/completion-nvim",
+		config = function()
+			vim.cmd([[set completeopt=menuone,noinsert,noselect]])
+			vim.cmd([[set shortmess+=c]])
+		end,
+	})
 	use({
 		"neovim/nvim-lspconfig",
 		config = function()
@@ -325,4 +331,3 @@ packer.startup(function()
 end)
 
 vim.cmd([[PackerInstall]])
-
