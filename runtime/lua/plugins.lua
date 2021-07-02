@@ -96,7 +96,13 @@ packer.startup(function()
 		end,
 	})
 	use("tpope/vim-surround")
-	use("jiangmiao/auto-pairs")
+	use({
+		-- "jiangmiao/auto-pairs",
+		"LunarWatcher/auto-pairs",
+		config = function()
+			vim.api.nvim_set_var("AutoPairsCompleteOnlyOnSpace", 1)
+		end,
+	})
 
 	-- formatter
 	use({
