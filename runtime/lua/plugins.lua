@@ -11,7 +11,14 @@ packer.startup(function()
 	use("wbthomason/packer.nvim")
 
 	-- colorscheme & statusline
-	use("arcticicestudio/nord-vim")
+	-- use("arcticicestudio/nord-vim")
+	use({
+		"sainnhe/edge",
+		config = function()
+			vim.api.nvim_set_var('edge_style', 'aura')
+			vim.cmd([[colorscheme edge]])
+		end,
+	})
 	-- use("itchyny/lightline.vim")
 	use("vim-airline/vim-airline")
 

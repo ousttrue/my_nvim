@@ -19,7 +19,6 @@ vim.api.nvim_set_keymap("n", "'", "[external]", {})
 --
 -- colorscheme, text, font
 --
-vim.cmd([[colorscheme nord]])
 vim.o.ambiwidth = "single"
 vim.o.termguicolors = true
 
