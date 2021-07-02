@@ -1,11 +1,15 @@
 # neovim の ビルドと設定管理
 
-## cargo install
+## build
 
-* stylua
-* ripgrep
-* bat
+* `build.py` で `install/bin` に nvim をビルドしてインストールする
 
-## go
+## TODO
 
-* ghq
+* 設定の起点を `lua` から `vim` に戻す。 `PackerCompile` の都合
+* Rust の LanguageServer
+* Rust の DebugAdatper
+* C# の LanguageServer
+* C# の DebugAdapter
+* Unity の DebugAdapter
+
