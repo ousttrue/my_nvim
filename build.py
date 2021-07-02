@@ -200,10 +200,8 @@ if fn.empty(fn.glob(install_path)) > 0 then
   execute 'packadd packer.nvim'
 end
 
-vim.cmd[[autocmd BufWritePost plugins.lua PackerCompile]]
 vim.cmd[[set runtimepath^={HERE / 'runtime'}]]
-require 'plugins'
-require 'setup'
+require 'entry'
 ''')
 
     (INIT_DIR / 'ginit.vim').write_text('''
@@ -226,7 +224,7 @@ if __name__ == '__main__':
         os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
     else:
         # ubuntu
-        install_packages('libtool-bin', 'cmake')
+        install_packages('libtool-bin', 'cmake', 'python3', 'python3-pip')
 
     # pip
     pip.main(['install', 'pynvim', 'neovim-remote', 'yapf'])
