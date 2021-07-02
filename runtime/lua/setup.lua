@@ -7,6 +7,7 @@ if vim.env.USERPROFILE then
 	vim.env.PATH = "C:\\Python38;" .. vim.env.PATH
 	vim.env.PATH = "C:\\Python38\\Scripts;" .. vim.env.PATH
 	vim.env.PATH = vim.env.USERPROFILE .. "\\go\\bin;" .. vim.env.PATH
+	vim.env.PATH = vim.env.PATH .. ";C:\\Program Files\\LLVM\\bin"
 end
 
 vim.api.nvim_set_keymap("n", "[prefix]", "<Nop>", { noremap = true })

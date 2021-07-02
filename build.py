@@ -227,7 +227,7 @@ if __name__ == '__main__':
         install_packages('libtool-bin', 'cmake', 'python3', 'python3-pip')
 
     # pip
-    pip.main(['install', 'pynvim', 'neovim-remote', 'yapf'])
+    pip.main(['install', 'pynvim', 'neovim-remote', 'yapf', 'debugpy'])
 
     # cargo
     run('cargo', 'install', 'bat', 'stylua')
