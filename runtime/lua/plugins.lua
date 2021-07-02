@@ -1,3 +1,7 @@
+--
+-- https://oroques.dev/notes/neovim-init/
+--
+
 vim.cmd([[packadd packer.nvim]])
 
 local packer = require("packer")
@@ -13,7 +17,13 @@ packer.startup(function()
 
 	-- treesitter
 	-- https://github.com/nvim-treesitter/nvim-treesitter
-	use("nvim-treesitter/nvim-treesitter")
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		config = function()
+			-- local ts = require("nvim-treesitter.configs")
+			-- ts.setup({ ensure_installed = "maintained", highlight = { enable = true } })
+		end,
+	})
 
 	-- git
 	use("tpope/vim-fugitive")
