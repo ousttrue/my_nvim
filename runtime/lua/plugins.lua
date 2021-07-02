@@ -21,8 +21,8 @@ packer.startup(function()
 	})
 
 	-- statusline
-	use("itchyny/lightline.vim")
-	-- use("vim-airline/vim-airline")
+	-- use("itchyny/lightline.vim")
+	use("vim-airline/vim-airline")
 	-- use("glepnir/galaxyline.nvim")
 
 	-- treesitter
@@ -55,6 +55,15 @@ packer.startup(function()
 	use("rhysd/git-messenger.vim")
 	use("airblade/vim-gitgutter")
 	use("junegunn/gv.vim")
+	-- use({
+	-- 	"pwntester/octo.nvim",
+	-- 	requires = {
+	-- 		{ "nvim-lua/plenary.nvim" },
+	-- 	},
+	-- 	config = function()
+	-- 		require("octo").setup()
+	-- 	end,
+	-- })
 
 	-- fuzzy finder
 	-- https://github.com/nvim-telescope/telescope.nvim
@@ -112,6 +121,38 @@ packer.startup(function()
 	-- https://github.com/neovim/nvim-lspconfig
 	-- https://github.com/iamcco/diagnostic-languageserver
 	use("nvim-lua/completion-nvim")
+	use({
+		"neovim/nvim-lspconfig",
+		config = function()
+			local sumneko_root_path = vim.env.USERPROFILE .. "\\ghq\\github.com\\sumneko\\lua-language-server"
+			local sumneko_binary = sumneko_root_path .. "\\bin\\Windows\\lua-language-server.exe"
+			require("lspconfig").sumneko_lua.setup({
+
+				cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
+				settings = {
+					Lua = {
+						runtime = {
+							-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+							version = "LuaJIT",
+							-- Setup your lua path
+							path = vim.split(package.path, ";"),
+						},
+						diagnostics = {
+							-- Get the language server to recognize the `vim` global
+							globals = { "vim" },
+						},
+						workspace = {
+							-- Make the server aware of Neovim runtime files
+							library = {
+								[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+								[vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+							},
+						},
+					},
+				},
+			})
+		end,
+	})
 
 	-- dap
 	-- Plug 'mfussenegger/nvim-dap'
@@ -212,7 +253,7 @@ packer.startup(function()
 				},
 				floating = {
 					max_height = nil, -- These can be integers or a float between 0 and 1.
-					max_width = nil,   -- Floats will be treated as percentage of your screen.
+					max_width = nil, -- Floats will be treated as percentage of your screen.
 				},
 			})
 
@@ -284,3 +325,4 @@ packer.startup(function()
 end)
 
 vim.cmd([[PackerInstall]])
+

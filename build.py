@@ -232,6 +232,9 @@ if __name__ == '__main__':
     # cargo
     run('cargo', 'install', 'bat', 'stylua')
 
+    # lsp
+    run('ghq get https://github.com/sumneko/lua-language-server')
+
     # TODO: ghq
 
     #

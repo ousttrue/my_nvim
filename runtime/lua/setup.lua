@@ -60,3 +60,4 @@ vim.api.nvim_set_keymap("", "<C-n>", ":tabnew<CR>", {})
 
 vim.api.nvim_set_keymap("n", "<C-l>", ":nohlsearch<CR><C-l>", { noremap = true })
 vim.api.nvim_set_keymap("n", "q", ":close<CR>", { noremap = true })
+
