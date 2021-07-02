@@ -11,12 +11,12 @@ end
 
 local set = vim.o
 
-vim.cmd([[nnoremap [prefix] <Nop>]])
-vim.cmd("nmap <Space> [prefix]")
-vim.cmd([[nnoremap [bookmark] <Nop>]])
-vim.cmd("nmap , [bookmark]")
-vim.cmd([[nnoremap [external] <Nop>]])
-vim.cmd("nmap ' [external]")
+vim.api.nvim_set_keymap("n", "[prefix]", "<Nop>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<Space>", "[prefix]", {})
+vim.api.nvim_set_keymap("n", "[bookmark]", "<Nop>", { noremap = true })
+vim.api.nvim_set_keymap("n", ",", "[bookmark]", {})
+vim.api.nvim_set_keymap("n", "[external]", "<Nop>", { noremap = true })
+vim.api.nvim_set_keymap("n", "'", "[external]", {})
 
 --
 -- colorscheme, text, font
@@ -38,7 +38,7 @@ set.expandtab = true
 --
 -- terminal
 --
-vim.cmd("tnoremap <Esc> <C-\\><C-n>")
+vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 -- set.shell = "pwsh.exe"
 -- set.shellcmdflag = "-NoProfile -NoLogo -NonInteractive -Command"
 vim.cmd([[command! -nargs=* T split | wincmd j | resize 20 | terminal pwsh.exe <args>]])
@@ -48,16 +48,16 @@ vim.cmd("autocmd TermOpen * startinsert")
 -- keymaps
 --
 -- vim.api.nvim_set_keymap( 'n', 'j', 'gj', {noremap = true} )
-vim.cmd("nmap <plus> :bn<CR>")
-vim.cmd("nmap <minus> :bp<CR>")
+vim.api.nvim_set_keymap("n", "<plus>", ":bn<CR>", {})
+vim.api.nvim_set_keymap("n", "<minus>", ":bp<CR>", {})
 -- paste
 vim.cmd("noremap! <S-Insert> <C-R>+")
 -- tab
-vim.cmd("map  <C-l> :tabn<CR>")
-vim.cmd("map  <C-h> :tabp<CR>")
-vim.cmd("map  <C-n> :tabnew<CR>")
+vim.api.nvim_set_keymap("", "<C-l>", ":tabn<CR>", {})
+vim.api.nvim_set_keymap("", "<C-h>", ":tabp<CR>", {})
+vim.api.nvim_set_keymap("", "<C-n>", ":tabnew<CR>", {})
 -- vim.cmd([[nmap <C-n> :lnext<CR>]])
 -- vim.cmd([[nmap <C-p> :lprevious<CR>]])
 
-vim.cmd([[nnoremap <C-l> :nohlsearch<CR><C-l>]])
-vim.cmd([[nnoremap q :close<CR> ]])
+vim.api.nvim_set_keymap("n", "<C-l>", ":nohlsearch<CR><C-l>", { noremap = true })
+vim.api.nvim_set_keymap("n", "q", ":close<CR>", { noremap = true })

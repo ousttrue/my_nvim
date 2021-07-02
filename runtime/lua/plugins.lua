@@ -46,9 +46,9 @@ packer.startup(function()
 			-- 		},
 			-- 	},
 			-- })
-			vim.cmd([[nmap <silent> [prefix]<Space> :<C-u>Telescope<CR>]])
-			vim.cmd([[nmap <silent> [bookmark], :<C-u>Telescope git_files<CR>]])
-			vim.cmd([[nmap <silent> [bookmark]g :<C-u>Telescope ghq list<CR>]])
+			vim.api.nvim_set_keymap("n", "[prefix]<Space>", ":<C-u>Telescope<CR>", {})
+			vim.api.nvim_set_keymap("n", "[bookmark],", ":<C-u>Telescope git_files<CR>", {})
+			vim.api.nvim_set_keymap("n", "[bookmark]g", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
 
@@ -79,10 +79,10 @@ packer.startup(function()
 		"tpope/vim-commentary",
 
 		config = function()
-			vim.cmd([[nmap <C-_> :Commentary<CR>]])
-			vim.cmd([[vmap <C-_> :Commentary<CR>]])
-			vim.cmd([[nmap <C-/> :Commentary<CR>]])
-			vim.cmd([[vmap <C-/> :Commentary<CR>]])
+			vim.api.nvim_set_keymap("n", "<C-_>", ":Commentary<CR>", {})
+			vim.api.nvim_set_keymap("v", "<C-_>", ":Commentary<CR>", {})
+			vim.api.nvim_set_keymap("n", "<C-/>", ":Commentary<CR>", {})
+			vim.api.nvim_set_keymap("v", "<C-/>", ":Commentary<CR>", {})
 		end,
 	})
 	use("tpope/vim-surround")
@@ -92,7 +92,7 @@ packer.startup(function()
 	use({
 		"sbdchd/neoformat",
 		config = function()
-			vim.cmd("nmap <A-F> :Neoformat<CR>")
+			vim.api.nvim_set_keymap("n", "<A-F>", ":Neoformat<CR>", {})
 			vim.cmd("let g:neoformat_enabled_python = ['yapf']")
 		end,
 	})
@@ -105,8 +105,8 @@ packer.startup(function()
 		"tyru/open-browser.vim",
 		config = function()
 			vim.cmd([[let g:netrw_nogx = 1 " disable netrw's gx mapping.]])
-			vim.cmd([[nmap gx <Plug>(openbrowser-smart-search)]])
-			vim.cmd([[vmap gx <Plug>(openbrowser-smart-search)]])
+			vim.api.nvim_set_keymap("n", "gx", "<Plug>(openbrowser-smart-search)", {})
+			vim.api.nvim_set_keymap("v", "gx", "<Plug>(openbrowser-smart-search)", {})
 		end,
 	})
 	-- use("LumaKernel/open-browser.vim")
