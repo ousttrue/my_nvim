@@ -20,6 +20,16 @@
                 "clean"
             ],
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "name": "init_files",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/build.py",
+            "args": [
+                "init_files"
+            ],
+            "console": "integratedTerminal"
+        },
     ]
 }

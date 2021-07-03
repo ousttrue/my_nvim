@@ -199,7 +199,7 @@ def init_files():
     if not INIT_DIR.exists():
         INIT_DIR.mkdir(parents=True)
 
-    map = {'runtime_root': str(HERE / 'runtime')}
+    map = {'myvim_root': str(HERE)}
 
     def callback(matchobj: re.Match):
         return map[matchobj.group(1)]
@@ -240,7 +240,8 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         # all
         # actions = ['clean', 'deps', 'nvim', 'install']
-        actions = ['deps', 'nvim', 'install', 'init_files']
+        # actions = ['deps', 'nvim', 'install', 'init_files']
+        actions = ['init_files']
     else:
         actions = sys.argv[1:]
 
