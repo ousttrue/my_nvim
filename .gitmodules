@@ -1,3 +1,6 @@
 [submodule "neovim"]
 	path = neovim
 	url = https://github.com/neovim/neovim.git
+[submodule "language_server/lua-language-server"]
+	path = language_server/lua-language-server
+	url = https://github.com/sumneko/lua-language-server.git
