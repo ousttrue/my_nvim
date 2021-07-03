@@ -23,6 +23,8 @@ VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\
 INIT_VIM_TEMPLATE = HERE / 'init.vim'
 GINIT_VIM_TEMPLATE = HERE / 'ginit.vim'
 
+LANGUAGE_SERVER_DIR = HERE / 'language_server'
+
 
 def init_dir() -> pathlib.Path:
     if platform.system() == 'Windows':
@@ -112,12 +114,15 @@ def install_packages(*packages: List[str]):
 
 def decode(b: bytes) -> str:
     if platform.system() == 'Windows':
-        return b.decode('cp932')
+        try:
+            return b.decode('cp932')
+        except:
+            return b.decode('utf8')
     else:
         return b.decode('utf-8')
 
 
-def run(*cmd: List[str]):
+def run(*cmd: List[str], **args):
     print(' '.join(cmd))
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     while True:
@@ -127,7 +132,7 @@ def run(*cmd: List[str]):
         output = process.stdout.readline()
         print(decode(output).strip())
 
-    if rc != 0:
+    if rc != args.get('rc', 0):
         raise Exception(rc)
 
 
@@ -199,7 +204,7 @@ def init_files():
     if not INIT_DIR.exists():
         INIT_DIR.mkdir(parents=True)
 
-    map = {'myvim_root': str(HERE)}
+    map = {'my_nvim_root': str(HERE).replace('\\', '/')}
 
     def callback(matchobj: re.Match):
         return map[matchobj.group(1)]
@@ -209,16 +214,24 @@ def init_files():
     (INIT_DIR / 'ginit.vim').write_text(GINIT_VIM_TEMPLATE.read_text())
 
 
-if __name__ == '__main__':
+def build_lua_language_server(path: pathlib.Path):
+    # build luamake
+    if not (path / '3rd/luamake/luamake.exe').exists():
+        os.chdir(path / '3rd/luamake')
+        run(os.environ['COMSPEC'], '/C', 'compile\\install.bat', rc=1)
+    # build language-server
+    os.chdir(path)
+    run(str(path / '3rd/luamake/luamake.exe'), 'rebuild')
 
-    #
-    # setup
-    #
+
+def ls():
+    build_lua_language_server(LANGUAGE_SERVER_DIR / 'lua-language-server')
+
+
+def tools():
 
     if platform.system() == 'Windows':
-        # for luarocks detect vc
-        vc_map = vcvars64()
-        os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
+        pass
     else:
         # ubuntu
         install_packages('libtool-bin', 'cmake', 'python3', 'python3-pip')
@@ -228,6 +241,14 @@ if __name__ == '__main__':
 
     # cargo
     run('cargo', 'install', 'bat', 'stylua')
+
+
+if __name__ == '__main__':
+
+    if platform.system() == 'Windows':
+        # for luarocks detect vc
+        vc_map = vcvars64()
+        os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
 
     # lsp
     # run('ghq get https://github.com/sumneko/lua-language-server')
@@ -239,8 +260,7 @@ if __name__ == '__main__':
     #
     if len(sys.argv) == 1:
         # all
-        # actions = ['clean', 'deps', 'nvim', 'install']
-        # actions = ['deps', 'nvim', 'install', 'init_files']
+        # actions = ['tools', 'deps', 'nvim', 'install', 'ls']
         actions = ['init_files']
     else:
         actions = sys.argv[1:]

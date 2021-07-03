@@ -1,15 +1,24 @@
 # neovim の ビルドと設定管理
 
+## Required
+
+### Windows
+
+* VC2019
+* CMake
+
+### Ubuntu-20.04(WSL2)
+
 ## build
 
 * `build.py` で `install/bin` に nvim をビルドしてインストールする
 
 ## TODO
 
-* 設定の起点を `lua` から `vim` に戻す。 `PackerCompile` の都合
-* Rust の LanguageServer
-* Rust の DebugAdatper
-* C# の LanguageServer
-* C# の DebugAdapter
-* Unity の DebugAdapter
+* [x] Lua: LanguageServer
+* [ ] Rust: LanguageServer
+* [ ] Rust: DebugAdatper
+* [ ] C#: LanguageServer
+* [ ] C#: DebugAdapter
+* [ ] Unity: DebugAdapter
 

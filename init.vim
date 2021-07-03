@@ -10,6 +10,6 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 EOF
 
-let g:myvim_root = "${myvim_root}"
-set runtimepath^=${myvim_root}/runtime
-source ${myvim_root}/runtime/entry.vim
+let g:my_nvim_root = "${my_nvim_root}"
+set runtimepath^=${my_nvim_root}/runtime
+source ${my_nvim_root}/runtime/entry.vim

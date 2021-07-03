@@ -128,7 +128,7 @@ packer.startup(function()
 	use({
 		"neovim/nvim-lspconfig",
 		config = function()
-			local sumneko_root_path = vim.env.USERPROFILE .. "\\ghq\\github.com\\sumneko\\lua-language-server"
+			local sumneko_root_path = vim.api.nvim_get_var('my_nvim_root') .. "\\language_server\\lua-language-server"
 			local sumneko_binary = sumneko_root_path .. "\\bin\\Windows\\lua-language-server.exe"
 			require("lspconfig").sumneko_lua.setup({
 
@@ -143,7 +143,7 @@ packer.startup(function()
 						},
 						diagnostics = {
 							-- Get the language server to recognize the `vim` global
-							globals = { "vim" },
+							globals = { "vim", "use" },
 						},
 						workspace = {
 							-- Make the server aware of Neovim runtime files
