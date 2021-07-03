@@ -17,6 +17,18 @@ packer.startup(function()
 			vim.cmd([[colorscheme edge]])
 		end,
 	})
+	use({
+		"rockerBOO/boo-colorscheme-nvim",
+		-- config = function()
+		-- 	vim.cmd([[colorscheme boo]])
+		-- end,
+	})
+	use({
+		"vigoux/oak",
+		-- config = function()
+		-- 	vim.cmd([[colorscheme oak]])
+		-- end,
+	})
 
 	-- statusline
 	-- use("itchyny/lightline.vim")
@@ -347,6 +359,9 @@ packer.startup(function()
 	use("sheerun/vim-polyglot")
 	use("norcalli/nvim-colorizer.lua")
 
+	-- use("cdelledonne/vim-cmake")
+	use("ilyachur/cmake4vim")
+
 	-- markdown
 	-- 自動的に遅延読み込みとみなされます。
 	use({
@@ -361,3 +376,5 @@ packer.startup(function()
 		-- run = function() vim.cmd[[GlowInstall]] end,
 	})
 end)
+
+vim.cmd("PackerInstall")
