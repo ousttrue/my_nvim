@@ -128,7 +128,19 @@ packer.startup(function()
 	use({
 		"neovim/nvim-lspconfig",
 		config = function()
-			local sumneko_root_path = vim.api.nvim_get_var('my_nvim_root') .. "\\language_server\\lua-language-server"
+			vim.api.nvim_set_var("lsp_signs_enabled", 1)
+			vim.api.nvim_set_var("lsp_diagnostics_enabled", 1)
+			vim.api.nvim_set_var("lsp_diagnostics_echo_cursor", 1)
+			vim.api.nvim_set_var("lsp_virtual_text_enabled", 1)
+			-- vim.api.nvim_set_var("lsp_signs_error", { text = "✗" })
+			-- vim.api.nvim_set_var("lsp_signs_warning", { text = "‼" })
+			-- vim.api.nvim_set_var("lsp_signs_information", { text = "i" })
+			-- vim.api.nvim_set_var("lsp_signs_hint", { text = "?" })
+
+			--
+			-- lua
+			--
+			local sumneko_root_path = vim.api.nvim_get_var("my_nvim_root") .. "\\language_server\\lua-language-server"
 			local sumneko_binary = sumneko_root_path .. "\\bin\\Windows\\lua-language-server.exe"
 			require("lspconfig").sumneko_lua.setup({
 
@@ -155,6 +167,11 @@ packer.startup(function()
 					},
 				},
 			})
+
+			--
+			-- pyls
+			--
+			require("lspconfig").pylsp.setup({})
 		end,
 	})
 

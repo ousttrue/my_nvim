@@ -226,6 +226,8 @@ def build_lua_language_server(path: pathlib.Path):
 
 def ls():
     build_lua_language_server(LANGUAGE_SERVER_DIR / 'lua-language-server')
+    # pip.main(['install', 'python-language-server']) # this is require python2
+    pip.main('install', 'python-lsp-server[all]')
 
 
 def tools():
@@ -260,8 +262,8 @@ if __name__ == '__main__':
     #
     if len(sys.argv) == 1:
         # all
-        # actions = ['tools', 'deps', 'nvim', 'install', 'ls']
-        actions = ['init_files']
+        actions = ['tools', 'deps', 'nvim', 'install', 'ls']
+        # actions = ['init_files']
     else:
         actions = sys.argv[1:]
 
