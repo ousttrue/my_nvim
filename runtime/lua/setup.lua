@@ -56,9 +56,9 @@ vim.cmd("noremap! <S-Insert> <C-R>+")
 -- tab
 -- vim.api.nvim_set_keymap("", "<C-l>", ":tabn<CR>", {})
 -- vim.api.nvim_set_keymap("", "<C-h>", ":tabp<CR>", {})
-vim.api.nvim_set_keymap("", "<C-n>", ":tabnew<CR>", {})
--- vim.cmd([[nmap <C-n> :lnext<CR>]])
--- vim.cmd([[nmap <C-p> :lprevious<CR>]])
+vim.api.nvim_set_keymap("", "<Space>n", ":tabnew<CR>", {})
+vim.cmd([[nmap <C-n> :lnext<CR>]])
+vim.cmd([[nmap <C-p> :lprevious<CR>]])
 
 vim.api.nvim_set_keymap("n", "<C-l>", ":nohlsearch<CR><C-l>", { noremap = true })
 vim.api.nvim_set_keymap("n", "q", ":close<CR>", { noremap = true })
