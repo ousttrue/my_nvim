@@ -34,6 +34,7 @@ vim.o.sts = 4
 vim.o.expandtab = true
 vim.o.inccommand = "split"
 vim.o.ic = true
+vim.o.clipboard = "unnamed"
 
 --
 -- terminal

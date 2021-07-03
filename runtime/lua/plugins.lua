@@ -136,42 +136,6 @@ packer.startup(function()
 			-- vim.api.nvim_set_var("lsp_signs_warning", { text = "‼" })
 			-- vim.api.nvim_set_var("lsp_signs_information", { text = "i" })
 			-- vim.api.nvim_set_var("lsp_signs_hint", { text = "?" })
-
-			--
-			-- lua
-			--
-			local sumneko_root_path = vim.api.nvim_get_var("my_nvim_root") .. "\\language_server\\lua-language-server"
-			local sumneko_binary = sumneko_root_path .. "\\bin\\Windows\\lua-language-server.exe"
-			require("lspconfig").sumneko_lua.setup({
-
-				cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
-				settings = {
-					Lua = {
-						runtime = {
-							-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-							version = "LuaJIT",
-							-- Setup your lua path
-							path = vim.split(package.path, ";"),
-						},
-						diagnostics = {
-							-- Get the language server to recognize the `vim` global
-							globals = { "vim", "use" },
-						},
-						workspace = {
-							-- Make the server aware of Neovim runtime files
-							library = {
-								[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-								[vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-							},
-						},
-					},
-				},
-			})
-
-			--
-			-- pyls
-			--
-			require("lspconfig").pylsp.setup({})
 		end,
 	})
 
@@ -180,23 +144,6 @@ packer.startup(function()
 	use({
 		"ousttrue/nvim-dap",
 		config = function()
-			local dap = require("dap")
-			dap.adapters.python = {
-				type = "executable",
-				command = "C:/Python38/python.exe",
-				args = { "-m", "debugpy.adapter" },
-			}
-			dap.configurations.python = {
-				{
-					type = "python",
-					request = "launch",
-					name = "Launch file",
-					program = "${file}",
-					pythonPath = function()
-						return "C:/Python38/python.exe"
-					end,
-				},
-			}
 		end,
 	})
 	use({

@@ -2,8 +2,9 @@
 
 ## Required
 
-### Windows
+### Windows10(64bit)
 
+* `C:/Python38`
 * VC2019
 * CMake
 
