@@ -2,8 +2,6 @@
 -- https://oroques.dev/notes/neovim-init/
 --
 
-vim.cmd([[packadd packer.nvim]])
-
 local packer = require("packer")
 packer.startup(function()
 	-- pckage
@@ -314,6 +312,7 @@ packer.startup(function()
 	-- filetypes
 	--
 	use("sheerun/vim-polyglot")
+	use("norcalli/nvim-colorizer.lua")
 
 	-- markdown
 	-- 自動的に遅延読み込みとみなされます。
@@ -329,5 +328,3 @@ packer.startup(function()
 		-- run = function() vim.cmd[[GlowInstall]] end,
 	})
 end)
-
-vim.cmd([[PackerInstall]])
