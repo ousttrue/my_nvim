@@ -38,6 +38,7 @@ packer.startup(function()
 	-- ToDo
 	-- https://github.com/kamykn/popup-menu.nvim
 	-- https://github.com/ncm2/float-preview.nvim
+	-- https://github.com/skywind3000/asynctasks.vim
 
 	-- treesitter
 	-- https://github.com/nvim-treesitter/nvim-treesitter
@@ -121,14 +122,19 @@ packer.startup(function()
 			vim.api.nvim_set_keymap("n", "[prefix]tn", ":NvimTreeFindFile<CR>", { noremap = true })
 		end,
 	})
+	-- https://github.com/Xuyuanp/yanil
 	use({
 		"scrooloose/nerdtree",
 		requires = {
 			{
 				"ryanoasis/vim-devicons",
 				-- "ryanoasis/nerd-fonts",
+				"Xuyuanp/nerdtree-git-plugin",
 			},
 		},
+		config = function()
+			vim.api.nvim_set_var("NERDTreeGitStatusUseNerdFonts", 1)
+		end,
 	})
 
 	-- lsp
