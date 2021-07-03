@@ -7,6 +7,7 @@ import pathlib
 import shutil
 import os
 import sys
+import re
 import platform
 import pip
 from typing import List, Dict
@@ -18,6 +19,9 @@ BUILD = NEOVIM_DIR / 'build'
 INSTALL_DIR = HERE / 'install'
 
 VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat'
+
+INIT_VIM_TEMPLATE = HERE / 'init.vim'
+GINIT_VIM_TEMPLATE = HERE / 'ginit.vim'
 
 
 def init_dir() -> pathlib.Path:
@@ -186,30 +190,23 @@ def install():
     run('cmake', '--install', '.', '--config', 'RelWithDebInfo', '--prefix',
         '../../install')
 
+
+def init_files():
+    #
+    # init.vim & ginit.vim
+    #
     print(INIT_DIR)
     if not INIT_DIR.exists():
         INIT_DIR.mkdir(parents=True)
-    (INIT_DIR / 'init.lua').write_text(f'''# this is generated. entry point
 
-local execute = vim.api.nvim_command
-local fn = vim.fn
+    map = {'runtime_root': str(HERE / 'runtime')}
 
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  fn.system({{'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path}})
-  execute 'packadd packer.nvim'
-end
+    def callback(matchobj: re.Match):
+        return map[matchobj.group(1)]
 
-vim.cmd[[set runtimepath^={HERE / 'runtime'}]]
-require 'entry'
-''')
-
-    (INIT_DIR / 'ginit.vim').write_text('''
-set mouse=a
-Guifont! Cica:h14
-GuiTabline 0
-GuiPopupmenu 0
-''')
+    (INIT_DIR / 'init.vim').write_text(
+        re.sub('\$\{(\w+)\}', callback, INIT_VIM_TEMPLATE.read_text()))
+    (INIT_DIR / 'ginit.vim').write_text(GINIT_VIM_TEMPLATE.read_text())
 
 
 if __name__ == '__main__':
@@ -233,7 +230,7 @@ if __name__ == '__main__':
     run('cargo', 'install', 'bat', 'stylua')
 
     # lsp
-    run('ghq get https://github.com/sumneko/lua-language-server')
+    # run('ghq get https://github.com/sumneko/lua-language-server')
 
     # TODO: ghq
 
@@ -243,7 +240,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         # all
         # actions = ['clean', 'deps', 'nvim', 'install']
-        actions = ['deps', 'nvim', 'install']
+        actions = ['deps', 'nvim', 'install', 'init_files']
     else:
         actions = sys.argv[1:]
 
