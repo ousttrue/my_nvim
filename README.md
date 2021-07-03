@@ -16,9 +16,12 @@
 
 ## TODO
 
-* [x] Lua: LanguageServer
-* [ ] Rust: LanguageServer
-* [ ] Rust: DebugAdatper
+* [x] Lua: LanguageServer(sumneko_lua)
+* [x] Python: LanguageServer(pylsp)
+* [x] Python: DebugAdatper(debugpy)
+* [ ] C++: LanguageServer(clangd)
+* [ ] C++: DebugAdapter(codelldb)
+* [ ] Rust: LanguageServer(rust_analyzer)
 * [ ] C#: LanguageServer
 * [ ] C#: DebugAdapter
 * [ ] Unity: DebugAdapter
