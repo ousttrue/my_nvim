@@ -10,59 +10,70 @@ import sys
 import re
 import platform
 import pip
-from typing import List, Dict
+from typing import Dict
 
-HERE = pathlib.Path(__file__).absolute().parent
-NEOVIM_DIR = HERE / 'neovim'
-DEPS = NEOVIM_DIR / '.deps'
-BUILD = NEOVIM_DIR / 'build'
-INSTALL_DIR = HERE / 'install'
+
+class MyNVim:
+    def __init__(self, root: pathlib.Path):
+        self.root = root
+        self.install_dir = self.root / 'install'
+        self.init_vim_template = self.root / 'init.vim'
+        self.ginit_vim_template = self.root / 'ginit.vim'
+        self.language_server_dir = self.root / 'language_server'
+        # neovim source
+        self.neovim_dir = self.root / 'neovim'
+        self.deps = self.neovim_dir / '.deps'
+        self.build = self.neovim_dir / 'build'
+
+        self.init_dir = self._get_init_dir()
+        self.home_dir = self._get_home_dir()
+
+        self.cargo_exe = self._get_cargo_exe()
+        self.cmake_exe = self._get_cmake_exe()
+
+    def _get_home_dir(self) -> pathlib.Path:
+        if 'USERPROFILE' in os.environ:
+            return pathlib.Path(os.environ['USERPROFILE']).absolute()
+        else:
+            return pathlib.Path(os.environ['HOME']).absolute()
+
+    def _get_init_dir(self) -> pathlib.Path:
+        if platform.system() == 'Windows':
+            if 'XDG_CONFIG_HOME' in os.environ:
+                xdg_home_dir = pathlib.Path(
+                    os.environ['XDG_CONFIG_HOME']).absolute()
+                return xdg_home_dir / 'nvim'
+            else:
+                APPDATA_DIR = pathlib.Path(os.environ['APPDATA']).absolute()
+                return APPDATA_DIR.parent / 'Local/nvim'
+        else:
+            home_dir = pathlib.Path(os.environ['HOME']).absolute()
+            return home_dir / '.config/nvim'
+
+    def _get_cargo_exe(self) -> pathlib.Path:
+        cargo = self.home_dir / '.cargo/bin/cargo'
+        if cargo.exists():
+            return cargo
+        cargo = self.home_dir / '.cargo/bin/cargo.exe'
+        if cargo.exists():
+            return cargo
+        raise Exception('no cargo')
+
+    def _get_cmake_exe(self) -> pathlib.Path:
+        for path in os.environ['PATH'].split(';'):
+            cmake = pathlib.Path(path) / 'cmake.exe'
+            if cmake.exists():
+                return cmake
+        cmake = pathlib.Path("C:/Program Files/CMake/bin/cmake.exe")
+        if cmake.exists():
+            return cmake
+
+        raise FileNotFoundError('cmake.exe')
+
+
+MY = MyNVim(pathlib.Path(__file__).absolute().parent)
 
 VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat'
-
-INIT_VIM_TEMPLATE = HERE / 'init.vim'
-GINIT_VIM_TEMPLATE = HERE / 'ginit.vim'
-
-LANGUAGE_SERVER_DIR = HERE / 'language_server'
-
-
-def init_dir() -> pathlib.Path:
-    if platform.system() == 'Windows':
-        if True:
-            APPDATA_DIR = pathlib.Path(os.environ['APPDATA']).absolute()
-            return APPDATA_DIR.parent / 'Local/nvim'
-        else:
-            HOME_DIR = pathlib.Path(os.environ['USERPROFILE']).absolute()
-            return HOME_DIR / '.config/nvim'
-    else:
-        HOME_DIR = pathlib.Path(os.environ['HOME']).absolute()
-        return HOME_DIR / '.config/nvim'
-
-
-INIT_DIR = init_dir()
-
-
-def home_dir() -> pathlib.Path:
-    if 'USERPROFILE' in os.environ:
-        return pathlib.Path(os.environ['USERPROFILE']).absolute()
-    else:
-        return pathlib.Path(os.environ['HOME']).absolute()
-
-
-HOME_DIR = home_dir()
-
-
-def cargo_exe() -> pathlib.Path:
-    cargo = HOME_DIR / '.cargo/bin/cargo'
-    if cargo.exists():
-        return cargo
-    cargo = HOME_DIR / '.cargo/bin/cargo.exe'
-    if cargo.exists():
-        return cargo
-    raise Exception('no cargo')
-
-
-CARGO = cargo_exe()
 
 
 def mkcd(path: pathlib.Path):
@@ -84,6 +95,11 @@ def vcvars64() -> Dict[str, str]:
         [comspec, '/k', VCBARS64, '&', 'set', '&', 'exit'],
         stdout=subprocess.PIPE)
 
+
+    stdout = process.stdout
+    if not stdout:
+        raise Exception()
+
     # old = {k: v for k, v in os.environ.items()}
 
     new = {}
@@ -91,7 +107,7 @@ def vcvars64() -> Dict[str, str]:
         rc = process.poll()
         if rc is not None:
             break
-        output = process.stdout.readline()
+        output = stdout.readline()
         line = decode(output)
 
         if '=' in line:
@@ -107,9 +123,9 @@ def vcvars64() -> Dict[str, str]:
     return new
 
 
-def install_packages(*packages: List[str]):
+def install_packages(*packages: str):
     if platform.system() == 'Linux':
-        run('sudo', 'apt', 'install', '-y', *packages)
+        run(pathlib.Path('/usr/bin/sudo'), 'apt', 'install', '-y', *packages)
 
 
 def decode(b: bytes) -> str:
@@ -122,48 +138,52 @@ def decode(b: bytes) -> str:
         return b.decode('utf-8')
 
 
-def run(*cmd: List[str], **args):
-    exe = pathlib.Path(cmd[0])
+def run(exe: pathlib.Path, *cmd: str, **args):
     if not exe.exists():
         raise Exception(f'{exe} not found')
 
-    print(' '.join(cmd))
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    print(f'{exe} ' + ''.join(f' {cmd}'))
+    process = subprocess.Popen([str(exe)] + list(cmd), stdout=subprocess.PIPE)
+    stdout = process.stdout
+    if not stdout:
+        raise Exception()
     while True:
         rc = process.poll()
         if rc is not None:
             break
-        output = process.stdout.readline()
+
+        output = stdout.readline()
         print(decode(output).strip())
 
     if rc != args.get('rc', 0):
         raise Exception(rc)
 
 
-def clean_deps():
-    if DEPS.exists():
-        shutil.rmtree(DEPS)
+def clean_deps(my: MyNVim):
+    if my.deps.exists():
+        shutil.rmtree(my.deps)
 
 
-def clean_nvim():
-    if BUILD.exists():
-        shutil.rmtree(BUILD)
+def clean_nvim(my: MyNVim):
+    if my.build.exists():
+        shutil.rmtree(my.build)
 
 
-def clean():
-    clean_deps()
-    clean_nvim()
-    if INSTALL_DIR.exists():
-        shutil.rmtree(INSTALL_DIR)
+def clean(my: MyNVim):
+    clean_deps(my)
+    clean_nvim(my)
+    if my.install_dir.exists():
+        shutil.rmtree(my.install_dir)
 
 
-def deps():
+def deps(my: MyNVim):
     '''
     build libs
     '''
-    mkcd(DEPS)
-    run('cmake', '../third-party', '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
-    run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
+    mkcd(my.deps)
+    run(my.cmake_exe, '../third-party',
+        '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
+    run(my.cmake_exe, '--build', '.', '--config', 'RelWithDebInfo')
 
 
 def vc_option(line: str) -> str:
@@ -178,63 +198,63 @@ def patch(file: pathlib.Path):
     file.write_text('\n'.join(lines))
 
 
-def nvim():
+def nvim(my: MyNVim):
     '''
     build nvim
     '''
-    mkcd(BUILD)
+    mkcd(my.build)
 
     # patch to CMakeLists.txt
-    patch(NEOVIM_DIR / 'CMakeLists.txt')
+    patch(my.neovim_dir / 'CMakeLists.txt')
 
     # single configuration(make etc)
-    run('cmake', '..', '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
+    run(my.cmake_exe, '..', '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
     # multi configuration(vc etc)
-    run('cmake', '--build', '.', '--config', 'RelWithDebInfo')
+    run(my.cmake_exe, '--build', '.', '--config', 'RelWithDebInfo')
 
 
-def install():
-    mkcd(BUILD)
-    # run('cmake', '--build', '.', '--target', 'install')
-    run('cmake', '--install', '.', '--config', 'RelWithDebInfo', '--prefix',
-        '../../install')
+def install(my: MyNVim):
+    mkcd(my.build)
+    # run(my.cmake_exe, '--build', '.', '--target', 'install')
+    run(my.cmake_exe, '--install', '.', '--config', 'RelWithDebInfo',
+        '--prefix', '../../install')
 
 
-def init_files():
+def init_files(my: MyNVim):
     #
     # init.vim & ginit.vim
     #
-    print(INIT_DIR)
-    if not INIT_DIR.exists():
-        INIT_DIR.mkdir(parents=True)
+    print(my.init_dir)
+    if not my.init_dir.exists():
+        my.init_dir.mkdir(parents=True)
 
-    map = {'my_nvim_root': str(HERE).replace('\\', '/')}
+    map = {'my_nvim_root': str(my.root).replace('\\', '/')}
 
     def callback(matchobj: re.Match):
         return map[matchobj.group(1)]
 
-    (INIT_DIR / 'init.vim').write_text(
-        re.sub('\$\{(\w+)\}', callback, INIT_VIM_TEMPLATE.read_text()))
-    (INIT_DIR / 'ginit.vim').write_text(GINIT_VIM_TEMPLATE.read_text())
+    (my.init_dir / 'init.vim').write_text(
+        re.sub(r'${(\w+)}', callback, my.init_vim_template.read_text()))
+    (my.init_dir / 'ginit.vim').write_text(my.ginit_vim_template.read_text())
 
 
 def build_lua_language_server(path: pathlib.Path):
     # build luamake
     if not (path / '3rd/luamake/luamake.exe').exists():
         os.chdir(path / '3rd/luamake')
-        run(os.environ['COMSPEC'], '/C', 'compile\\install.bat', rc=1)
+        run(pathlib.Path(os.environ['COMSPEC']), '/C', 'compile\\install.bat', rc=1)
     # build language-server
     os.chdir(path)
-    run(str(path / '3rd/luamake/luamake.exe'), 'rebuild')
+    run(path / '3rd/luamake/luamake.exe', 'rebuild')
 
 
-def ls():
-    build_lua_language_server(LANGUAGE_SERVER_DIR / 'lua-language-server')
+def ls(my: MyNVim):
+    build_lua_language_server(my.language_server_dir / 'lua-language-server')
     # pip.main(['install', 'python-language-server']) # this is require python2
-    pip.main('install', 'python-lsp-server[all]')
+    pip.main(['install', 'python-lsp-server[all]'])
 
 
-def tools():
+def tools(my: MyNVim):
 
     if platform.system() == 'Windows':
         pass
@@ -246,7 +266,7 @@ def tools():
     pip.main(['install', 'pynvim', 'neovim-remote', 'yapf', 'debugpy'])
 
     # cargo
-    run(str(CARGO), 'install', 'bat', 'stylua', 'rhq')
+    run(my.cargo_exe, 'install', 'bat', 'stylua', 'rhq')
 
 
 if __name__ == '__main__':
@@ -273,4 +293,4 @@ if __name__ == '__main__':
 
     for action in actions:
         print(f'########## {action} ##########')
-        locals()[action]()
+        locals()[action](MY)
