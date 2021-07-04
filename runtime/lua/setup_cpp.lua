@@ -4,9 +4,16 @@ require("lspconfig").clangd.setup({
 })
 
 local dap = require("dap")
+
+if vim.fn.has("win32") ~= 0 then
+	local exe = vim.env.USERPROFILE .. "/.vscode/extensions/vadimcn.vscode-lldb-1.6.5/adapter/codelldb.exe"
+else
+	local exe = "/usr/bin/codelldb"
+end
+
 dap.adapters.codelldb = {
 	type = "executable_server",
-	command = vim.env.USERPROFILE .. "/.vscode/extensions/vadimcn.vscode-lldb-1.6.5/adapter/codelldb.exe",
+	command = exe,
 }
 dap.configurations.cpp = {
 	{

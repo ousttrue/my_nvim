@@ -60,6 +60,9 @@ class MyNVim:
         raise Exception('no cargo')
 
     def _get_cmake_exe(self) -> pathlib.Path:
+        cmake = pathlib.Path('/usr/bin/cmake')
+        if cmake.exists():
+            return cmake
         for path in os.environ['PATH'].split(';'):
             cmake = pathlib.Path(path) / 'cmake.exe'
             if cmake.exists():
@@ -94,7 +97,6 @@ def vcvars64() -> Dict[str, str]:
     process = subprocess.Popen(
         [comspec, '/k', VCBARS64, '&', 'set', '&', 'exit'],
         stdout=subprocess.PIPE)
-
 
     stdout = process.stdout
     if not stdout:
@@ -181,8 +183,7 @@ def deps(my: MyNVim):
     build libs
     '''
     mkcd(my.deps)
-    run(my.cmake_exe, '../third-party',
-        '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
+    run(my.cmake_exe, '../third-party', '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
     run(my.cmake_exe, '--build', '.', '--config', 'RelWithDebInfo')
 
 
@@ -234,18 +235,29 @@ def init_files(my: MyNVim):
         return map[matchobj.group(1)]
 
     (my.init_dir / 'init.vim').write_text(
-        re.sub(r'${(\w+)}', callback, my.init_vim_template.read_text()))
+        re.sub(r'\$\{(\w+)\}', callback, my.init_vim_template.read_text()))
     (my.init_dir / 'ginit.vim').write_text(my.ginit_vim_template.read_text())
 
 
 def build_lua_language_server(path: pathlib.Path):
     # build luamake
-    if not (path / '3rd/luamake/luamake.exe').exists():
-        os.chdir(path / '3rd/luamake')
-        run(pathlib.Path(os.environ['COMSPEC']), '/C', 'compile\\install.bat', rc=1)
-    # build language-server
-    os.chdir(path)
-    run(path / '3rd/luamake/luamake.exe', 'rebuild')
+    if platform.system() == 'Windows':
+        if not (path / '3rd/luamake/luamake.exe').exists():
+            os.chdir(path / '3rd/luamake')
+            run(pathlib.Path(os.environ['COMSPEC']),
+                '/C',
+                'compile\\install.bat',
+                rc=1)
+        # build language-server
+        os.chdir(path)
+        run(path / '3rd/luamake/luamake.exe', 'rebuild')
+    else:
+        if not (path / '3rd/luamake/luamake').exists():
+            os.chdir(path / '3rd/luamake')
+            run(path / '3rd/luamake/compile/install.sh')
+        # build language-server
+        os.chdir(path)
+        run(path / '3rd/luamake/luamake', 'rebuild')
 
 
 def ls(my: MyNVim):
