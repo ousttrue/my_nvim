@@ -123,6 +123,10 @@ def decode(b: bytes) -> str:
 
 
 def run(*cmd: List[str], **args):
+    exe = pathlib.Path(cmd[0])
+    if not exe.exists():
+        raise Exception(f'{exe} not found')
+
     print(' '.join(cmd))
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     while True:
@@ -242,7 +246,7 @@ def tools():
     pip.main(['install', 'pynvim', 'neovim-remote', 'yapf', 'debugpy'])
 
     # cargo
-    run('cargo', 'install', 'bat', 'stylua')
+    run(str(CARGO), 'install', 'bat', 'stylua')
 
 
 if __name__ == '__main__':

@@ -39,6 +39,15 @@ packer.startup(function()
 	-- https://github.com/kamykn/popup-menu.nvim
 	-- https://github.com/ncm2/float-preview.nvim
 	-- https://github.com/skywind3000/asynctasks.vim
+	use({
+		"skywind3000/asynctasks.vim",
+		requires = {
+			{ "skywind3000/asyncrun.vim" },
+		},
+		config = function()
+			vim.api.nvim_set_var("asyncrun_open", 6)
+		end,
+	})
 
 	-- treesitter
 	-- https://github.com/nvim-treesitter/nvim-treesitter

@@ -3,12 +3,36 @@
 --   https://github.com/willelz/nvim-lua-guide-ja/blob/master/README.ja.md
 -- https://zenn.dev/slin/articles/2020-11-03-neovim-lua2
 
+-- @param pos int
+-- @param path strring
+local function insert_path(pos, path)
+	path = path:gsub("/", "\\")
+
+	if vim.env.PATH:find(path) then
+		return
+	end
+
+	if pos == 0 then
+		-- head
+		if not path:match(";$") then
+			path = path + ";"
+		end
+		vim.env.PATH = path .. vim.env.PATH
+	else
+		-- tail
+		if not vim.env.PATH:match(";$") then
+			path = ";" .. path
+		end
+		vim.env.PATH = vim.env.PATH .. path
+	end
+end
+
 if vim.env.USERPROFILE then
-	vim.env.PATH = "C:\\Python38;" .. vim.env.PATH
-	vim.env.PATH = "C:\\Python38\\Scripts;" .. vim.env.PATH
-	vim.env.PATH = vim.env.USERPROFILE .. "\\.cargo\\bin;" .. vim.env.PATH
-	vim.env.PATH = vim.env.USERPROFILE .. "\\go\\bin;" .. vim.env.PATH
-	vim.env.PATH = vim.env.PATH .. ";C:\\Program Files\\LLVM\\bin"
+	insert_path(-1, "C:\\Python38")
+	insert_path(-1, "C:\\Python38\\Scripts")
+	insert_path(-1, vim.env.USERPROFILE .. "\\.cargo\\bin")
+	insert_path(-1, vim.env.USERPROFILE .. "\\go\\bin")
+	insert_path(-1, "C:\\Program Files\\LLVM\\bin")
 end
 
 vim.api.nvim_set_keymap("n", "[prefix]", "<Nop>", { noremap = true })
@@ -63,4 +87,3 @@ vim.cmd([[nmap <C-p> :lprevious<CR>]])
 
 vim.api.nvim_set_keymap("n", "<C-l>", ":nohlsearch<CR><C-l>", { noremap = true })
 vim.api.nvim_set_keymap("n", "q", ":close<CR>", { noremap = true })
-
