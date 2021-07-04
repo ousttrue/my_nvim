@@ -10,4 +10,5 @@ lua require 'setup_lua'
 lua require 'setup_python'
 lua require 'setup_cpp'
 lua require 'setup_rust'
+lua require 'setup_cs'
 

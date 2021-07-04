@@ -22,6 +22,6 @@
 * [x] C++: LanguageServer(clangd)
 * [x] C++: DebugAdapter(codelldb)
 * [x] Rust: LanguageServer(rust_analyzer)
-* [ ] C#: LanguageServer
+* [x] C#: LanguageServer(OmniSharp)
 * [ ] C#: DebugAdapter
 * [ ] Unity: DebugAdapter
