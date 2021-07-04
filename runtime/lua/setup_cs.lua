@@ -15,6 +15,10 @@ dap.adapters.netcoredb = {
 	command = vim.env.USERPROFILE .. "/Desktop/netcoredbg/netcoredbg.exe",
 	args = { "--interpreter=vscode" },
 }
+dap.adapters.unity = {
+	type = "executable",
+	command = vim.env.USERPROFILE .. "/.vscode/extensions/unity.unity-debug-2.7.5/bin/UnityDebug.exe",
+}
 dap.configurations.cs = {
 	{
 		name = "Launch",
@@ -22,6 +26,14 @@ dap.configurations.cs = {
 		request = "launch",
 		program = function()
 			return vim.fn.input("Path to dll", vim.fn.getcwd() .. "/bin/Debug/", "file")
+		end,
+	},
+	{
+		name = "Attach Unity",
+		type = "unity",
+		request = "launch",
+		program = function()
+			return vim.fn.input("Path to EditorInstance.json", vim.fn.getcwd(), "file")
 		end,
 	},
 }

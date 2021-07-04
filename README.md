@@ -1,12 +1,15 @@
-# neovim の ビルドと設定管理
+# neovim build and configuration
 
-## Required
+## Dependencies
 
 ### Windows10(64bit)
 
-* `C:/Python38`
 * VC2019
 * CMake
+* `C:/Python38`
+* rustup
+* go, ghq
+* LLVM(treesitter, cland)
 
 ### Ubuntu-20.04(WSL2)
 
@@ -14,14 +17,15 @@
 
 * `build.py` で `install/bin` に nvim をビルドしてインストールする
 
-## TODO
+## Languages(lsp & dap)
 
-* [x] Lua: LanguageServer(sumneko_lua)
-* [x] Python: LanguageServer(pylsp)
-* [x] Python: DebugAdatper(debugpy)
+* [x] Lua: LanguageServer([sumneko_lua](https://github.com/sumneko/lua-language-server))
+* [x] Python: LanguageServer([pylsp](https://github.com/python-lsp/python-lsp-server))
+* [x] Python: DebugAdatper([debugpy](https://github.com/microsoft/debugpy))
 * [x] C++: LanguageServer(clangd)
-* [x] C++: DebugAdapter(codelldb)
-* [x] Rust: LanguageServer(rust_analyzer)
-* [x] C#: LanguageServer(OmniSharp)
-* [x] C#: DebugAdapter(netcoredbg)
-* [ ] Unity: DebugAdapter
+* [x] C++: DebugAdapter([codelldb](https://github.com/vadimcn/vscode-lldb))
+* [x] Rust: LanguageServer([rust_analyzer](https://github.com/rust-analyzer/rust-analyzer))
+* [x] C#: LanguageServer([OmniSharp](https://github.com/omnisharp/omnisharp-roslyn))
+* [x] C#: DebugAdapter([netcoredbg](https://github.com/Samsung/netcoredbg))
+* [ ] Unity: DebugAdapter([unitydebug](https://github.com/Unity-Technologies/vscode-unity-debug))
+
