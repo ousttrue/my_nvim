@@ -137,8 +137,23 @@ packer.startup(function()
 			-- 		},
 			-- 	},
 			-- })
-			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
-			vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
+			-- vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
+			-- vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
+		end,
+	})
+	use({
+		"liuchengxu/vim-clap",
+		run = function()
+			-- " Build the extra binary if cargo exists on your system.
+			vim.cmd([[Clap install-binary]])
+		end,
+		config = function()
+			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Clap git_files<CR>", {})
+			-- vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
+
+			-- " For example, use <C-n>/<C-p> instead of <C-j>/<C-k> to navigate the result.
+			vim.cmd([[autocmd FileType clap_input inoremap <silent> <buffer> <C-n> <C-R>=clap#navigation#linewise('down')<CR>]])
+			vim.cmd([[autocmd FileType clap_input inoremap <silent> <buffer> <C-p> <C-R>=clap#navigation#linewise('up')<CR>]])
 		end,
 	})
 
