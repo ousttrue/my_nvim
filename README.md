@@ -21,6 +21,7 @@
 
 * [x] Lua: LanguageServer([sumneko_lua](https://github.com/sumneko/lua-language-server))
 * [x] Python: LanguageServer([pylsp](https://github.com/python-lsp/python-lsp-server))
+* [x] Python: LanguageServer([pyright](https://github.com/Microsoft/pyright))
 * [x] Python: DebugAdatper([debugpy](https://github.com/microsoft/debugpy))
 * [x] C++: LanguageServer(clangd)
 * [x] C++: DebugAdapter([codelldb](https://github.com/vadimcn/vscode-lldb))

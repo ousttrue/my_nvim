@@ -1,4 +1,7 @@
-require("lspconfig").pylsp.setup({
+-- require("lspconfig").pylsp.setup({
+-- 	on_attach = require("lsp_on_attach"),
+-- })
+require("lspconfig").pyright.setup({
 	on_attach = require("lsp_on_attach"),
 })
 

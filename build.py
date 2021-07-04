@@ -84,7 +84,7 @@ def vcvars64() -> Dict[str, str]:
         [comspec, '/k', VCBARS64, '&', 'set', '&', 'exit'],
         stdout=subprocess.PIPE)
 
-    old = {k: v for k, v in os.environ.items()}
+    # old = {k: v for k, v in os.environ.items()}
 
     new = {}
     while True:

@@ -33,6 +33,7 @@ if vim.env.USERPROFILE then
 	insert_path(-1, vim.env.USERPROFILE .. "\\.cargo\\bin")
 	insert_path(-1, vim.env.USERPROFILE .. "\\go\\bin")
 	insert_path(-1, "C:\\Program Files\\LLVM\\bin")
+	insert_path(-1, vim.env.APPDATA .. "\\npm")
 end
 
 vim.api.nvim_set_keymap("n", "[prefix]", "<Nop>", { noremap = true })
