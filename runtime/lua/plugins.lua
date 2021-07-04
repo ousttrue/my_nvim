@@ -36,9 +36,8 @@ packer.startup(function()
 	-- use("glepnir/galaxyline.nvim")
 
 	-- ToDo
-	-- https://github.com/kamykn/popup-menu.nvim
-	-- https://github.com/ncm2/float-preview.nvim
-	-- https://github.com/skywind3000/asynctasks.vim
+	-- liuchengxu/vim-which-key
+
 	use({
 		"skywind3000/asynctasks.vim",
 		requires = {
@@ -96,6 +95,11 @@ packer.startup(function()
 			}
 		end,
 	})
+	use({
+		"liuchengxu/vista.vim",
+		config = function()
+		end,
+	})
 
 	-- git
 	use("tpope/vim-fugitive")
@@ -138,7 +142,7 @@ packer.startup(function()
 			-- 	},
 			-- })
 			-- vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
-			-- vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
+			vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
 	use({
@@ -149,11 +153,15 @@ packer.startup(function()
 		end,
 		config = function()
 			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Clap git_files<CR>", {})
-			-- vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
 
 			-- " For example, use <C-n>/<C-p> instead of <C-j>/<C-k> to navigate the result.
-			vim.cmd([[autocmd FileType clap_input inoremap <silent> <buffer> <C-n> <C-R>=clap#navigation#linewise('down')<CR>]])
-			vim.cmd([[autocmd FileType clap_input inoremap <silent> <buffer> <C-p> <C-R>=clap#navigation#linewise('up')<CR>]])
+			vim.cmd(
+				[[autocmd FileType clap_input inoremap <silent> <buffer> <C-n> <C-R>=clap#navigation#linewise('down')<CR>]]
+			)
+			vim.cmd(
+				[[autocmd FileType clap_input inoremap <silent> <buffer> <C-p> <C-R>=clap#navigation#linewise('up')<CR>]]
+			)
+			vim.cmd([[autocmd FileType clap_input call compe#setup({ 'enabled': v:false }, 0)]])
 		end,
 	})
 

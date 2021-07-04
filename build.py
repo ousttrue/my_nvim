@@ -246,7 +246,7 @@ def tools():
     pip.main(['install', 'pynvim', 'neovim-remote', 'yapf', 'debugpy'])
 
     # cargo
-    run(str(CARGO), 'install', 'bat', 'stylua')
+    run(str(CARGO), 'install', 'bat', 'stylua', 'rhq')
 
 
 if __name__ == '__main__':
