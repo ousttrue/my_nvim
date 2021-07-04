@@ -44,14 +44,12 @@ vim.api.nvim_set_keymap("n", "[external]", "<Nop>", { noremap = true })
 vim.api.nvim_set_keymap("n", "'", "[external]", {})
 
 --
--- colorscheme, text, font
+-- settings
 --
 vim.o.ambiwidth = "single"
 vim.o.termguicolors = true
 
---
--- settings
---
+vim.o.number = true
 vim.o.autochdir = true
 vim.o.hidden = true
 vim.o.ts = 4
