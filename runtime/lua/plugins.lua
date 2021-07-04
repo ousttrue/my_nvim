@@ -337,7 +337,7 @@ packer.startup(function()
 	use({
 		"WhoIsSethDaniel/toggle-lsp-diagnostics.nvim",
 		config = function()
-			require("toggle_lsp_diagnostics").init({ underline = false, virtual_text = { prefix = "XXX", spacing = 5 } })
+			-- require("toggle_lsp_diagnostics").init({ underline = false, virtual_text = { prefix = "XXX", spacing = 5 } })
 		end,
 	})
 
