@@ -23,5 +23,5 @@
 * [x] C++: DebugAdapter(codelldb)
 * [x] Rust: LanguageServer(rust_analyzer)
 * [x] C#: LanguageServer(OmniSharp)
-* [ ] C#: DebugAdapter
+* [x] C#: DebugAdapter(netcoredbg)
 * [ ] Unity: DebugAdapter

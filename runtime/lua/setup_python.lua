@@ -10,9 +10,9 @@ dap.adapters.python = {
 }
 dap.configurations.python = {
 	{
+		name = "Launch file",
 		type = "python",
 		request = "launch",
-		name = "Launch file",
 		program = "${file}",
 		pythonPath = function()
 			return vim.api.nvim_get_var("python3_host_prog")
