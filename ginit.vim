@@ -3,7 +3,7 @@ set ambiwidth=single
 Guifont! Cica:h12
 GuiTabline 0
 GuiPopupmenu 0
-GuiLinespace 2
+GuiLinespace 5
 
 " Use shift+insert for paste inside neovim-qt,
 " see https://github.com/equalsraf/neovim-qt/issues/327#issuecomment-325660764
