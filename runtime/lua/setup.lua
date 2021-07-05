@@ -46,7 +46,7 @@ vim.api.nvim_set_keymap("n", "'", "[external]", {})
 --
 -- settings
 --
-vim.o.ambiwidth = "single"
+vim.o.ambiwidth = "double"
 vim.o.termguicolors = true
 
 vim.o.number = true

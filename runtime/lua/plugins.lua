@@ -37,6 +37,7 @@ packer.startup(function()
 
 	-- ToDo
 	-- liuchengxu/vim-which-key
+	use("kizza/actionmenu.nvim")
 
 	use({
 		"skywind3000/asynctasks.vim",

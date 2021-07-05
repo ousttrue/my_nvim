@@ -1,4 +1,5 @@
 set mouse=a
+set ambiwidth=single
 Guifont! Cica:h12
 GuiTabline 0
 GuiPopupmenu 0
