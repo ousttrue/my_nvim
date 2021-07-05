@@ -189,6 +189,8 @@ packer.startup(function()
 		},
 		config = function()
 			vim.api.nvim_set_var("NERDTreeGitStatusUseNerdFonts", 1)
+			vim.api.nvim_set_var("NERDTreeBookmarksFile", 1)
+			vim.api.nvim_set_keymap("n", ",,", ":NERDTreeVCS<CR>", {})
 		end,
 	})
 
@@ -426,8 +428,6 @@ packer.startup(function()
 					max_width = nil, -- Floats will be treated as percentage of your screen.
 				},
 			})
-
-			vim.api.nvim_set_keymap("n", ",,", ":lua require('dapui').toggle()<CR>", {})
 		end,
 	})
 

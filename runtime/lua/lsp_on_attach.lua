@@ -1,6 +1,6 @@
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(_, bufnr)
+return function(_, bufnr)
 	local function buf_set_keymap(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
 	end
@@ -32,6 +32,27 @@ local on_attach = function(_, bufnr)
 	buf_set_keymap("n", "<Tab>", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
 	buf_set_keymap("n", "<space>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 	buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-end
 
-return on_attach
+	local menu_items = {
+		'"K: hover"',
+		'"[C-k]: signature"',
+		'"gD: goto declaration"',
+		'"gd: goto definition"',
+		'"gi: goto implementation"',
+		'"gr: references"',
+		'"[space]D: definition"',
+		'"[space]rn: rename"',
+		'"[space]ca: codeaction"',
+		'"[space]f: format"',
+	}
+	local menu = "[" .. table.concat(menu_items, ", ") .. "]"
+
+	buf_set_keymap(
+		"n",
+		";;",
+		":call actionmenu#open(" .. menu .. ", {i, item -> execute('normal '.split(item, ':')[0], '')})<CR>",
+		opts
+	)
+
+	print("lsp_on_attached !")
+end
