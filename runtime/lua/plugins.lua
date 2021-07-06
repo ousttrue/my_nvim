@@ -149,23 +149,34 @@ packer.startup(function()
 			vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
+	-- use({
+	-- 	"liuchengxu/vim-clap",
+	-- 	run = function()
+	-- 		-- " Build the extra binary if cargo exists on your system.
+	-- 		vim.cmd([[Clap install-binary]])
+	-- 	end,
+	-- 	config = function()
+	-- 		vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Clap git_files<CR>", {})
+
+	-- 		-- " For example, use <C-n>/<C-p> instead of <C-j>/<C-k> to navigate the result.
+	-- 		vim.cmd(
+	-- 			[[autocmd FileType clap_input inoremap <silent> <buffer> <C-n> <C-R>=clap#navigation#linewise('down')<CR>]]
+	-- 		)
+	-- 		vim.cmd(
+	-- 			[[autocmd FileType clap_input inoremap <silent> <buffer> <C-p> <C-R>=clap#navigation#linewise('up')<CR>]]
+	-- 		)
+	-- 		vim.cmd([[autocmd FileType clap_input call compe#setup({ 'enabled': v:false }, 0)]])
+	-- 	end,
+	-- })
 	use({
-		"liuchengxu/vim-clap",
+		"Yggdroot/LeaderF",
 		run = function()
-			-- " Build the extra binary if cargo exists on your system.
-			vim.cmd([[Clap install-binary]])
+			vim.cmd([[LeaderfInstallCExtension]])
 		end,
 		config = function()
-			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Clap git_files<CR>", {})
-
-			-- " For example, use <C-n>/<C-p> instead of <C-j>/<C-k> to navigate the result.
-			vim.cmd(
-				[[autocmd FileType clap_input inoremap <silent> <buffer> <C-n> <C-R>=clap#navigation#linewise('down')<CR>]]
-			)
-			vim.cmd(
-				[[autocmd FileType clap_input inoremap <silent> <buffer> <C-p> <C-R>=clap#navigation#linewise('up')<CR>]]
-			)
-			vim.cmd([[autocmd FileType clap_input call compe#setup({ 'enabled': v:false }, 0)]])
+			vim.api.nvim_set_var('Lf_WindowPosition', 'popup')
+			vim.api.nvim_set_var('Lf_PopupHeight', 0.7)
+			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Leaderf<CR>", {})
 		end,
 	})
 
