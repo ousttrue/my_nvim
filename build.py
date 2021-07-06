@@ -10,7 +10,7 @@ import sys
 import re
 import platform
 import pip
-from typing import Dict
+from typing import Dict, Optional
 
 
 class MyNVim:
@@ -28,8 +28,10 @@ class MyNVim:
         self.init_dir = self._get_init_dir()
         self.home_dir = self._get_home_dir()
 
+        self.git_exe = self._get_from_path('git')
+        self.cmake_exe = self._get_from_path(
+            'cmake', "C:/Program Files/CMake/bin/cmake.exe")
         self.cargo_exe = self._get_cargo_exe()
-        self.cmake_exe = self._get_cmake_exe()
 
     def _get_home_dir(self) -> pathlib.Path:
         if 'USERPROFILE' in os.environ:
@@ -59,19 +61,26 @@ class MyNVim:
             return cargo
         raise Exception('no cargo')
 
-    def _get_cmake_exe(self) -> pathlib.Path:
-        cmake = pathlib.Path('/usr/bin/cmake')
-        if cmake.exists():
-            return cmake
-        for path in os.environ['PATH'].split(';'):
-            cmake = pathlib.Path(path) / 'cmake.exe'
+    def _get_from_path(self,
+                       name: str,
+                       default: Optional[str] = None) -> pathlib.Path:
+        if platform.system() == "Windows":
+            name = name + ".exe"
+            delimiter = ';'
+        else:
+            delimiter = ':'
+
+        for path in os.environ['PATH'].split(delimiter):
+            exe = pathlib.Path(path) / name
+            if exe.exists():
+                return exe
+
+        if default:
+            cmake = pathlib.Path(default)
             if cmake.exists():
                 return cmake
-        cmake = pathlib.Path("C:/Program Files/CMake/bin/cmake.exe")
-        if cmake.exists():
-            return cmake
 
-        raise FileNotFoundError('cmake.exe')
+        raise FileNotFoundError(name)
 
 
 MY = MyNVim(pathlib.Path(__file__).absolute().parent)
@@ -272,13 +281,30 @@ def tools(my: MyNVim):
         pass
     else:
         # ubuntu
-        install_packages('libtool-bin', 'cmake', 'python3', 'python3-pip')
+        install_packages('libtool-bin', 'cmake', 'python3', 'python3-pip', 'ninja-build', 'clangd')
+
+        '''
+        $ sudo apt install -y nodejs npm
+        $ sudo npm install n -g
+        $ sudo n stable
+        $ sudo apt purge -y nodejs npm
+        $ node -v
+        v14.17.3
+
+        $ curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux -o ~/bin/rust-analyzer
+        $ chmod +x ~/bin/rust-analyzer
+        '''
 
     # pip
     pip.main(['install', 'pynvim', 'neovim-remote', 'yapf', 'debugpy'])
 
     # cargo
     run(my.cargo_exe, 'install', 'bat', 'stylua', 'rhq')
+
+
+def pull(my: MyNVim):
+    run(my.git_exe, 'pull')
+    run(my.git_exe, 'submodule', 'update', '--init', '--recursive')
 
 
 if __name__ == '__main__':

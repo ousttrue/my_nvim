@@ -5,16 +5,25 @@
 ### Windows10(64bit)
 
 * VC2019
-* CMake
+* CMake, ninja
 * `C:/Python38`
 * rustup
 * go, ghq
 * LLVM(treesitter, cland)
+* nodejs 14(pyright)
 
 ### Ubuntu-20.04(WSL2)
 
-## build
+* gcc
+* cmake, ninja
+* `/usr/bin/python3`
+* rustup
+* go, ghq
+* nodejs 14(pyright)
 
+## build.py
+
+* [ ] build.py to python invoke
 * `build.py` で `install/bin` に nvim をビルドしてインストールする
 
 ## Languages(lsp & dap)
