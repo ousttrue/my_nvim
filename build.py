@@ -166,8 +166,9 @@ def run(exe: pathlib.Path, *cmd: str, **args):
         output = stdout.readline()
         print(decode(output).strip())
 
-    if rc != args.get('rc', 0):
-        raise Exception(rc)
+    if rc != 0:
+        if rc != args.get('rc', 0):
+            raise Exception(rc)
 
 
 def clean_deps(my: MyNVim):
@@ -281,8 +282,8 @@ def tools(my: MyNVim):
         pass
     else:
         # ubuntu
-        install_packages('libtool-bin', 'cmake', 'python3', 'python3-pip', 'ninja-build', 'clangd')
-
+        install_packages('libtool-bin', 'cmake', 'python3', 'python3-pip',
+                         'ninja-build', 'clangd')
         '''
         $ sudo apt install -y nodejs npm
         $ sudo npm install n -g
@@ -299,7 +300,13 @@ def tools(my: MyNVim):
     pip.main(['install', 'pynvim', 'neovim-remote', 'yapf', 'debugpy'])
 
     # cargo
-    run(my.cargo_exe, 'install', 'bat', 'stylua', 'rhq')
+    run(
+        my.cargo_exe,
+        'install',
+        'bat',
+        'stylua',
+        #'rhq',
+    )
 
 
 def pull(my: MyNVim):
