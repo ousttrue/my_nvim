@@ -37,7 +37,9 @@ packer.startup(function()
 
 	-- ToDo
 	-- liuchengxu/vim-which-key
+
 	use("kizza/actionmenu.nvim")
+	use("simeji/winresizer")
 
 	use({
 		"skywind3000/asynctasks.vim",
@@ -488,7 +490,8 @@ packer.startup(function()
 	use("ilyachur/cmake4vim")
 
 	-- markdown
-	-- 自動的に遅延読み込みとみなされます。
+	-- use("vim-voom/VOoM")
+	use("rhysd/vim-gfm-syntax")
 	use({
 		"npxbr/glow.nvim",
 		cmd = { "Glow", "GlowInstall" },
