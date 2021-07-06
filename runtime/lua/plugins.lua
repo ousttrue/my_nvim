@@ -115,6 +115,8 @@ packer.startup(function()
 	-- 		require("octo").setup()
 	-- 	end,
 	-- })
+	use("sodapopcan/vim-twiggy")
+	use("gregsexton/gitv")
 
 	-- fuzzy finder
 	-- https://github.com/nvim-telescope/telescope.nvim
