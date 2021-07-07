@@ -135,18 +135,18 @@ packer.startup(function()
 		config = function()
 			require("telescope").load_extension("ghq")
 
-			-- local actions = require("telescope.actions")
-			-- require("telescope").setup({
-			-- 	defaults = {
-			-- 		mappings = {
-			-- 			i = {
-			-- 				["<esc>"] = actions.close,
-			-- 			},
-			-- 		},
-			-- 	},
-			-- })
-			-- vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
-			-- vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
+			local actions = require("telescope.actions")
+			require("telescope").setup({
+				defaults = {
+					mappings = {
+						i = {
+							["<esc>"] = actions.close,
+						},
+					},
+				},
+			})
+			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
+			vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
 	-- use({
@@ -180,18 +180,18 @@ packer.startup(function()
 	-- 	end,
 	-- })
 	-- https://github.com/Shougo/denite.nvim
-	use({
-		"Shougo/denite.nvim",
-		requires = {
-			{ "Jagua/vim-denite-ghq" },
-		},
-		run = function()
-			vim.cmd([[UpdateRemotePlugins]])
-		end,
-		config = function()
-			require("plugins_denite").config()
-		end,
-	})
+	-- use({
+	-- 	"Shougo/denite.nvim",
+	-- 	requires = {
+	-- 		{ "Jagua/vim-denite-ghq" },
+	-- 	},
+	-- 	run = function()
+	-- 		vim.cmd([[UpdateRemotePlugins]])
+	-- 	end,
+	-- 	config = function()
+	-- 		require("plugins_denite").config()
+	-- 	end,
+	-- })
 
 	-- filer
 	use({
