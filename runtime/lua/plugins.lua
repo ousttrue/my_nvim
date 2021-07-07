@@ -146,7 +146,7 @@ packer.startup(function()
 			-- 	},
 			-- })
 			-- vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
-			vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
+			-- vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
 	-- use({
@@ -168,15 +168,30 @@ packer.startup(function()
 	-- 		vim.cmd([[autocmd FileType clap_input call compe#setup({ 'enabled': v:false }, 0)]])
 	-- 	end,
 	-- })
+	-- use({
+	-- 	"Yggdroot/LeaderF",
+	-- 	run = function()
+	-- 		vim.cmd([[LeaderfInstallCExtension]])
+	-- 	end,
+	-- 	config = function()
+	-- 		vim.api.nvim_set_var('Lf_WindowPosition', 'popup')
+	-- 		vim.api.nvim_set_var('Lf_PopupHeight', 0.7)
+	-- 		vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Leaderf<CR>", {})
+	-- 	end,
+	-- })
+	-- https://github.com/Shougo/denite.nvim
 	use({
-		"Yggdroot/LeaderF",
+		"Shougo/denite.nvim",
 		run = function()
-			vim.cmd([[LeaderfInstallCExtension]])
+			vim.cmd([[UpdateRemotePlugins]])
 		end,
 		config = function()
-			vim.api.nvim_set_var('Lf_WindowPosition', 'popup')
-			vim.api.nvim_set_var('Lf_PopupHeight', 0.7)
-			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Leaderf<CR>", {})
+			-- pass
+			vim.cmd([[autocmd FileType denite lua require("denite_mapping")()]])
+			vim.fn["denite#custom#option"]("default", {
+				split = "floating",
+			})
+			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Denite file<CR>", {})
 		end,
 	})
 
