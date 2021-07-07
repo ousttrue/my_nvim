@@ -8,6 +8,15 @@ packer.startup(function()
 	-- https://github.com/wbthomason/packer.nvim
 	use("wbthomason/packer.nvim")
 
+	use_rocks("penlight")
+
+	use({
+		"teal-language/vim-teal",
+		rocks = {
+			{ "tl" },
+		},
+	})
+
 	-- colorscheme
 	-- use("arcticicestudio/nord-vim")
 	use({
@@ -40,6 +49,8 @@ packer.startup(function()
 
 	use("kizza/actionmenu.nvim")
 	use("simeji/winresizer")
+
+	use("thinca/vim-quickrun")
 
 	use({
 		"skywind3000/asynctasks.vim",

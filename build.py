@@ -33,6 +33,16 @@ class MyNVim:
             'cmake', "C:/Program Files/CMake/bin/cmake.exe")
         self.cargo_exe = self._get_cargo_exe()
 
+        self.luarocks_bat_template = self.root / 'luarocks.bat'
+        self.luarocks_dir = self.neovim_dir / '.deps/usr/luarocks'
+        hererocks_dir = 'packer_hererocks/2.1.0-beta3'
+        if platform.system() == "Windows":
+            self.hererocks_dir = pathlib.Path(os.environ['USERPROFILE']) / (
+                'AppData/Local/Temp/nvim/' + hererocks_dir)
+        else:
+            self.hererocks_dir = pathlib.Path(
+                os.environ['HOME']) / ('.cache/nvim/' + hererocks_dir)
+
     def _get_home_dir(self) -> pathlib.Path:
         if 'USERPROFILE' in os.environ:
             return pathlib.Path(os.environ['USERPROFILE']).absolute()
@@ -231,6 +241,13 @@ def install(my: MyNVim):
         '--prefix', '../../install')
 
 
+def map_template(path: pathlib.Path, map: Dict[str, str]) -> str:
+    def callback(matchobj: re.Match):
+        return map[matchobj.group(1)]
+
+    return re.sub(r'\$\{(\w+)\}', callback, path.read_text())
+
+
 def init_files(my: MyNVim):
     #
     # init.vim & ginit.vim
@@ -239,13 +256,9 @@ def init_files(my: MyNVim):
     if not my.init_dir.exists():
         my.init_dir.mkdir(parents=True)
 
-    map = {'my_nvim_root': str(my.root).replace('\\', '/')}
-
-    def callback(matchobj: re.Match):
-        return map[matchobj.group(1)]
-
     (my.init_dir / 'init.vim').write_text(
-        re.sub(r'\$\{(\w+)\}', callback, my.init_vim_template.read_text()))
+        map_template(my.init_vim_template,
+                     {'my_nvim_root': str(my.root).replace('\\', '/')}))
     (my.init_dir / 'ginit.vim').write_text(my.ginit_vim_template.read_text())
 
 
@@ -314,17 +327,33 @@ def pull(my: MyNVim):
     run(my.git_exe, 'submodule', 'update', '--init', '--recursive')
 
 
+def hererocks(my: MyNVim):
+    '''
+    copy lualocks from neovim/.deps
+    '''
+    if platform.system() != 'Windows':
+        return
+    shutil.copytree(my.luarocks_dir, my.hererocks_dir, dirs_exist_ok=True)
+    shutil.copytree(my.luarocks_dir.parent / 'lib/luarocks',
+                    my.hererocks_dir / 'lib',
+                    dirs_exist_ok=True)
+
+    # replace luarocks.bat
+    (my.hererocks_dir / 'luarocks.bat').write_text(
+        map_template(
+            my.luarocks_bat_template, {
+                'packer_hererocks_lua_path': f'{my.hererocks_dir}/lua/?.lua;{my.hererocks_dir}/lib/lua/?/init.lua',
+                'packer_hererocks_path': f'{my.hererocks_dir}/luarocks.lua',
+                'luajit_exe': f'{my.deps}/usr/bin/luajit.exe',
+                'luarocks_lua': f'{my.deps}/usr/luarocks/luarocks.lua',
+            }))
+
 if __name__ == '__main__':
 
     if platform.system() == 'Windows':
         # for luarocks detect vc
         vc_map = vcvars64()
         os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
-
-    # lsp
-    # run('ghq get https://github.com/sumneko/lua-language-server')
-
-    # TODO: ghq
 
     #
     # actions
