@@ -182,16 +182,14 @@ packer.startup(function()
 	-- https://github.com/Shougo/denite.nvim
 	use({
 		"Shougo/denite.nvim",
+		requires = {
+			{ "Jagua/vim-denite-ghq" },
+		},
 		run = function()
 			vim.cmd([[UpdateRemotePlugins]])
 		end,
 		config = function()
-			-- pass
-			vim.cmd([[autocmd FileType denite lua require("denite_mapping")()]])
-			vim.fn["denite#custom#option"]("default", {
-				split = "floating",
-			})
-			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Denite file<CR>", {})
+			require("plugins_denite").config()
 		end,
 	})
 
