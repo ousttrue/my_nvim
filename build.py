@@ -10,92 +10,11 @@ import sys
 import re
 import platform
 import pip
-from typing import Dict, Optional
-
-
-class MyNVim:
-    def __init__(self, root: pathlib.Path):
-        self.root = root
-        self.install_dir = self.root / 'install'
-        self.init_vim_template = self.root / 'init.vim'
-        self.ginit_vim_template = self.root / 'ginit.vim'
-        self.language_server_dir = self.root / 'language_server'
-        # neovim source
-        self.neovim_dir = self.root / 'neovim'
-        self.deps = self.neovim_dir / '.deps'
-        self.build = self.neovim_dir / 'build'
-
-        self.init_dir = self._get_init_dir()
-        self.home_dir = self._get_home_dir()
-
-        self.git_exe = self._get_from_path('git')
-        self.cmake_exe = self._get_from_path(
-            'cmake', "C:/Program Files/CMake/bin/cmake.exe")
-        self.cargo_exe = self._get_cargo_exe()
-
-        self.luarocks_bat_template = self.root / 'luarocks.bat'
-        self.luarocks_dir = self.neovim_dir / '.deps/usr/luarocks'
-        hererocks_dir = 'packer_hererocks/2.1.0-beta3'
-        if platform.system() == "Windows":
-            self.hererocks_dir = pathlib.Path(os.environ['USERPROFILE']) / (
-                'AppData/Local/Temp/nvim/' + hererocks_dir)
-        else:
-            self.hererocks_dir = pathlib.Path(
-                os.environ['HOME']) / ('.cache/nvim/' + hererocks_dir)
-
-    def _get_home_dir(self) -> pathlib.Path:
-        if 'USERPROFILE' in os.environ:
-            return pathlib.Path(os.environ['USERPROFILE']).absolute()
-        else:
-            return pathlib.Path(os.environ['HOME']).absolute()
-
-    def _get_init_dir(self) -> pathlib.Path:
-        if platform.system() == 'Windows':
-            if 'XDG_CONFIG_HOME' in os.environ:
-                xdg_home_dir = pathlib.Path(
-                    os.environ['XDG_CONFIG_HOME']).absolute()
-                return xdg_home_dir / 'nvim'
-            else:
-                APPDATA_DIR = pathlib.Path(os.environ['APPDATA']).absolute()
-                return APPDATA_DIR.parent / 'Local/nvim'
-        else:
-            home_dir = pathlib.Path(os.environ['HOME']).absolute()
-            return home_dir / '.config/nvim'
-
-    def _get_cargo_exe(self) -> pathlib.Path:
-        cargo = self.home_dir / '.cargo/bin/cargo'
-        if cargo.exists():
-            return cargo
-        cargo = self.home_dir / '.cargo/bin/cargo.exe'
-        if cargo.exists():
-            return cargo
-        raise Exception('no cargo')
-
-    def _get_from_path(self,
-                       name: str,
-                       default: Optional[str] = None) -> pathlib.Path:
-        if platform.system() == "Windows":
-            name = name + ".exe"
-            delimiter = ';'
-        else:
-            delimiter = ':'
-
-        for path in os.environ['PATH'].split(delimiter):
-            exe = pathlib.Path(path) / name
-            if exe.exists():
-                return exe
-
-        if default:
-            cmake = pathlib.Path(default)
-            if cmake.exists():
-                return cmake
-
-        raise FileNotFoundError(name)
-
+from typing import Dict
+from mynvim import MyNVim
+import vcenv
 
 MY = MyNVim(pathlib.Path(__file__).absolute().parent)
-
-VCBARS64 = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat'
 
 
 def mkcd(path: pathlib.Path):
@@ -108,40 +27,6 @@ def diff(new: Dict[str, str], old: Dict[str, str]):
         old_v = old.get(k)
         if v != old_v:
             print(f'{k}: {v} != {old_v}')
-
-
-def vcvars64() -> Dict[str, str]:
-    # %comspec% /k cmd
-    comspec = os.environ['comspec']
-    process = subprocess.Popen(
-        [comspec, '/k', VCBARS64, '&', 'set', '&', 'exit'],
-        stdout=subprocess.PIPE)
-
-    stdout = process.stdout
-    if not stdout:
-        raise Exception()
-
-    # old = {k: v for k, v in os.environ.items()}
-
-    new = {}
-    while True:
-        rc = process.poll()
-        if rc is not None:
-            break
-        output = stdout.readline()
-        line = decode(output)
-
-        if '=' in line:
-            k, v = line.strip().split('=', 1)
-            # print(k, v)
-            new[k] = v
-
-    # diff(new, old)
-
-    if rc != 0:
-        raise Exception(rc)
-
-    return new
 
 
 def install_packages(*packages: str):
@@ -207,18 +92,6 @@ def deps(my: MyNVim):
     run(my.cmake_exe, '--build', '.', '--config', 'RelWithDebInfo')
 
 
-def vc_option(line: str) -> str:
-    if 'add_compile_options(/W3)' in line:
-        return 'add_compile_options(/W3 /source-charset:utf-8 /wd4244 /wd4267 /wd4996 /wd4566)'
-    else:
-        return line
-
-
-def patch(file: pathlib.Path):
-    lines = [vc_option(line) for line in file.read_text().splitlines()]
-    file.write_text('\n'.join(lines))
-
-
 def nvim(my: MyNVim):
     '''
     build nvim
@@ -226,7 +99,7 @@ def nvim(my: MyNVim):
     mkcd(my.build)
 
     # patch to CMakeLists.txt
-    patch(my.neovim_dir / 'CMakeLists.txt')
+    my.patch()
 
     # single configuration(make etc)
     run(my.cmake_exe, '..', '-DCMAKE_BUILD_TYPE=RelWithDebInfo')
@@ -342,18 +215,15 @@ def hererocks(my: MyNVim):
     (my.hererocks_dir / 'luarocks.bat').write_text(
         map_template(
             my.luarocks_bat_template, {
-                'packer_hererocks_lua_path': f'{my.hererocks_dir}/lua/?.lua;{my.hererocks_dir}/lib/lua/?/init.lua',
+                'packer_hererocks_lua_path':
+                f'{my.hererocks_dir}/lua/?.lua;{my.hererocks_dir}/lib/lua/?/init.lua',
                 'packer_hererocks_path': f'{my.hererocks_dir}/luarocks.lua',
                 'luajit_exe': f'{my.deps}/usr/bin/luajit.exe',
                 'luarocks_lua': f'{my.deps}/usr/luarocks/luarocks.lua',
             }))
 
-if __name__ == '__main__':
 
-    if platform.system() == 'Windows':
-        # for luarocks detect vc
-        vc_map = vcvars64()
-        os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
+if __name__ == '__main__':
 
     #
     # actions
