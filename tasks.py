@@ -3,9 +3,11 @@ from invoke.context import Context
 from invoke import task
 import pathlib
 import os
+import sys
 import shutil
 import platform
 import re
+import urllib.request
 import pip
 from mynvim import MyNVim
 
@@ -17,7 +19,13 @@ def run(c: Context, exe: pathlib.Path, *args: str, **kwargs):
     if ' ' in cmd:
         cmd = f'"{cmd}"'
     cmd = f'{cmd} {" ".join(args)}'
-    print(f'{pathlib.Path(c.cwd).absolute().relative_to(MY.root)}$ {cmd}')
+
+    try:
+        rel = pathlib.Path(c.cwd).absolute().relative_to(MY.root)
+    except ValueError:
+        rel = str(c.cwd)
+
+    print(f'{rel}$ {cmd}')
     if kwargs.get('sudo', False):
         del kwargs['sudo']
         c.sudo(cmd, **kwargs)
@@ -204,28 +212,24 @@ def ls(c):
     # pip.main(['install', 'python-lsp-server[all]'])
 
 
+# HEREROCKS_URL = 'https://raw.githubusercontent.com/luarocks/hererocks/latest/hererocks.py'
+HEREROCKS_URL = 'https://raw.githubusercontent.com/ousttrue/hererocks/master/hererocks.py'
+
 @task
 def hererocks(c):
     '''
-    copy lualocks from ./neovim/.deps
+    build lualocks from hererocks
     '''
-    print(f'hererocks: {MY.hererocks_dir}')
-    if platform.system() != 'Windows':
+    if platform.system() != "Windows":
         return
-    shutil.copytree(MY.luarocks_dir, MY.hererocks_dir, dirs_exist_ok=True)
 
-    lib = MY.hererocks_dir / 'lib'
-    if lib.exists():
-        shutil.rmtree(lib)
-    lib.mkdir()
+    print(f'hererocks: {MY.hererocks_dir}')
+    MY.hererocks_dir.mkdir(exist_ok=True, parents=True)
+    with c.cd(MY.hererocks_dir):
+        data = urllib.request.urlopen(HEREROCKS_URL)
+        dst = MY.hererocks_dir / 'hererocks.py'
+        dst.write_bytes(data.read())
 
-    # replace luarocks.bat
-    (MY.hererocks_dir / 'luarocks.bat').write_text(
-        map_template(
-            MY.luarocks_bat_template, {
-                'packer_hererocks_lua_path':
-                f'{MY.hererocks_dir}/lua/?.lua;{MY.hererocks_dir}/lib/lua/?/init.lua',
-                'packer_hererocks_path': f'{MY.hererocks_dir}/luarocks.lua',
-                'luajit_exe': f'{MY.deps}/usr/bin/luajit.exe',
-                'luarocks_lua': f'{MY.deps}/usr/luarocks/luarocks.lua',
-            }))
+        run(c, pathlib.Path(sys.executable), 'hererocks.py', '--verbose',
+            '-j', '2.1.0-beta3', '-r', 'latest',
+            '2.1.0-beta3')

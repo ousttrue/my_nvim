@@ -36,9 +36,7 @@ class MyNVim:
             'cmake', "C:/Program Files/CMake/bin/cmake.exe")
         self.cargo_exe = self._get_cargo_exe()
 
-        self.luarocks_bat_template = self.root / 'hererocks/luarocks.bat'
-        self.luarocks_dir = self.neovim_dir / '.deps/usr/luarocks'
-        hererocks_dir = 'packer_hererocks/2.1.0-beta3'
+        hererocks_dir = 'packer_hererocks'
         if platform.system() == "Windows":
             self.hererocks_dir = pathlib.Path(os.environ['USERPROFILE']) / (
                 'AppData/Local/Temp/nvim/' + hererocks_dir)
