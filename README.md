@@ -21,10 +21,26 @@
 * go, ghq
 * nodejs 14(pyright)
 
-## build.py
+## tasks.py
 
-* [ ] build.py to python invoke
-* `build.py` で `install/bin` に nvim をビルドしてインストールする
+```
+$ pip install invoke
+```
+
+```
+❯ invoke -l
+Available tasks:
+
+  clean          clean ./neovim/build, ./neovim/.deps, ./install
+  hererocks      copy lualocks from ./neovim/.deps
+  init-files     install neovim init.vim & ginti.vim
+  install        install neovim to ./install
+  ls             setup language servers
+  neovim-build   build ./neovim/build
+  neovim-deps    build ./neovim/.deps third-party dependencies
+  tools          install apt, pip, cargo
+  update         git pull
+```
 
 ## Languages(lsp & dap)
 

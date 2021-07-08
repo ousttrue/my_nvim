@@ -97,3 +97,35 @@ class MyNVim:
 
     def patch(self):
         patch(self.neovim_dir / 'CMakeLists.txt')
+
+
+def decode(b: bytes) -> str:
+    if platform.system() == 'Windows':
+        try:
+            return b.decode('cp932')
+        except:
+            return b.decode('utf8')
+    else:
+        return b.decode('utf-8')
+
+
+def run(exe: pathlib.Path, *cmd: str, **args):
+    if not exe.exists():
+        raise Exception(f'{exe} not found')
+
+    print(f'{exe} ' + ''.join(f' {cmd}'))
+    process = subprocess.Popen([str(exe)] + list(cmd), stdout=subprocess.PIPE)
+    stdout = process.stdout
+    if not stdout:
+        raise Exception()
+    while True:
+        rc = process.poll()
+        if rc is not None:
+            break
+
+        output = stdout.readline()
+        print(decode(output).strip())
+
+    if rc != 0:
+        if rc != args.get('rc', 0):
+            raise Exception(rc)
