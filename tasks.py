@@ -19,7 +19,7 @@ def run(c: Context, exe: pathlib.Path, *args: str, **kwargs):
     cmd = f'{cmd} {" ".join(args)}'
     print(f'{pathlib.Path(c.cwd).absolute().relative_to(MY.root)}$ {cmd}')
     if kwargs.get('sudo', False):
-        del kwargs['sudokwargs.']
+        del kwargs['sudo']
         c.sudo(cmd, **kwargs)
     else:
         c.run(cmd, **kwargs)
@@ -68,6 +68,7 @@ def tools(c):
         'install',
         'bat',
         'stylua',
+        'ripgrep',
         #'rhq',
     )
 
