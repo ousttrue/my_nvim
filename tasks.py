@@ -208,12 +208,15 @@ def hererocks(c):
     '''
     copy lualocks from ./neovim/.deps
     '''
+    print(f'hererocks: {MY.hererocks_dir}')
     if platform.system() != 'Windows':
         return
     shutil.copytree(MY.luarocks_dir, MY.hererocks_dir, dirs_exist_ok=True)
-    shutil.copytree(MY.luarocks_dir.parent / 'lib/luarocks',
-                    MY.hererocks_dir / 'lib',
-                    dirs_exist_ok=True)
+
+    lib = MY.hererocks_dir / 'lib'
+    if lib.exists():
+        shutil.rmtree(lib)
+    lib.mkdir()
 
     # replace luarocks.bat
     (MY.hererocks_dir / 'luarocks.bat').write_text(
