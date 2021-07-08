@@ -2,7 +2,10 @@
 -- https://oroques.dev/notes/neovim-init/
 --
 local packer = require("packer")
-require('packer.luarocks').install_commands()
+-- require('packer.luarocks').install_commands()
+-- require('packer.luarocks').setup_paths()
+-- require('luarocks.loader')
+
 packer.startup(function()
     -- pckage
     -- https://github.com/wbthomason/packer.nvim
