@@ -15,6 +15,11 @@ packer.startup(function()
 	use_rocks("penlight")
 	use({ "teal-language/vim-teal", rocks = { { "tl" } } })
 
+	use_rocks({
+		"lua-lsp",
+		server = "http://luarocks.org/dev",
+	})
+
 	use("jremmen/vim-ripgrep")
 
 	-- colorscheme

@@ -33,6 +33,10 @@ return function(_, bufnr)
 	buf_set_keymap("n", "<space>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 	buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
+	-- vim.api.nvim_command([[autocmd CursorHold   * lua require'utils'.blameVirtText()]])
+	-- vim.api.nvim_command([[autocmd CursorMoved  * lua require'utils'.clearBlameVirtText()]])
+	-- vim.api.nvim_command([[autocmd CursorMovedI * lua require'utils'.clearBlameVirtText()]])
+
 	local menu_items = {
 		'"K: hover"',
 		'"[C-k]: signature"',
