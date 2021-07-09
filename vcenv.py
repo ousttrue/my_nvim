@@ -54,3 +54,7 @@ if platform.system() == 'Windows':
     # for luarocks detect vc
     vc_map = vcvars64()
     os.environ['VCINSTALLDIR'] = vc_map['VCINSTALLDIR']
+    os.environ['PATH'] = vc_map['PATH']
+    os.environ['INCLUDE'] = vc_map['INCLUDE']
+    os.environ['LIB'] = vc_map['LIB']
+

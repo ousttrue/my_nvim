@@ -9,6 +9,7 @@ import platform
 import re
 import urllib.request
 import pip
+import vcenv
 from mynvim import MyNVim
 
 MY = MyNVim(pathlib.Path(__file__).absolute().parent)
@@ -224,12 +225,15 @@ def hererocks(c):
         return
 
     print(f'hererocks: {MY.hererocks_dir}')
+    if MY.hererocks_dir.exists():
+        shutil.rmtree(MY.hererocks_dir)
     MY.hererocks_dir.mkdir(exist_ok=True, parents=True)
     with c.cd(MY.hererocks_dir):
         data = urllib.request.urlopen(HEREROCKS_URL)
         dst = MY.hererocks_dir / 'hererocks.py'
         dst.write_bytes(data.read())
 
+        # python hererocks.py --verbose -j 2.1.0-beta3 -r latest 2.1.0-beta3
         run(c, pathlib.Path(sys.executable), 'hererocks.py', '--verbose',
             '-j', '2.1.0-beta3', '-r', 'latest',
             '2.1.0-beta3')
