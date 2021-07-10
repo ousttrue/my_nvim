@@ -8,9 +8,9 @@ endif
 
 lua require 'plugins'
 lua require 'setup'
-lua require 'setup_lua'
-lua require 'setup_python'
-lua require 'setup_cpp'
-lua require 'setup_rust'
-lua require 'setup_cs'
+lua require 'lang.lua'
+lua require 'lang.python'
+lua require 'lang.cpp'
+lua require 'lang.rust'
+lua require 'lang.cs'
 
