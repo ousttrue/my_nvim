@@ -235,22 +235,68 @@ function json.parse(str, pos, end_delim)
 	end
 end
 
--- stdin & stdout use DAP transport
-while true do
-	-- Content-Length: 119
+local DA = {
+	input = io.stdin,
+	output = io.stdout,
+	next_seq = 0,
+}
 
-	local l = io.stdin:read("*l")
-	io.stderr:write(l)
+DA.new_message = function(da, msg_type)
+	local msg = {
+		seq = da.next_seq,
+		type = msg_type,
+	}
+	da.next_seq = da.next_seq + 1
+	return msg
+end
+
+DA.on_request = function(da, parsed)
+	if parsed.command == "initialize" then
+		-- response
+		local response = da:new_message("response")
+		response["request_seq"] = parsed.seq
+		response["success"] = true
+		response["command"] = parsed.command
+		-- capabilities
+		response["body"] = {}
+		return response
+	else
+		error(string.format("unknown command: %q", parsed))
+	end
+end
+
+DA.on_message = function(da, parsed)
+	if parsed.type == "request" then
+		return da:on_request(parsed)
+	else
+		error(string.format("unknown type: %q", parsed))
+	end
+end
+
+DA.process_message = function(da)
+	local l = da.input:read("*l")
 
 	local m = string.match(l, "Content%-Length: (%d+)")
 	local length = tonumber(m)
 
-	io.stdin:read("*l")
-	local body = io.stdin:read(length)
+	da.input:read("*l")
+	local body = da.input:read(length)
 	local parsed = json.parse(body)
 	-- seq
 	-- type request...
 	-- command initialize...
+	local response = DA:on_message(parsed)
+	if response then
+		local encoded = json.stringify(response)
+		local encoded_length = string.len(encoded)
+		local msg = string.format("Content-Length: %d", encoded_length) .. "\r\n\r\n" .. encoded
+		da.output:write(msg)
+		da.output:flush()
+io.stderr:write(msg)
+	end
+end
 
-	io.stderr:write(string.format("[luada], %s, %s, %s", parsed.seq, parsed.type, parsed.command))
+while true do
+	DA:process_message()
+	break
 end
