@@ -54,27 +54,28 @@ require("lspconfig").sumneko_lua.setup({
 -- dap
 --
 local dap = require("dap")
+
+local luada = vim.api.nvim_get_var("my_nvim_root") .. "/luada.lua"
+
+dap.adapters.luada = {
+	type = "executable",
+	command = vim.api.nvim_get_var("my_nvim_root") .. "/neovim/.deps/usr/bin/luajit.exe",
+	-- args = { "-l", "luada", "--" },
+	-- args = { "-e", "require('luada')", "--" },
+	-- args = { "-e", "io.stderr:write(package.path)", "--" },
+	args = { luada },
+	-- options = {
+	-- 	env = {
+	-- 		-- for require luada.lua
+	-- 		LUA_PATH = lua_path,
+	-- 	},
+	-- },
+}
 dap.configurations.lua = {
 	{
-		type = "nlua",
-		request = "attach",
-		name = "Attach to running Neovim instance",
-		host = function()
-			local value = vim.fn.input("Host [127.0.0.1]: ")
-			if value ~= "" then
-				return value
-			end
-			return "127.0.0.1"
-		end,
-		port = function()
-			local val = tonumber(vim.fn.input("Port: "))
-			assert(val, "Please provide a port number")
-			return val
-		end,
+		name = "lua debug adapter",
+		type = "luada",
+		request = "launch",
+		program = "${file}",
 	},
 }
-
-dap.adapters.nlua = function(callback, config)
-	callback({ type = "server", host = config.host, port = config.port })
-end
-

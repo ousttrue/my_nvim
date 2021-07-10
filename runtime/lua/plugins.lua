@@ -92,7 +92,7 @@ packer.startup(function()
 				highlight_hovered_item = true,
 				show_guides = false,
 				auto_preview = false,
-				position = "left",
+				position = "right",
 				show_numbers = false,
 				show_relative_numbers = false,
 				show_symbol_details = true,
@@ -372,17 +372,12 @@ packer.startup(function()
 
 	-- dap
 	-- Plug 'mfussenegger/nvim-dap'
-	use({ "ousttrue/nvim-dap", config = function() end })
 	use({
-		"nvim-telescope/telescope-dap.nvim",
+		"ousttrue/nvim-dap",
+		requires = {
+			{ "mfussenegger/nvim-dap-python" },
+		},
 		config = function()
-			require("telescope").load_extension("dap")
-		end,
-	})
-	use({
-		"mfussenegger/nvim-dap-python",
-		config = function()
-			-- require('dap-python').setup('~/miniconda3/bin/python')
 			local opt = { noremap = true }
 			vim.api.nvim_set_keymap("n", "<F5>", ":lua require'dap'.continue()<CR>", opt)
 			-- vim.api.nvim_set_keymap("n", "<leader>dd", ":lua require('dap').continue()<CR>", opt)
@@ -409,10 +404,16 @@ packer.startup(function()
 		end,
 	})
 	use({
+		"nvim-telescope/telescope-dap.nvim",
+		config = function()
+			require("telescope").load_extension("dap")
+		end,
+	})
+	use({
 		"rcarriga/nvim-dap-ui",
 		requires = { "ousttrue/nvim-dap" },
 		config = function()
-			require("dapui").setup()
+			-- require("dapui").setup()
 
 			require("dapui").setup({
 				icons = { expanded = "⯆", collapsed = "⯈" },
