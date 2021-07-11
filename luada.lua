@@ -308,11 +308,14 @@ DA.new_message = function(da, msg_type)
 	return msg
 end
 
-DA.new_response = function(da, seq, command)
+DA.new_response = function(da, seq, command, body)
 	local response = da:new_message("response")
 	response["success"] = true
 	response["request_seq"] = seq
 	response["command"] = command
+	if body then
+		response["body"] = body
+	end
 	return response
 end
 
@@ -340,15 +343,17 @@ DA.launch = function(da)
 	end)
 
 	debug.sethook(da.thread, function(_, line)
-		local frame = debug.getinfo(2, "nSluf")
+		local stack_level = 2
+
+		local top_frame = debug.getinfo(stack_level, "nSluf")
 
 		local debuggerName = "luada.lua"
-		if frame.source:sub(-#debuggerName) == debuggerName then
+		if top_frame.source:sub(-#debuggerName) == debuggerName then
 			-- skip debugger code
 			return
 		end
 
-		local source = frame.source
+		local source = top_frame.source
 		if source:sub(1, 1) ~= "@" then
 			return
 		end
@@ -356,7 +361,36 @@ DA.launch = function(da)
 
 		local match = da:match_breakpoint(source, line)
 		if match then
-			io.stderr:write("break!")
+			io.stderr:write("break!\n")
+
+			-- stacks
+			da.stacks = {
+				{
+					id = stack_level,
+					name = top_frame.name,
+					line = top_frame.currentline,
+					column = 1,
+				},
+			}
+			stack_level = stack_level + 1
+			while true do
+				local frame = debug.getinfo(stack_level, "nSluf")
+				if not frame then
+					break
+				end
+				if frame.source:sub(-#debuggerName) == debuggerName then
+					-- skip debugger code
+					break
+				end
+				table.insert(da.stacks, {
+					id = stack_level,
+					name = frame.name,
+					line = frame.currentline,
+					column = 1,
+				})
+				stack_level = stack_level + 1
+			end
+
 			-- hit breakpoint
 			local event = da:new_event("stopped")
 			event.body = {
@@ -386,11 +420,9 @@ DA.on_request = function(da, parsed)
 			local event = da:new_event("initialized")
 			da:send_message(event)
 		end)
-		local response = da:new_response(parsed.seq, parsed.command)
-		response["body"] = {
+		return da:new_response(parsed.seq, parsed.command, {
 			supportsConfigurationDoneRequest = true,
-		}
-		return response
+		})
 	elseif parsed.command == "launch" then
 		da.debugee = {
 			program = parsed.arguments.program,
@@ -405,11 +437,9 @@ DA.on_request = function(da, parsed)
 				table.insert(breakpoints, created)
 			end
 		end
-		local response = da:new_response(parsed.seq, parsed.command)
-		response.body = {
+		return da:new_response(parsed.seq, parsed.command, {
 			breakpoints = breakpoints,
-		}
-		return response
+		})
 	elseif parsed.command == "configurationDone" then
 		-- enqueue
 		da:enqueue(function()
@@ -418,14 +448,18 @@ DA.on_request = function(da, parsed)
 		end)
 		return da:new_response(parsed.seq, parsed.command)
 	elseif parsed.command == "threads" then
-		local response = da:new_response(parsed.seq, parsed.command)
-		response.body = {
+		return da:new_response(parsed.seq, parsed.command, {
 			threads = {
-				id = 0,
-				name = "main",
+				{
+					id = 0,
+					name = "main",
+				},
 			},
-		}
-		return response
+		})
+	elseif parsed.command == "stackTrace" then
+		return da:new_response(parsed.seq, parsed.command, {
+			stackFrames = da.stacks,
+		})
 	else
 		error(string.format("unknown command: %q", parsed))
 	end
