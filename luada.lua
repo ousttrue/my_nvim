@@ -242,6 +242,13 @@ end
 -- \r\n
 -- byte[length]
 ------------------------------------------------------------------------------
+-- replace global print
+print = function(...)
+	for _, v in ipairs({ ... }) do
+		io.stderr:write(string.format(v))
+	end
+end
+
 io.stdout:setvbuf("no", 0)
 io.stderr:setvbuf("no", 0)
 local DA = {
@@ -250,7 +257,49 @@ local DA = {
 	next_seq = 0,
 	queue = {},
 	running = true,
+	breakpoints = {},
+	next_breakpoint_id = 1,
 }
+
+DA.enqueue = function(da, action)
+	table.insert(da.queue, action)
+end
+
+DA.add_breakpoint = function(da, source, line)
+	local match = da:match_breakpoint(source, line)
+	if match then
+		return {
+			id = match.id,
+			source = match.source,
+			line = match.line,
+			verified = false,
+		}
+	end
+
+	local bp = {
+		id = da.next_breakpoint_id,
+		source = source,
+		line = line,
+		verified = true,
+	}
+	da.next_breakpoint_id = da.next_breakpoint_id + 1
+	table.insert(da.breakpoints, bp)
+	return bp
+end
+
+DA.match_breakpoint = function(da, source, line, from_hook)
+	for i, b in ipairs(da.breakpoints) do
+		if from_hook then
+			io.stderr:write(string.format("%s:%d <=> %s:%d", b.source, b.line, source, line))
+		end
+		if b.line == line then
+			if b.source == source then
+				-- match
+				return b
+			end
+		end
+	end
+end
 
 DA.new_message = function(da, msg_type)
 	local msg = {
@@ -276,13 +325,54 @@ DA.new_event = function(da, event_name)
 	}
 end
 
-DA.enqueue = function(da, action)
-	table.insert(da.queue, action)
+DA.launch = function(da)
+	local chunk = loadfile(da.debugee.program)
+
+	da.thread = coroutine.create(function()
+		-- run
+		local rc = chunk(unpack(da.debugee.args)) or 0
+
+		-- exit
+		da.running = false
+		local event = da:new_event("exited")
+		event.body = {
+			exitCode = rc,
+		}
+		da:send_message(event)
+	end)
+
+	debug.sethook(da.thread, function(_, line)
+		local frame = debug.getinfo(2, "nSluf")
+
+		local debuggerName = "luada.lua"
+		if frame.source:sub(-#debuggerName) == debuggerName then
+			-- skip debugger code
+			return
+		end
+
+		local match = da:match_breakpoint(frame.source, line, true)
+		if match then
+			-- hit breakpoint
+			local event = da:new_event("stopped")
+			event.body = {
+				reason = "breakpoint",
+				hitBreakpointIds = { match.id },
+			}
+			da:send_message(event)
+
+			coroutine.yield()
+		end
+	end, "l")
+end
+
+DA.resume = function(da)
+	coroutine.resume(da.thread)
 end
 
 ------------------------------------------------------------------------------
 -- https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Initialize
 -- https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Launch
+-- https://microsoft.github.io/debug-adapter-protocol/specification#Requests_SetBreakpoints
 ------------------------------------------------------------------------------
 DA.on_request = function(da, parsed)
 	if parsed.command == "initialize" then
@@ -291,20 +381,34 @@ DA.on_request = function(da, parsed)
 			da:send_message(event)
 		end)
 		local response = da:new_response(parsed.seq, parsed.command)
-		response["body"] = {}
+		response["body"] = {
+			supportsConfigurationDoneRequest = true,
+		}
 		return response
 	elseif parsed.command == "launch" then
+		da.debugee = {
+			program = parsed.arguments.program,
+			args = parsed.arguments.args,
+		}
+		return da:new_response(parsed.seq, parsed.command)
+	elseif parsed.command == "setBreakpoints" then
+		local breakpoints = {}
+		for i, b in ipairs(parsed.arguments.breakpoints) do
+			local created = da:add_breakpoint(parsed.arguments.source.path, b.line)
+			if created then
+				table.insert(breakpoints, created)
+			end
+		end
+		local response = da:new_response(parsed.seq, parsed.command)
+		response.body = {
+			breakpoints = breakpoints,
+		}
+		return response
+	elseif parsed.command == "configurationDone" then
 		-- enqueue
 		da:enqueue(function()
-			local chunk = loadfile(parsed.arguments.program)
-			local rc = chunk(unpack(parsed.arguments.args)) or 0
-			-- exit
-			da.running = false
-			local event = da:new_event("exited")
-			event.body = {
-				exitCode = rc,
-			}
-			da:send_message(event)
+			da:launch()
+			da:resume()
 		end)
 		return da:new_response(parsed.seq, parsed.command)
 	else
