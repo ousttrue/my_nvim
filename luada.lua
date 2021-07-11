@@ -287,11 +287,9 @@ DA.add_breakpoint = function(da, source, line)
 	return bp
 end
 
-DA.match_breakpoint = function(da, source, line, from_hook)
+DA.match_breakpoint = function(da, source, line)
 	for i, b in ipairs(da.breakpoints) do
-		if from_hook then
-			io.stderr:write(string.format("%s:%d <=> %s:%d", b.source, b.line, source, line))
-		end
+		io.stderr:write(string.format("#%s:%d <=> %s:%d#", b.source, b.line, source, line))
 		if b.line == line then
 			if b.source == source then
 				-- match
@@ -350,8 +348,15 @@ DA.launch = function(da)
 			return
 		end
 
-		local match = da:match_breakpoint(frame.source, line, true)
+		local source = frame.source
+		if source:sub(1, 1) ~= "@" then
+			return
+		end
+		source = source:sub(2)
+
+		local match = da:match_breakpoint(source, line)
 		if match then
+			io.stderr:write("break!")
 			-- hit breakpoint
 			local event = da:new_event("stopped")
 			event.body = {

@@ -76,7 +76,7 @@ dap.configurations.lua = {
 		name = "lua debug adapter",
 		type = "luada",
 		request = "launch",
-		program = "${file}",
+		program = "${fileDirname}\\${file}",
 		args = { "a", "b", "c" },
 	},
 }
