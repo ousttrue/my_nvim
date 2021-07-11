@@ -361,6 +361,7 @@ DA.launch = function(da)
 			local event = da:new_event("stopped")
 			event.body = {
 				reason = "breakpoint",
+				threadId = 0,
 				hitBreakpointIds = { match.id },
 			}
 			da:send_message(event)
@@ -416,6 +417,15 @@ DA.on_request = function(da, parsed)
 			da:resume()
 		end)
 		return da:new_response(parsed.seq, parsed.command)
+	elseif parsed.command == "threads" then
+		local response = da:new_response(parsed.seq, parsed.command)
+		response.body = {
+			threads = {
+				id = 0,
+				name = "main",
+			},
+		}
+		return response
 	else
 		error(string.format("unknown command: %q", parsed))
 	end
