@@ -77,5 +77,6 @@ dap.configurations.lua = {
 		type = "luada",
 		request = "launch",
 		program = "${file}",
+		args = { "a", "b", "c" },
 	},
 }

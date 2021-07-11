@@ -1,7 +1,3 @@
---
--- lua Debug Adapter
---
-
 -- https://gist.github.com/tylerneylon/59f4bcf316be525b30ab
 --[[ json.lua
 
@@ -236,7 +232,15 @@ function json.parse(str, pos, end_delim)
 end
 
 ------------------------------------------------------------------------------
--- luada
+--
+-- lua Debug Adapter
+--
+-- https://microsoft.github.io/debug-adapter-protocol/specification
+--
+-- # message format(JSON-RPC)
+-- Content-Length: length\r\n
+-- \r\n
+-- byte[length]
 ------------------------------------------------------------------------------
 io.stdout:setvbuf("no", 0)
 io.stderr:setvbuf("no", 0)
@@ -244,6 +248,8 @@ local DA = {
 	input = io.stdin,
 	output = io.stdout,
 	next_seq = 0,
+	queue = {},
+	running = true,
 }
 
 DA.new_message = function(da, msg_type)
@@ -255,16 +261,52 @@ DA.new_message = function(da, msg_type)
 	return msg
 end
 
+DA.new_response = function(da, seq, command)
+	local response = da:new_message("response")
+	response["success"] = true
+	response["request_seq"] = seq
+	response["command"] = command
+	return response
+end
+
+DA.new_event = function(da, event_name)
+	return {
+		type = "event",
+		event = event_name,
+	}
+end
+
+DA.enqueue = function(da, action)
+	table.insert(da.queue, action)
+end
+
+------------------------------------------------------------------------------
+-- https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Initialize
+-- https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Launch
+------------------------------------------------------------------------------
 DA.on_request = function(da, parsed)
 	if parsed.command == "initialize" then
-		-- response
-		local response = da:new_message("response")
-		response["request_seq"] = parsed.seq
-		response["success"] = true
-		response["command"] = parsed.command
-		-- capabilities
+		da:enqueue(function()
+			local event = da:new_event("initialized")
+			da:send_message(event)
+		end)
+		local response = da:new_response(parsed.seq, parsed.command)
 		response["body"] = {}
 		return response
+	elseif parsed.command == "launch" then
+		-- enqueue
+		da:enqueue(function()
+			local chunk = loadfile(parsed.arguments.program)
+			local rc = chunk(unpack(parsed.arguments.args)) or 0
+			-- exit
+			da.running = false
+			local event = da:new_event("exited")
+			event.body = {
+				exitCode = rc,
+			}
+			da:send_message(event)
+		end)
+		return da:new_response(parsed.seq, parsed.command)
 	else
 		error(string.format("unknown command: %q", parsed))
 	end
@@ -278,7 +320,32 @@ DA.on_message = function(da, parsed)
 	end
 end
 
+DA.send_message = function(da, message)
+	local encoded = json.stringify(message)
+	if encoded:find("\n") then
+		error("contain LF")
+	end
+	local encoded_length = string.len(encoded)
+	local msg = string.format("Content-Length: %d", encoded_length)
+	if package.config:sub(1, 1) == "\\" then
+		-- windows
+		msg = msg .. "\n\n"
+	else
+		msg = msg .. "\r\n\r\n"
+	end
+	msg = msg .. encoded
+	da.output:write(msg)
+	da.output:flush()
+end
+
 DA.process_message = function(da)
+	-- dequeue
+	while #da.queue > 0 do
+		local action = table.remove(da.queue, 1)
+		action()
+	end
+
+	-- read
 	local l = da.input:read("*l")
 
 	local m = string.match(l, "Content%-Length: (%d+)")
@@ -289,26 +356,24 @@ DA.process_message = function(da)
 	local parsed = json.parse(body)
 	local response = DA:on_message(parsed)
 	if response then
-		local encoded = json.stringify(response)
-		if encoded:find("\n") then
-			error("contain LF")
-		end
-		local encoded_length = string.len(encoded)
-		local msg = string.format("Content-Length: %d", encoded_length)
-		if package.config:sub(1, 1) == "\\" then
-			-- windows
-			msg = msg .. "\n\n"
-		else
-			msg = msg .. "\r\n\r\n"
-		end
-		msg = msg .. encoded
-		da.output:write(msg)
-		da.output:flush()
+		da:send_message(response)
 	end
 end
 
-while true do
-	DA:process_message()
+-- local function format_table(t)
+-- 	local tmp = "["
+-- 	for k, v in pairs(t) do
+-- 		tmp = tmp .. string.format("%q = %q, ", k, v)
+-- 	end
+-- 	return tmp .. "]"
+-- end
+
+DA.loop = function(da)
+	while da.running do
+		DA:process_message()
+	end
 end
+
+DA:loop()
 
 io.stderr:write("[luada]exit")
