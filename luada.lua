@@ -235,6 +235,11 @@ function json.parse(str, pos, end_delim)
 	end
 end
 
+------------------------------------------------------------------------------
+-- luada
+------------------------------------------------------------------------------
+io.stdout:setvbuf("no", 0)
+io.stderr:setvbuf("no", 0)
 local DA = {
 	input = io.stdin,
 	output = io.stdout,
@@ -282,21 +287,28 @@ DA.process_message = function(da)
 	da.input:read("*l")
 	local body = da.input:read(length)
 	local parsed = json.parse(body)
-	-- seq
-	-- type request...
-	-- command initialize...
 	local response = DA:on_message(parsed)
 	if response then
 		local encoded = json.stringify(response)
+		if encoded:find("\n") then
+			error("contain LF")
+		end
 		local encoded_length = string.len(encoded)
-		local msg = string.format("Content-Length: %d", encoded_length) .. "\r\n\r\n" .. encoded
+		local msg = string.format("Content-Length: %d", encoded_length)
+		if package.config:sub(1, 1) == "\\" then
+			-- windows
+			msg = msg .. "\n\n"
+		else
+			msg = msg .. "\r\n\r\n"
+		end
+		msg = msg .. encoded
 		da.output:write(msg)
 		da.output:flush()
-io.stderr:write(msg)
 	end
 end
 
 while true do
 	DA:process_message()
-	break
 end
+
+io.stderr:write("[luada]exit")
