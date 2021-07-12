@@ -272,7 +272,9 @@ DA.add_breakpoint = function(da, source, line)
 	if match then
 		return {
 			id = match.id,
-			source = match.source,
+			source = {
+				path = match.source,
+			},
 			line = match.line,
 			verified = false,
 		}
@@ -280,7 +282,9 @@ DA.add_breakpoint = function(da, source, line)
 
 	local bp = {
 		id = da.next_breakpoint_id,
-		source = source,
+		source = {
+			path = source,
+		},
 		line = line,
 		verified = true,
 	}
@@ -291,9 +295,9 @@ end
 
 DA.match_breakpoint = function(da, source, line)
 	for i, b in ipairs(da.breakpoints) do
-		io.stderr:write(string.format("#%s:%d <=> %s:%d#", b.source, b.line, source, line))
+		io.stderr:write(string.format("#%s:%d <=> %s:%d#", b.source.path, b.line, source, line))
 		if b.line == line then
-			if b.source == source then
+			if b.source.path == source then
 				-- match
 				return b
 			end
@@ -344,11 +348,12 @@ DA.push_frame = function(da, stack_level, frame, variables)
 		line = frame.currentline,
 		column = 1,
 	}
-	if type(frame.source) == "string" and frame.source.sub(1, 1) == "@" then
-		stackframe.source = frame.source.sub(2)
+	if type(frame.source) == "string" and frame.source:sub(1, 1) == "@" then
+		stackframe.source = {
+			path = frame.source:sub(2),
+		}
 	end
 	table.insert(da.stackframes, stackframe)
-
 
 	local scopes = {}
 	-- local
@@ -383,13 +388,19 @@ DA.on_hook = function(da, stack_level, line)
 	end
 	source = source:sub(2)
 
-	local match = da:match_breakpoint(source, line)
-	if not match then
-		-- not break
-		return
+	local match
+	if da.next then
+		io.stderr:write("next!\n")
+		da.next = false
+	else
+		match = da:match_breakpoint(source, line)
+		if not match then
+			-- not break
+			return
+		end
+		-- hit breakpoint
+		io.stderr:write("break!\n")
 	end
-	-- hit breakpoint
-	io.stderr:write("break!\n")
 
 	-- clear
 	da.stackframes = {}
@@ -450,12 +461,20 @@ DA.on_hook = function(da, stack_level, line)
 	end
 
 	-- stacktrace & scpopes
-	da:send_event("stopped", {
-		reason = "breakpoint",
-		threadId = 0,
-		hitBreakpointIds = { match.id },
-	})
+	if match then
+		da:send_event("stopped", {
+			reason = "breakpoint",
+			threadId = 0,
+			hitBreakpointIds = { match.id },
+		})
+	else
+		da:send_event("stopped", {
+			reason = "step",
+			threadId = 0,
+		})
+	end
 
+	io.stderr:write("[!yield!]\n")
 	coroutine.yield()
 end
 
@@ -481,7 +500,10 @@ DA.launch = function(da)
 	end, "l")
 end
 
-DA.resume = function(da)
+DA.resume = function(da, next)
+	if next then
+		da.next = true
+	end
 	coroutine.resume(da.thread)
 end
 
@@ -546,9 +568,12 @@ DA.on_request = function(da, parsed)
 		da:enqueue(function()
 			da:resume()
 		end)
-		return da:new_response(parsed.seq, parsed.command, {
-			variables = da.variables[parsed.arguments.variablesReference],
-		})
+		return da:new_response(parsed.seq, parsed.command)
+	elseif parsed.command == "next" then
+		da:enqueue(function()
+			da:resume(true)
+		end)
+		return da:new_response(parsed.seq, parsed.command)
 	else
 		error(string.format("unknown command: %q", parsed))
 	end
@@ -581,6 +606,12 @@ DA.send_message = function(da, message)
 end
 
 DA.process_message = function(da)
+	if da.thread then
+		io.stderr:write(string.format("[status]%q\n", coroutine.status(da.thread)))
+	else
+		io.stderr:write(string.format("[status]not launch\n"))
+	end
+
 	-- dequeue
 	while #da.queue > 0 do
 		local action = table.remove(da.queue, 1)
