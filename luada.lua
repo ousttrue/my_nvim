@@ -258,7 +258,7 @@ local DA = {
 	output = io.stdout,
 	next_seq = 0,
 	queue = {},
-	running = true,
+	running_stack = { true },
 	breakpoints = {},
 	next_breakpoint_id = 1,
 }
@@ -412,7 +412,7 @@ DA.on_hook = function(da, stack_level, line)
 		local variables = {}
 		local i = 1
 		while true do
-			local k, v = debug.getlocal(da.thread, stack_level, i)
+			local k, v = debug.getlocal(stack_level, i)
 			if not k then
 				break
 			end
@@ -445,7 +445,7 @@ DA.on_hook = function(da, stack_level, line)
 		local variables = {}
 		local i = 1
 		while true do
-			local k, v = debug.getlocal(da.thread, stack_level, i)
+			local k, v = debug.getlocal(stack_level, i)
 			if not k then
 				break
 			end
@@ -474,37 +474,30 @@ DA.on_hook = function(da, stack_level, line)
 		})
 	end
 
+	-- start nested loop
 	io.stderr:write("[!yield!]\n")
-	coroutine.yield()
+	table.insert(da.running_stack, true)
+	da:loop()
 end
 
 DA.launch = function(da)
 	local chunk = loadfile(da.debugee.program)
 
-	da.thread = coroutine.create(function()
-		-- run
-		local rc = chunk(unpack(da.debugee.args)) or 0
-
-		-- exit
-		da.running = false
-		da:send_event("exited", {
-			exitCode = rc,
-		})
-	end)
-
-	debug.sethook(da.thread, function(_, line)
+	debug.sethook(function(_, line)
 		-- 3 hook
 		-- 2 this
 		-- 1 on_hook
 		da:on_hook(3, line)
 	end, "l")
-end
 
-DA.resume = function(da, next)
-	if next then
-		da.next = true
-	end
-	coroutine.resume(da.thread)
+	-- run
+	local rc = chunk(unpack(da.debugee.args)) or 0
+
+	-- exit
+	da.running_stack[#da.running_stack] = false
+	da:send_event("exited", {
+		exitCode = rc,
+	})
 end
 
 ------------------------------------------------------------------------------
@@ -540,7 +533,6 @@ DA.on_request = function(da, parsed)
 	elseif parsed.command == "configurationDone" then
 		da:enqueue(function()
 			da:launch()
-			da:resume()
 		end)
 		return da:new_response(parsed.seq, parsed.command)
 	elseif parsed.command == "threads" then
@@ -565,14 +557,11 @@ DA.on_request = function(da, parsed)
 			variables = da.variables[parsed.arguments.variablesReference],
 		})
 	elseif parsed.command == "continue" then
-		da:enqueue(function()
-			da:resume()
-		end)
+		da.running_stack[#da.running_stack] = false
 		return da:new_response(parsed.seq, parsed.command)
 	elseif parsed.command == "next" then
-		da:enqueue(function()
-			da:resume(true)
-		end)
+		da.next = true
+		da.running_stack[#da.running_stack] = false
 		return da:new_response(parsed.seq, parsed.command)
 	else
 		error(string.format("unknown command: %q", parsed))
@@ -606,12 +595,6 @@ DA.send_message = function(da, message)
 end
 
 DA.process_message = function(da)
-	if da.thread then
-		io.stderr:write(string.format("[status]%q\n", coroutine.status(da.thread)))
-	else
-		io.stderr:write(string.format("[status]not launch\n"))
-	end
-
 	-- dequeue
 	while #da.queue > 0 do
 		local action = table.remove(da.queue, 1)
@@ -642,9 +625,10 @@ end
 -- end
 
 DA.loop = function(da)
-	while da.running do
+	while da.running_stack[#da.running_stack] do
 		DA:process_message()
 	end
+	table.remove(da.running_stack)
 end
 
 DA:loop()
