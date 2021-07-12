@@ -338,17 +338,19 @@ DA.send_event = function(da, event_name, body)
 end
 
 DA.push_frame = function(da, stack_level, frame, variables)
-	da.stackframes = {
-		{
-			id = stack_level,
-			name = frame.name,
-			line = frame.currentline,
-			column = 1,
-		},
+	local stackframe = {
+		id = stack_level,
+		name = frame.name,
+		line = frame.currentline,
+		column = 1,
 	}
+	if type(frame.source) == "string" and frame.source.sub(1, 1) == "@" then
+		stackframe.source = frame.source.sub(2)
+	end
+	table.insert(da.stackframes, stackframe)
+
 
 	local scopes = {}
-
 	-- local
 	table.insert(scopes, {
 		name = "Locals",
@@ -359,7 +361,6 @@ DA.push_frame = function(da, stack_level, frame, variables)
 	table.insert(da.variables, variables)
 	-- upvalues
 	-- globals
-
 	da.scope = {
 		[stack_level] = scopes,
 	}
@@ -515,7 +516,6 @@ DA.on_request = function(da, parsed)
 			breakpoints = breakpoints,
 		})
 	elseif parsed.command == "configurationDone" then
-		-- enqueue
 		da:enqueue(function()
 			da:launch()
 			da:resume()
@@ -539,6 +539,13 @@ DA.on_request = function(da, parsed)
 			scopes = da.scope[parsed.arguments.frameId],
 		})
 	elseif parsed.command == "variables" then
+		return da:new_response(parsed.seq, parsed.command, {
+			variables = da.variables[parsed.arguments.variablesReference],
+		})
+	elseif parsed.command == "continue" then
+		da:enqueue(function()
+			da:resume()
+		end)
 		return da:new_response(parsed.seq, parsed.command, {
 			variables = da.variables[parsed.arguments.variablesReference],
 		})
