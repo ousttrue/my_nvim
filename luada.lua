@@ -321,14 +321,23 @@ DA.new_response = function(da, seq, command, body)
 	return response
 end
 
-DA.new_event = function(da, event_name)
-	return {
+DA.new_event = function(da, event_name, body)
+	local event = {
 		type = "event",
 		event = event_name,
 	}
+	if body then
+		event.body = body
+	end
+	return event
 end
 
-DA.push_frame = function(da, stack_level, frame)
+DA.send_event = function(da, event_name, body)
+	local event = da:new_event(event_name, body)
+	da:send_message(event)
+end
+
+DA.push_frame = function(da, stack_level, frame, variables)
 	da.stackframes = {
 		{
 			id = stack_level,
@@ -338,37 +347,79 @@ DA.push_frame = function(da, stack_level, frame)
 		},
 	}
 
+	local scopes = {}
+
+	-- local
+	table.insert(scopes, {
+		name = "Locals",
+		presentationHint = "locals",
+		variablesReference = #da.variables + 1,
+		expensive = false,
+	})
+	table.insert(da.variables, variables)
+	-- upvalues
+	-- globals
+
 	da.scope = {
-		[stack_level] = {
-			{
-				name = "Locals",
-				presentationHint = "locals",
-				variablesReference = 1,
-				expensive = false,
-			},
-			{
-				name = "UpValues",
-				presentationHint = "upvalues",
-				variablesReference = 2,
-				expensive = false,
-			},
-			{
-				name = "Globals",
-				presentationHint = "globals",
-				variablesReference = 3,
-				expensive = false,
-			},
-		},
+		[stack_level] = scopes,
 	}
 end
 
-DA.update_stacktrace = function(da, stack_level, top_frame)
+--
+-- debug.xxx 関数はこの関数内で呼ぶべし。他の関数に入ると stack_level を足す必要がある。
+--
+DA.on_hook = function(da, stack_level, line)
+	-- hook_frame
+	local hook_frame = debug.getinfo(stack_level, "nSluf")
+	if hook_frame.source:sub(-#DEBUGGER_NAME) == DEBUGGER_NAME then
+		-- skip debugger code
+		return
+	end
+
+	local source = hook_frame.source
+	if source:sub(1, 1) ~= "@" then
+		return
+	end
+	source = source:sub(2)
+
+	local match = da:match_breakpoint(source, line)
+	if not match then
+		-- not break
+		return
+	end
+	-- hit breakpoint
+	io.stderr:write("break!\n")
+
 	-- clear
 	da.stackframes = {}
 	da.scope = {}
-	da:push_frame(stack_level, top_frame)
-	stack_level = stack_level + 1
+	da.variables = {}
 
+	-- top
+	do
+		local variables = {}
+		local i = 1
+		while true do
+			local k, v = debug.getlocal(da.thread, stack_level, i)
+			if not k then
+				break
+			end
+			io.stderr:write(string.format("(%q)[%q = %q]", stack_level, k, v))
+			i = i + 1
+			if k ~= "(*temporary)" then
+				table.insert(variables, {
+					variablesReference = 0,
+					name = k,
+					value = v,
+					type = type(v),
+				})
+			end
+		end
+		da:push_frame(stack_level, hook_frame, variables)
+		stack_level = stack_level + 1
+	end
+
+	-- frames
 	while true do
 		local frame = debug.getinfo(stack_level, "nSluf")
 		if not frame then
@@ -378,9 +429,33 @@ DA.update_stacktrace = function(da, stack_level, top_frame)
 			-- skip debugger code
 			break
 		end
-		da:push_frame(stack_level, frame)
+
+		local variables = {}
+		local i = 1
+		while true do
+			local k, v = debug.getlocal(da.thread, stack_level, i)
+			if not k then
+				break
+			end
+			io.stderr:write(string.format("(%q)[%q = %q]", stack_level, k, v))
+			i = i + 1
+			table.insert(variables, {
+				name = k,
+				value = v,
+			})
+		end
+		da:push_frame(stack_level, frame, variables)
 		stack_level = stack_level + 1
 	end
+
+	-- stacktrace & scpopes
+	da:send_event("stopped", {
+		reason = "breakpoint",
+		threadId = 0,
+		hitBreakpointIds = { match.id },
+	})
+
+	coroutine.yield()
 end
 
 DA.launch = function(da)
@@ -392,47 +467,16 @@ DA.launch = function(da)
 
 		-- exit
 		da.running = false
-		local event = da:new_event("exited")
-		event.body = {
+		da:send_event("exited", {
 			exitCode = rc,
-		}
-		da:send_message(event)
+		})
 	end)
 
 	debug.sethook(da.thread, function(_, line)
-		local stack_level = 2
-
-		local top_frame = debug.getinfo(stack_level, "nSluf")
-
-		if top_frame.source:sub(-#DEBUGGER_NAME) == DEBUGGER_NAME then
-			-- skip debugger code
-			return
-		end
-
-		local source = top_frame.source
-		if source:sub(1, 1) ~= "@" then
-			return
-		end
-		source = source:sub(2)
-
-		local match = da:match_breakpoint(source, line)
-		if match then
-			-- hit breakpoint
-			io.stderr:write("break!\n")
-
-			-- stacktrace & scpopes
-			da:update_stacktrace(stack_level, top_frame)
-
-			local event = da:new_event("stopped")
-			event.body = {
-				reason = "breakpoint",
-				threadId = 0,
-				hitBreakpointIds = { match.id },
-			}
-			da:send_message(event)
-
-			coroutine.yield()
-		end
+		-- 3 hook
+		-- 2 this
+		-- 1 on_hook
+		da:on_hook(3, line)
 	end, "l")
 end
 
@@ -448,8 +492,7 @@ end
 DA.on_request = function(da, parsed)
 	if parsed.command == "initialize" then
 		da:enqueue(function()
-			local event = da:new_event("initialized")
-			da:send_message(event)
+			da:send_event("initialized")
 		end)
 		return da:new_response(parsed.seq, parsed.command, {
 			supportsConfigurationDoneRequest = true,
@@ -494,6 +537,10 @@ DA.on_request = function(da, parsed)
 	elseif parsed.command == "scopes" then
 		return da:new_response(parsed.seq, parsed.command, {
 			scopes = da.scope[parsed.arguments.frameId],
+		})
+	elseif parsed.command == "variables" then
+		return da:new_response(parsed.seq, parsed.command, {
+			variables = da.variables[parsed.arguments.variablesReference],
 		})
 	else
 		error(string.format("unknown command: %q", parsed))
