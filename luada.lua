@@ -242,6 +242,8 @@ end
 -- \r\n
 -- byte[length]
 ------------------------------------------------------------------------------
+DEBUGGER_NAME = "luada.lua"
+
 -- replace global print
 print = function(...)
 	for _, v in ipairs({ ... }) do
@@ -326,6 +328,61 @@ DA.new_event = function(da, event_name)
 	}
 end
 
+DA.push_frame = function(da, stack_level, frame)
+	da.stackframes = {
+		{
+			id = stack_level,
+			name = frame.name,
+			line = frame.currentline,
+			column = 1,
+		},
+	}
+
+	da.scope = {
+		[stack_level] = {
+			{
+				name = "Locals",
+				presentationHint = "locals",
+				variablesReference = 1,
+				expensive = false,
+			},
+			{
+				name = "UpValues",
+				presentationHint = "upvalues",
+				variablesReference = 2,
+				expensive = false,
+			},
+			{
+				name = "Globals",
+				presentationHint = "globals",
+				variablesReference = 3,
+				expensive = false,
+			},
+		},
+	}
+end
+
+DA.update_stacktrace = function(da, stack_level, top_frame)
+	-- clear
+	da.stackframes = {}
+	da.scope = {}
+	da:push_frame(stack_level, top_frame)
+	stack_level = stack_level + 1
+
+	while true do
+		local frame = debug.getinfo(stack_level, "nSluf")
+		if not frame then
+			break
+		end
+		if frame.source:sub(-#DEBUGGER_NAME) == DEBUGGER_NAME then
+			-- skip debugger code
+			break
+		end
+		da:push_frame(stack_level, frame)
+		stack_level = stack_level + 1
+	end
+end
+
 DA.launch = function(da)
 	local chunk = loadfile(da.debugee.program)
 
@@ -347,8 +404,7 @@ DA.launch = function(da)
 
 		local top_frame = debug.getinfo(stack_level, "nSluf")
 
-		local debuggerName = "luada.lua"
-		if top_frame.source:sub(-#debuggerName) == debuggerName then
+		if top_frame.source:sub(-#DEBUGGER_NAME) == DEBUGGER_NAME then
 			-- skip debugger code
 			return
 		end
@@ -361,37 +417,12 @@ DA.launch = function(da)
 
 		local match = da:match_breakpoint(source, line)
 		if match then
+			-- hit breakpoint
 			io.stderr:write("break!\n")
 
-			-- stacks
-			da.stacks = {
-				{
-					id = stack_level,
-					name = top_frame.name,
-					line = top_frame.currentline,
-					column = 1,
-				},
-			}
-			stack_level = stack_level + 1
-			while true do
-				local frame = debug.getinfo(stack_level, "nSluf")
-				if not frame then
-					break
-				end
-				if frame.source:sub(-#debuggerName) == debuggerName then
-					-- skip debugger code
-					break
-				end
-				table.insert(da.stacks, {
-					id = stack_level,
-					name = frame.name,
-					line = frame.currentline,
-					column = 1,
-				})
-				stack_level = stack_level + 1
-			end
+			-- stacktrace & scpopes
+			da:update_stacktrace(stack_level, top_frame)
 
-			-- hit breakpoint
 			local event = da:new_event("stopped")
 			event.body = {
 				reason = "breakpoint",
@@ -458,7 +489,11 @@ DA.on_request = function(da, parsed)
 		})
 	elseif parsed.command == "stackTrace" then
 		return da:new_response(parsed.seq, parsed.command, {
-			stackFrames = da.stacks,
+			stackFrames = da.stackframes,
+		})
+	elseif parsed.command == "scopes" then
+		return da:new_response(parsed.seq, parsed.command, {
+			scopes = da.scope[parsed.arguments.frameId],
 		})
 	else
 		error(string.format("unknown command: %q", parsed))
