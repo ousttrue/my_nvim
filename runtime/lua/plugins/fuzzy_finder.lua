@@ -23,7 +23,7 @@ function M.startup()
 				defaults = { mappings = { i = { ["<esc>"] = actions.close } } },
 			})
 			-- vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
-			vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
+			-- vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
 	use({
@@ -37,9 +37,10 @@ function M.startup()
 			},
 		},
 		config = function()
-			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>FZF<CR>", {})
-
 			vim.api.nvim_set_var("fzf_layout", { window = 'lua require("floatingFZF")()' })
+
+			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>GFiles<CR>", {})
+			vim.api.nvim_set_keymap("n", "<F3>", ":call fzf#run({'source': 'ghq list --full-path', 'sink': 'e'})<CR>", {})
 		end,
 	})
 	-- 	"liuchengxu/vim-clap",
