@@ -45,8 +45,8 @@ packer.startup(function()
 	})
 
 	-- statusline
-	-- use("itchyny/lightline.vim")
-	use("vim-airline/vim-airline")
+	use("itchyny/lightline.vim")
+	-- use("vim-airline/vim-airline")
 	-- use("glepnir/galaxyline.nvim")
 
 	-- ToDo
