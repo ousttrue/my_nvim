@@ -1,6 +1,6 @@
 local M = {}
 
-local use = require'packer'.use
+local use = require("packer").use
 -- local use_rocks = require'packer'.use_locks
 
 function M.startup()
@@ -22,11 +22,26 @@ function M.startup()
 			require("telescope").setup({
 				defaults = { mappings = { i = { ["<esc>"] = actions.close } } },
 			})
-			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
+			-- vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>Telescope git_files<CR>", {})
 			vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
-	-- use({
+	use({
+		"junegunn/fzf.vim",
+		requires = {
+			{
+				"junegunn/fzf",
+				run = function()
+					vim.fn["fzf#install"]()
+				end,
+			},
+		},
+		config = function()
+			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>FZF<CR>", {})
+
+			vim.api.nvim_set_var("fzf_layout", { window = 'lua require("floatingFZF")()' })
+		end,
+	})
 	-- 	"liuchengxu/vim-clap",
 	-- 	run = function()
 	-- 		-- " Build the extra binary if cargo exists on your system.
