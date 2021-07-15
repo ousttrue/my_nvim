@@ -51,6 +51,7 @@ packer.startup(function()
 
 	-- ToDo
 	-- liuchengxu/vim-which-key
+	-- MattesGroeger/vim-bookmarks
 
 	use("kizza/actionmenu.nvim")
 	use("simeji/winresizer")
@@ -126,6 +127,7 @@ packer.startup(function()
 	-- })
 	use("sodapopcan/vim-twiggy")
 	use("gregsexton/gitv")
+	-- https://github.com/lambdalisue/gina.vim
 
 	-- fuzzy finder
 	require('plugins.fuzzy_finder').startup()

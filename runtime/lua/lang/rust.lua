@@ -1,5 +1,21 @@
+--
+-- lsp
+--
+local cmd = { "rust-analyzer" }
+if vim.fn.has("win32") ~= 0 then
+	cmd = {
+		vim.env.APPDATA
+			.. "\\Code\\User\\globalStorage\\matklad.rust-analyzer\\rust-analyzer-x86_64-pc-windows-msvc.exe",
+	}
+end
 require("lspconfig").rust_analyzer.setup({
-	on_attach = require("lsp_on_attach"),
+	cmd = cmd,
+	on_attach = function(_, bufnr)
+		require("lsp_on_attach")(_, bufnr)
+
+		local opts = { noremap = true, silent = true }
+		-- vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-S-b>", ":T cargo build<CR>", opts)
+	end,
 	settings = {
 		["rust-analyzer"] = {
 			assist = {
@@ -16,6 +32,9 @@ require("lspconfig").rust_analyzer.setup({
 	},
 })
 
+--
+-- dap
+--
 local exe = ""
 if vim.fn.has("win32") ~= 0 then
 	exe = vim.env.USERPROFILE .. "/.vscode/extensions/vadimcn.vscode-lldb-1.6.5/adapter/codelldb.exe"
@@ -47,10 +66,15 @@ dap.configurations.rust = {
 		program = function()
 			return vim.fn.input("Path to executable: ", dap.get_workspaceFolder() .. "/target/debug/", "file")
 		end,
-		args = { "assets" },
+		args = function()
+			return { dap.get_workspaceFolder():joinpath("assets").filename }
+		end,
 		cwd = function()
 			return dap.get_workspaceFolder().filename
 		end,
 		stopOnEntry = false,
+		-- env = {
+		-- 	RUST_BACKTRACE = 1,
+		-- },
 	},
 }

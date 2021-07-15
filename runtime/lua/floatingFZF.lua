@@ -1,5 +1,5 @@
 return function()
-	vim.env.FZF_DEFAULT_OPTS = " --color=bg:#20242C --border --layout=reverse"
+	-- vim.env.FZF_DEFAULT_OPTS = " --color=bg:#20242C --border --layout=reverse"
 	local width = vim.fn.float2nr(vim.o.columns * 0.9)
 	local height = vim.fn.float2nr(vim.o.lines * 0.6)
 
