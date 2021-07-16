@@ -48,7 +48,13 @@ packer.startup(function()
 	-- use("itchyny/lightline.vim")
 	-- use("vim-airline/vim-airline")
 	-- use("glepnir/galaxyline.nvim")
-	use("hoob3rt/lualine.nvim")
+	use({
+		"hoob3rt/lualine.nvim",
+		requires = { "kyazdani42/nvim-web-devicons", opt = true },
+		config = function()
+			require("lualine").setup()
+		end,
+	})
 
 	-- ToDo
 	-- liuchengxu/vim-which-key
