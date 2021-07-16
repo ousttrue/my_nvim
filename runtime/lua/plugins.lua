@@ -45,9 +45,10 @@ packer.startup(function()
 	})
 
 	-- statusline
-	use("itchyny/lightline.vim")
+	-- use("itchyny/lightline.vim")
 	-- use("vim-airline/vim-airline")
 	-- use("glepnir/galaxyline.nvim")
+	use("hoob3rt/lualine.nvim")
 
 	-- ToDo
 	-- liuchengxu/vim-which-key
@@ -130,7 +131,7 @@ packer.startup(function()
 	-- https://github.com/lambdalisue/gina.vim
 
 	-- fuzzy finder
-	require('plugins.fuzzy_finder').startup()
+	require("plugins.fuzzy_finder").startup()
 
 	-- filer
 	use({
@@ -340,7 +341,7 @@ packer.startup(function()
 			vim.api.nvim_set_keymap("n", "<leader>dn", ":lua require('dap-python').test_method()<CR>", opt)
 			vim.api.nvim_set_keymap("n", "<leader>ds <ESC>", ":lua require('dap-python').debug_selection()<CR>", opt)
 
-			require('dap').set_log_level('trace')
+			require("dap").set_log_level("trace")
 		end,
 	})
 	use({
