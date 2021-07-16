@@ -1,9 +1,9 @@
 set mouse=a
 set ambiwidth=single
-Guifont! Cica:h12
+Guifont! Cica:h13
 GuiTabline 0
 GuiPopupmenu 0
-GuiLinespace 5
+" GuiLinespace 5
 
 " Use shift+insert for paste inside neovim-qt,
 " see https://github.com/equalsraf/neovim-qt/issues/327#issuecomment-325660764

@@ -26,6 +26,7 @@ function M.startup()
 			-- vim.api.nvim_set_keymap("n", "<F3>", ":<C-u>Telescope ghq list<CR>", {})
 		end,
 	})
+
 	use({
 		"junegunn/fzf.vim",
 		requires = {
@@ -40,9 +41,20 @@ function M.startup()
 			vim.api.nvim_set_var("fzf_layout", { window = 'lua require("floatingFZF")()' })
 
 			vim.api.nvim_set_keymap("n", "<Space><Space>", ":<C-u>GFiles<CR>", {})
-			vim.api.nvim_set_keymap("n", "<F3>", ":call fzf#run({'source': 'ghq list --full-path', 'sink': 'e'})<CR>", {})
+			vim.api.nvim_set_keymap(
+				"n",
+				"<F3>",
+				":call fzf#run({'source': 'ghq list --full-path', 'sink': 'e'})<CR>",
+				{}
+			)
 		end,
 	})
+
+	-- use("LoricAndre/fzterm.nvim")
+
+	-- use("RishabhRD/popfix")
+	-- use("RishabhRD/nvim-finder")
+
 	-- 	"liuchengxu/vim-clap",
 	-- 	run = function()
 	-- 		-- " Build the extra binary if cargo exists on your system.

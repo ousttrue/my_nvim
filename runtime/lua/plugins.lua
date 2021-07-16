@@ -10,6 +10,7 @@ packer.startup(function()
 	-- pckage
 	-- https://github.com/wbthomason/packer.nvim
 	-- use("wbthomason/packer.nvim")
+	use("nvim-lua/plenary.nvim")
 	use("ousttrue/packer.nvim")
 
 	use_rocks("penlight")
