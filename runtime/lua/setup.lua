@@ -46,8 +46,24 @@ vim.api.nvim_set_keymap("n", "'", "[external]", {})
 -- settings
 --
 vim.o.ambiwidth = "single"
-vim.o.termguicolors = true
+if vim.env.SHELL then
+	-- not windows
+	print('SHELL')
+else
+	if vim.fn.exists('g:GuiName') ~= 0 then
+		-- nvim-qt
+		print('nvim-qt')
+	elseif vim.fn.exists("g:nvy") ~= 0 then
+		-- nvy
+		print('nvy')
+	else
+		-- windows cmd.exe
+		print('CMD')
+		vim.o.ambiwidth = "double"
+	end
+end
 
+vim.o.termguicolors = true
 vim.o.number = true
 vim.o.autochdir = true
 vim.o.hidden = true
@@ -88,4 +104,4 @@ vim.cmd([[nmap <C-n> :lnext<CR>]])
 vim.cmd([[nmap <C-p> :lprevious<CR>]])
 
 vim.api.nvim_set_keymap("n", "<C-l>", ":nohlsearch<CR><C-l>", { noremap = true })
-vim.api.nvim_set_keymap("n", "q", ":close<CR>", {noremap = true})
+vim.api.nvim_set_keymap("n", "q", ":close<CR>", { noremap = true })

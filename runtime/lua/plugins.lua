@@ -56,10 +56,20 @@ packer.startup(function()
 			require("lualine").setup()
 		end,
 	})
+	use({
+		"akinsho/nvim-bufferline.lua",
+		requires = "kyazdani42/nvim-web-devicons",
+		config = function()
+			require("bufferline").setup({})
+		end,
+	})
+	-- romgrk/barbar.nvim
 
 	-- ToDo
 	-- liuchengxu/vim-which-key
 	-- MattesGroeger/vim-bookmarks
+	-- brglng/vim-sidebar-manager
+	-- miyakogi/sidepanel.vim
 
 	use("kizza/actionmenu.nvim")
 	use("simeji/winresizer")
@@ -136,6 +146,7 @@ packer.startup(function()
 	use("sodapopcan/vim-twiggy")
 	use("gregsexton/gitv")
 	-- https://github.com/lambdalisue/gina.vim
+	use("f-person/git-blame.nvim")
 
 	-- fuzzy finder
 	require("plugins.fuzzy_finder").startup()
@@ -165,6 +176,7 @@ packer.startup(function()
 			vim.api.nvim_set_keymap("n", ",,", ":NERDTreeVCS<CR>", {})
 		end,
 	})
+	-- https://github.com/tamago324/lir.nvim
 
 	-- lsp
 	-- https://github.com/neovim/nvim-lspconfig
@@ -313,6 +325,54 @@ packer.startup(function()
 		"WhoIsSethDaniel/toggle-lsp-diagnostics.nvim",
 		config = function()
 			-- require("toggle_lsp_diagnostics").init({ underline = false, virtual_text = { prefix = "XXX", spacing = 5 } })
+		end,
+	})
+	use({
+		"kosayoda/nvim-lightbulb",
+		config = function()
+			-- Showing defaults
+			require("nvim-lightbulb").update_lightbulb({
+				sign = {
+					enabled = true,
+					-- Priority of the gutter sign
+					priority = 10,
+				},
+				float = {
+					enabled = false,
+					-- Text to show in the popup float
+					text = "💡",
+					-- Available keys for window options:
+					-- - height     of floating window
+					-- - width      of floating window
+					-- - wrap_at    character to wrap at for computing height
+					-- - max_width  maximal width of floating window
+					-- - max_height maximal height of floating window
+					-- - pad_left   number of columns to pad contents at left
+					-- - pad_right  number of columns to pad contents at right
+					-- - pad_top    number of lines to pad contents at top
+					-- - pad_bottom number of lines to pad contents at bottom
+					-- - offset_x   x-axis offset of the floating window
+					-- - offset_y   y-axis offset of the floating window
+					-- - anchor     corner of float to place at the cursor (NW, NE, SW, SE)
+					-- - winblend   transparency of the window (0-100)
+					win_opts = {},
+				},
+				virtual_text = {
+					enabled = false,
+					-- Text to show at virtual text
+					text = "💡",
+				},
+				status_text = {
+					enabled = false,
+					-- Text to provide when code actions are available
+					text = "💡",
+					-- Text to provide when no actions are available
+					text_unavailable = "",
+				},
+			})
+			vim.fn.sign_define("LightBulbSign", { text = "", texthl = "", linehl = "", numhl = "" })
+			-- vim.api.nvim_command("highlight LightBulbFloatWin ctermfg= ctermbg= guifg= guibg=")
+			-- vim.api.nvim_command("highlight LightBulbVirtualText ctermfg= ctermbg= guifg= guibg=")
 		end,
 	})
 

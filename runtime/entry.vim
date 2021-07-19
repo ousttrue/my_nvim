@@ -6,6 +6,10 @@ else
     let g:python3_host_prog = "/usr/bin/python3"
 endif
 
+if exists("g:nvy")
+    set guifont=Cica:h14
+endif
+
 lua require 'plugins'
 lua require 'setup'
 lua require 'lang.lua'
