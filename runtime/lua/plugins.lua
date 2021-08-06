@@ -16,7 +16,7 @@ packer.startup(function()
     use_rocks "penlight"
     use { "teal-language/vim-teal", rocks = { { "tl" } } }
 
-    use "simeji/winresizer"
+    use "RRethy/vim-illuminate"
 
     use {
         "tyru/eskk.vim",
@@ -62,20 +62,13 @@ cmap jk <Plug>(eskk:toggle)
     use "jremmen/vim-ripgrep"
 
     -- colorscheme
-    local function use_cs(repo, name)
-        if not name then
-            name = repo:match "[^/]+/(.+)"
-        end
-        use {
-            repo,
-            config = function()
-                vim.cmd(string.format("colorscheme %s", name))
-            end,
-        }
-    end
-
+    use {
+        "glepnir/zephyr-nvim",
+        config = function()
+            vim.cmd [[colorscheme zephyr]]
+        end,
+    }
     -- "arcticicestudio/nord-vim",
-    use_cs("glepnir/zephyr-nvim", "zephyr")
 
     -- use {
     --     "sainnhe/edge",
@@ -244,8 +237,11 @@ cmap jk <Plug>(eskk:toggle)
         end,
     }
     -- https://github.com/tamago324/lir.nvim
+    -- https://github.com/akinsho/nvim-bufferline.lua
 
     -- lsp
+    -- https://github.com/glepnir/lspsaga.nvim
+    -- https://github.com/folke/trouble.nvim
     -- https://github.com/neovim/nvim-lspconfig
     -- https://github.com/iamcco/diagnostic-languageserver
     -- use({
