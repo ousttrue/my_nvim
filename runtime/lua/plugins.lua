@@ -89,23 +89,23 @@ cmap jk <Plug>(eskk:toggle)
     }
 
     -- statusline
-    -- use("itchyny/lightline.vim")
+    use "itchyny/lightline.vim"
     -- use("vim-airline/vim-airline")
     -- use("glepnir/galaxyline.nvim")
-    use {
-        "hoob3rt/lualine.nvim",
-        requires = { "kyazdani42/nvim-web-devicons", opt = true },
-        config = function()
-            require("lualine").setup()
-        end,
-    }
-    use {
-        "akinsho/nvim-bufferline.lua",
-        requires = "kyazdani42/nvim-web-devicons",
-        config = function()
-            require("bufferline").setup {}
-        end,
-    }
+    -- use {
+    --     "hoob3rt/lualine.nvim",
+    --     requires = { "kyazdani42/nvim-web-devicons", opt = true },
+    --     config = function()
+    --         require("lualine").setup()
+    --     end,
+    -- }
+    -- use {
+    --     "akinsho/nvim-bufferline.lua",
+    --     requires = "kyazdani42/nvim-web-devicons",
+    --     config = function()
+    --         require("bufferline").setup {}
+    --     end,
+    -- }
     -- romgrk/barbar.nvim
 
     -- ToDo
@@ -143,7 +143,16 @@ cmap jk <Plug>(eskk:toggle)
         end,
         config = function()
             local ts = require "nvim-treesitter.configs"
-            ts.setup { highlight = { enable = true } }
+            ts.setup {
+                highlight = {
+                    enable = true,
+                    -- disable = {},
+                },
+                indent = {
+                    enable = true,
+                },
+                ensure_installed = "maintained",
+            }
         end,
     }
     use "nvim-treesitter/playground"
