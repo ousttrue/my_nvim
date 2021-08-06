@@ -47,6 +47,7 @@ return function(_, bufnr)
 		'"[space]D: definition"',
 		'"[space]rn: rename"',
 		'"[space]ca: codeaction"',
+		'"[space]q: diagnostic ilst"',
 		'"[space]f: format"',
 	}
 	local menu = "[" .. table.concat(menu_items, ", ") .. "]"

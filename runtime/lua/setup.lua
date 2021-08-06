@@ -5,34 +5,34 @@
 -- @param pos int
 -- @param path strring
 local function insert_path(pos, path)
-	path = path:gsub("/", "\\")
+    path = path:gsub("/", "\\")
 
-	if vim.env.PATH:find(path) then
-		return
-	end
+    if vim.env.PATH:find(path) then
+        return
+    end
 
-	if pos == 0 then
-		-- head
-		if not path:match(";$") then
-			path = path + ";"
-		end
-		vim.env.PATH = path .. vim.env.PATH
-	else
-		-- tail
-		if not vim.env.PATH:match(";$") then
-			path = ";" .. path
-		end
-		vim.env.PATH = vim.env.PATH .. path
-	end
+    if pos == 0 then
+        -- head
+        if not path:match ";$" then
+            path = path + ";"
+        end
+        vim.env.PATH = path .. vim.env.PATH
+    else
+        -- tail
+        if not vim.env.PATH:match ";$" then
+            path = ";" .. path
+        end
+        vim.env.PATH = vim.env.PATH .. path
+    end
 end
 
 if vim.env.USERPROFILE then
-	insert_path(-1, "C:\\Python38")
-	insert_path(-1, "C:\\Python38\\Scripts")
-	insert_path(-1, vim.env.USERPROFILE .. "\\.cargo\\bin")
-	insert_path(-1, vim.env.USERPROFILE .. "\\go\\bin")
-	insert_path(-1, "C:\\Program Files\\LLVM\\bin")
-	insert_path(-1, vim.env.APPDATA .. "\\npm")
+    insert_path(-1, "C:\\Python38")
+    insert_path(-1, "C:\\Python38\\Scripts")
+    insert_path(-1, vim.env.USERPROFILE .. "\\.cargo\\bin")
+    insert_path(-1, vim.env.USERPROFILE .. "\\go\\bin")
+    insert_path(-1, "C:\\Program Files\\LLVM\\bin")
+    insert_path(-1, vim.env.APPDATA .. "\\npm")
 end
 
 vim.api.nvim_set_keymap("n", "[prefix]", "<Nop>", { noremap = true })
@@ -47,20 +47,20 @@ vim.api.nvim_set_keymap("n", "'", "[external]", {})
 --
 vim.o.ambiwidth = "single"
 if vim.env.SHELL then
-	-- not windows
-	print('SHELL')
+    -- not windows
+    print "SHELL"
 else
-	if vim.fn.exists('g:GuiName') ~= 0 then
-		-- nvim-qt
-		print('nvim-qt')
-	elseif vim.fn.exists("g:nvy") ~= 0 then
-		-- nvy
-		print('nvy')
-	else
-		-- windows cmd.exe
-		print('CMD')
-		vim.o.ambiwidth = "double"
-	end
+    if vim.fn.exists "g:GuiName" ~= 0 then
+        -- nvim-qt
+        print "nvim-qt"
+    elseif vim.fn.exists "g:nvy" ~= 0 then
+        -- nvy
+        print "nvy"
+    else
+        -- windows cmd.exe
+        print "CMD"
+        vim.o.ambiwidth = "double"
+    end
 end
 
 vim.o.termguicolors = true
@@ -81,12 +81,12 @@ vim.o.clipboard = "unnamed"
 vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 -- vim.o.shell = "pwsh.exe"
 -- vim.o.shellcmdflag = "-NoProfile -NoLogo -NonInteractive -Command"
-if vim.fn.has("win32") ~= 0 then
-	vim.cmd([[command! -nargs=* T split | wincmd j | resize 20 | terminal pwsh.exe <args>]])
+if vim.fn.has "win32" ~= 0 then
+    vim.cmd [[command! -nargs=* T split | wincmd j | resize 20 | terminal pwsh.exe <args>]]
 else
-	vim.cmd([[command! -nargs=* T split | wincmd j | resize 20 | terminal <args>]])
+    vim.cmd [[command! -nargs=* T split | wincmd j | resize 20 | terminal <args>]]
 end
-vim.cmd("autocmd TermOpen * startinsert")
+vim.cmd "autocmd TermOpen * startinsert"
 
 --
 -- keymaps
@@ -95,13 +95,14 @@ vim.cmd("autocmd TermOpen * startinsert")
 -- vim.api.nvim_set_keymap("n", "<plus>", ":bn<CR>", {})
 -- vim.api.nvim_set_keymap("n", "<minus>", ":bp<CR>", {})
 -- paste
-vim.cmd("noremap! <S-Insert> <C-R>+")
+vim.cmd "noremap! <S-Insert> <C-R>+"
 -- tab
 -- vim.api.nvim_set_keymap("", "<C-l>", ":tabn<CR>", {})
 -- vim.api.nvim_set_keymap("", "<C-h>", ":tabp<CR>", {})
 -- vim.api.nvim_set_keymap("", "<Space>n", ":tabnew<CR>", {})
-vim.cmd([[nmap <C-n> :lnext<CR>]])
-vim.cmd([[nmap <C-p> :lprevious<CR>]])
+vim.cmd [[nmap <C-n> :lnext<CR>]]
+vim.cmd [[nmap <C-p> :lprevious<CR>]]
 
 vim.api.nvim_set_keymap("n", "<C-l>", ":nohlsearch<CR><C-l>", { noremap = true })
-vim.api.nvim_set_keymap("n", "q", ":close<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "q", ":lua require'close_keep_window'.close()<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "Q", ":close<CR>", { noremap = true })
