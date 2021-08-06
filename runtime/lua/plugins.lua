@@ -16,6 +16,8 @@ packer.startup(function()
 	use_rocks("penlight")
 	use({ "teal-language/vim-teal", rocks = { { "tl" } } })
 
+	use("tyru/eskk.vim")
+
 	use_rocks({
 		"lua-lsp",
 		server = "http://luarocks.org/dev",
