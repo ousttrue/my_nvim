@@ -62,31 +62,46 @@ cmap jk <Plug>(eskk:toggle)
     use "jremmen/vim-ripgrep"
 
     -- colorscheme
-    use {
-        "arcticicestudio/nord-vim",
-        --config = function()
-        --
-        --end,
-    }
-    use {
-        "sainnhe/edge",
-        -- config = function()
-        --     vim.api.nvim_set_var("edge_style", "aura")
-        --     vim.cmd [[colorscheme edge]]
-        -- end,
-    }
-    use {
-        "rockerBOO/boo-colorscheme-nvim",
-        -- config = function()
-        -- 	vim.cmd([[colorscheme boo]])
-        -- end,
-    }
-    use {
-        "vigoux/oak",
-        config = function()
-            vim.cmd [[colorscheme oak]]
-        end,
-    }
+    local function use_cs(repo, name)
+        if not name then
+            name = repo:match "[^/]+/(.+)"
+        end
+        use {
+            repo,
+            config = function()
+                vim.cmd(string.format("colorscheme %s", name))
+            end,
+        }
+    end
+
+    -- "arcticicestudio/nord-vim",
+    use_cs("glepnir/zephyr-nvim", "zephyr")
+
+    -- use {
+    --     "sainnhe/edge",
+    --     -- config = function()
+    --     --     vim.api.nvim_set_var("edge_style", "aura")
+    --     --     vim.cmd [[colorscheme edge]]
+    --     -- end,
+    -- }
+    -- use {
+    --     "rockerBOO/boo-colorscheme-nvim",
+    --     -- config = function()
+    --     -- 	vim.cmd([[colorscheme boo]])
+    --     -- end,
+    -- }
+    -- use {
+    --     "vigoux/oak",
+    --     -- config = function()
+    --     --     vim.cmd [[colorscheme oak]]
+    --     -- end,
+    -- }
+    -- use {
+    --     "yasukotelin/shirotelin",
+    --     config = function()
+    --         vim.cmd [[colorscheme shirotelin]]
+    --     end,
+    -- }
 
     -- statusline
     use "itchyny/lightline.vim"

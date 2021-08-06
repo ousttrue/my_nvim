@@ -74,6 +74,8 @@ vim.o.expandtab = true
 vim.o.inccommand = "split"
 vim.o.ic = true
 vim.o.clipboard = "unnamed"
+-- vim.o.list = true
+-- vim.o.listchars = "tab:»-,eol:↲,extends:»,precedes:«,space:."
 
 --
 -- terminal
