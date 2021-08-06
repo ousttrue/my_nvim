@@ -168,7 +168,7 @@ cmap jk <Plug>(eskk:toggle)
 
     -- git
     use "tpope/vim-fugitive"
-    use "rhysd/git-messenger.vim"
+    -- use "rhysd/git-messenger.vim"
     use "airblade/vim-gitgutter"
     use "junegunn/gv.vim"
     -- use({
@@ -183,7 +183,7 @@ cmap jk <Plug>(eskk:toggle)
     use "sodapopcan/vim-twiggy"
     use "gregsexton/gitv"
     -- https://github.com/lambdalisue/gina.vim
-    use "f-person/git-blame.nvim"
+    -- use "f-person/git-blame.nvim"
 
     -- fuzzy finder
     require("plugins.fuzzy_finder").startup()
