@@ -106,3 +106,22 @@ vim.cmd [[nmap <C-p> :lprevious<CR>]]
 vim.api.nvim_set_keymap("n", "<C-l>", ":nohlsearch<CR><C-l>", { noremap = true })
 vim.api.nvim_set_keymap("n", "q", ":lua require'close_keep_window'.close()<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "Q", ":close<CR>", { noremap = true })
+
+vim.api.nvim_set_var("terminal_ansi_colors", {
+    "#073642", -- black
+    "#dc322f", -- Red
+    "#859900", -- green
+    "#b58900", -- yellow
+    "#268bd2", -- blue
+    "#d33682", -- magenta
+    "#2aa198", -- cyan
+    "#eee8d5", -- white
+    "#002b36", -- black (bright)
+    "#cb4b16", -- red (bright)
+    "#586e75", -- green (bright)
+    "#657b83", -- yellow (bright)
+    "#839496", -- blue (bright)
+    "#6c71c4", -- magenta (bright)
+    "#93a1a1", -- cyan (bright)
+    "#fdf6e3", -- white (bright)
+})

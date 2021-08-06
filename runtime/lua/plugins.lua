@@ -16,6 +16,8 @@ packer.startup(function()
     use_rocks "penlight"
     use { "teal-language/vim-teal", rocks = { { "tl" } } }
 
+    use "simeji/winresizer"
+
     use {
         "tyru/eskk.vim",
         config = function()
@@ -40,8 +42,7 @@ packer.startup(function()
             vim.api.nvim_set_var("eskk#marker_okuri", "[送り]")
             vim.api.nvim_set_var("eskk#marker_jisyo_touroku", "[辞書]")
 
-
-            vim.cmd[[
+            vim.cmd [[
 augroup vimrc_eskk
   autocmd!
   autocmd User eskk-enable-post lmap <buffer> l <Plug>(eskk:disable)
@@ -61,13 +62,18 @@ cmap jk <Plug>(eskk:toggle)
     use "jremmen/vim-ripgrep"
 
     -- colorscheme
-    -- use("arcticicestudio/nord-vim")
+    use {
+        "arcticicestudio/nord-vim",
+        --config = function()
+        --
+        --end,
+    }
     use {
         "sainnhe/edge",
-        config = function()
-            vim.api.nvim_set_var("edge_style", "aura")
-            vim.cmd [[colorscheme edge]]
-        end,
+        -- config = function()
+        --     vim.api.nvim_set_var("edge_style", "aura")
+        --     vim.cmd [[colorscheme edge]]
+        -- end,
     }
     use {
         "rockerBOO/boo-colorscheme-nvim",
@@ -77,9 +83,9 @@ cmap jk <Plug>(eskk:toggle)
     }
     use {
         "vigoux/oak",
-        -- config = function()
-        -- 	vim.cmd([[colorscheme oak]])
-        -- end,
+        config = function()
+            vim.cmd [[colorscheme oak]]
+        end,
     }
 
     -- statusline
