@@ -43,13 +43,17 @@ packer.startup(function()
             vim.api.nvim_set_var("eskk#marker_jisyo_touroku", "[辞書]")
 
             vim.cmd [[
+"exit eskk by l"
 augroup vimrc_eskk
   autocmd!
   autocmd User eskk-enable-post lmap <buffer> l <Plug>(eskk:disable)
+  autocmd InsertEnter *.md if g:toggle_markdown_eskk | call eskk#enable() | endif
 augroup END
 
-imap jk <Plug>(eskk:toggle)
-cmap jk <Plug>(eskk:toggle)
+let g:toggle_markdown_eskk = 1
+
+imap ; <Plug>(eskk:toggle)
+cmap ; <Plug>(eskk:toggle)
 ]]
         end,
     }

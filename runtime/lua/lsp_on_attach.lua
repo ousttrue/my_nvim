@@ -54,7 +54,7 @@ return function(_, bufnr)
 
 	buf_set_keymap(
 		"n",
-		";;",
+		"<f4>",
 		":call actionmenu#open(" .. menu .. ", {i, item -> execute('normal '.split(item, ':')[0], '')})<CR>",
 		opts
 	)

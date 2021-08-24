@@ -109,6 +109,9 @@ vim.api.nvim_set_keymap("n", "<C-l>", ":nohlsearch<CR><C-l>", { noremap = true }
 vim.api.nvim_set_keymap("n", "q", ":lua require'close_keep_window'.close()<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "Q", ":close<CR>", { noremap = true })
 
+vim.api.nvim_set_keymap("n", "<c-s>", ":w<CR>", { noremap = true })
+vim.api.nvim_set_keymap("i", "<c-s>", "<Esc>:w<CR>a", { noremap = true })
+
 vim.api.nvim_set_var("terminal_ansi_colors", {
     "#073642", -- black
     "#dc322f", -- Red
