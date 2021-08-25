@@ -4,5 +4,8 @@
     "Lua.diagnostics.globals": [
         "vim",
         "use",
+    ],
+    "cSpell.words": [
+        "luarocks"
     ]
 }

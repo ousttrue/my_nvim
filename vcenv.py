@@ -40,7 +40,7 @@ def vcvars64() -> Dict[str, str]:
         if '=' in line:
             k, v = line.strip().split('=', 1)
             # print(k, v)
-            new[k] = v
+            new[k.upper()] = v
 
     # diff(new, old)
 
@@ -57,4 +57,3 @@ if platform.system() == 'Windows':
     os.environ['PATH'] = vc_map['PATH']
     os.environ['INCLUDE'] = vc_map['INCLUDE']
     os.environ['LIB'] = vc_map['LIB']
-
