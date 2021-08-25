@@ -113,7 +113,15 @@ def update(c):
     run(c, MY.git_exe, 'submodule', 'update', '--init', '--recursive')
 
 
-@task(update)
+@task
+def neovim_master_pull(c):
+    with c.cd(MY.neovim_dir):
+        run(c, MY.git_exe, 'switch', '-f', 'master')
+        run(c, MY.git_exe, 'pull')
+        run(c, MY.git_exe, 'submodule', 'update', '--init', '--recursive')
+
+
+@task
 def neovim_deps(c):
     '''
     build ./neovim/.deps third-party dependencies
@@ -216,6 +224,7 @@ def ls(c):
 # HEREROCKS_URL = 'https://raw.githubusercontent.com/luarocks/hererocks/latest/hererocks.py'
 HEREROCKS_URL = 'https://raw.githubusercontent.com/ousttrue/hererocks/master/hererocks.py'
 
+
 @task
 def hererocks(c):
     '''
@@ -234,6 +243,5 @@ def hererocks(c):
         dst.write_bytes(data.read())
 
         # python hererocks.py --verbose -j 2.1.0-beta3 -r latest 2.1.0-beta3
-        run(c, pathlib.Path(sys.executable), 'hererocks.py', '--verbose',
-            '-j', '2.1.0-beta3', '-r', 'latest',
-            '2.1.0-beta3')
+        run(c, pathlib.Path(sys.executable), 'hererocks.py', '--verbose', '-j',
+            '2.1.0-beta3', '-r', 'latest', '2.1.0-beta3')
