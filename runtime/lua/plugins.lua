@@ -161,7 +161,7 @@ cmap ; <Plug>(eskk:toggle)
                     -- disable = {},
                 },
                 indent = {
-                    enable = true,
+                    -- enable = true,
                 },
                 ensure_installed = "maintained",
             }
