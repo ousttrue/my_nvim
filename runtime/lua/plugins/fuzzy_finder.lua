@@ -13,10 +13,10 @@ function M.startup()
 			{ "nvim-lua/plenary.nvim" },
 			{ "kyazdani42/nvim-web-devicons" },
 			-- { "nvim-telescope/telescope-ghq.nvim" },
-			{ "ousttrue/telescope-ghq.nvim" },
+			-- { "ousttrue/telescope-ghq.nvim" },
 		},
 		config = function()
-			require("telescope").load_extension("ghq")
+			-- require("telescope").load_extension("ghq")
 
 			local actions = require("telescope.actions")
 			require("telescope").setup({

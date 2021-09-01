@@ -63,7 +63,8 @@ cmap ; <Plug>(eskk:toggle)
         server = "http://luarocks.org/dev",
     }
 
-    use "jremmen/vim-ripgrep"
+    -- use "jremmen/vim-ripgrep"
+    use { "tacahiroy/vim-ripgrep", branch = "fix-e1208" }
 
     -- colorscheme
     use {
@@ -163,7 +164,7 @@ cmap ; <Plug>(eskk:toggle)
                 indent = {
                     -- enable = true,
                 },
-                ensure_installed = "maintained",
+                -- ensure_installed = "maintained",
             }
         end,
     }
