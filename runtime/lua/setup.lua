@@ -111,6 +111,7 @@ vim.api.nvim_set_keymap("n", "q", ":close<CR>", { noremap = true })
 
 vim.api.nvim_set_keymap("n", "<c-s>", ":w<CR>", { noremap = true })
 vim.api.nvim_set_keymap("i", "<c-s>", "<Esc>:w<CR>a", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-S-P>", ":lua require'codetask'.run()<CR>", { noremap = true })
 
 vim.api.nvim_set_var("terminal_ansi_colors", {
     "#073642", -- black
