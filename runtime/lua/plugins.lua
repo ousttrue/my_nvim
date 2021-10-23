@@ -52,8 +52,8 @@ augroup END
 
 let g:toggle_markdown_eskk = 1
 
-imap ; <Plug>(eskk:toggle)
-cmap ; <Plug>(eskk:toggle)
+imap jk <Plug>(eskk:toggle)
+cmap jk <Plug>(eskk:toggle)
 ]]
         end,
     }
@@ -596,6 +596,8 @@ cmap ; <Plug>(eskk:toggle)
         -- 関数も指定可能です。
         -- run = function() vim.cmd[[GlowInstall]] end,
     }
+
+    use { "akinsho/toggleterm.nvim" }
 end)
 
 vim.cmd "PackerInstall"
