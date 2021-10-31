@@ -70,7 +70,9 @@ class MyNVim:
         cargo = self.home_dir / '.cargo/bin/cargo.exe'
         if cargo.exists():
             return cargo
-        raise Exception('no cargo')
+        # raise Exception('no cargo')
+        print('no cargo')
+        return None
 
     def _get_from_path(self,
                        name: str,

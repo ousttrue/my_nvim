@@ -10,11 +10,11 @@ if exists("g:nvy")
     set guifont=Cica:h14
 endif
 
-lua require 'plugins'
-lua require 'setup'
-lua require 'lang.lua'
-lua require 'lang.python'
-lua require 'lang.cpp'
-lua require 'lang.rust'
-lua require 'lang.cs'
-
+" lua require 'plugins'
+lua require 'noplugins'
+" lua require 'setup'
+" lua require 'lang.lua'
+" lua require 'lang.python'
+" lua require 'lang.cpp'
+" lua require 'lang.rust'
+" lua require 'lang.cs'
