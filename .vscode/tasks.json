@@ -8,6 +8,15 @@
             "type": "shell",
             "command": "invoke neovim-build",
             "problemMatcher": []
-        }
+        },
+        {
+            "label": "sphinx-autobuild",
+            "type": "shell",
+            "command": "sphinx-autobuild . ../public --open-browser",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/docs"
+            }
+        },
     ]
 }
