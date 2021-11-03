@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>nvim-dap &#8212; vim memo  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/translations.js"></script>
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="vimspector" href="vimspector.html" />
+    <link rel="prev" title="lsp" href="../lsp/lsp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="vimspector.html" title="vimspector"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../lsp/lsp.html" title="lsp"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">nvim-dap</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="nvim-dap">
+<h1>nvim-dap<a class="headerlink" href="#nvim-dap" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mfussenegger/nvim-dap/blob/master/doc/dap.txt">https://github.com/mfussenegger/nvim-dap/blob/master/doc/dap.txt</a></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://medium.com/swlh/neovim-lsp-dap-and-fuzzy-finder-60337ef08060">https://medium.com/swlh/neovim-lsp-dap-and-fuzzy-finder-60337ef08060</a></p></li>
+<li><p><a class="reference external" href="https://alpha2phi.medium.com/neovim-dap-enhanced-ebc730ff498b">https://alpha2phi.medium.com/neovim-dap-enhanced-ebc730ff498b</a></p></li>
+<li><p><a class="reference external" href="https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#ccrust-via-lldb-vscode">https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#ccrust-via-lldb-vscode</a></p></li>
+</ul>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[plugins]]
+repo = &#39;mfussenegger/nvim-dap&#39;
+[[plugins]]
+repo = &#39;rcarriga/nvim-dap-ui&#39;
+[[plugins]]
+repo = &#39;nvim-telescope/telescope-dap.nvim&#39;
+</pre></div>
+</div>
+<section id="adapter-installation">
+<h2>adapter installation<a class="headerlink" href="#adapter-installation" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation">https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation</a></p></li>
+</ul>
+</section>
+<section id="log">
+<h2>log<a class="headerlink" href="#log" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">$APPDATA/../Local/Temp/nvim/dap.log</span></code></p>
+</section>
+<section id="dapinstall">
+<h2>DAPInstall<a class="headerlink" href="#dapinstall" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference external" href="https://github.com/Pocco81/DAPInstall.nvim">https://github.com/Pocco81/DAPInstall.nvim</a></p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[plugins]]
+repo = &#39;Pocco81/DAPInstall.nvim&#39;
+</pre></div>
+</div>
+</section>
+<section id="nvim-lua">
+<h2>nvim-lua<a class="headerlink" href="#nvim-lua" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[plugins]]
+repo = &#39;jbyuki/one-small-step-for-vimkind&#39;
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nvim-dap</a><ul>
+<li><a class="reference internal" href="#adapter-installation">adapter installation</a></li>
+<li><a class="reference internal" href="#log">log</a></li>
+<li><a class="reference internal" href="#dapinstall">DAPInstall</a></li>
+<li><a class="reference internal" href="#nvim-lua">nvim-lua</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="../lsp/lsp.html"
+                        title="前の章へ">lsp</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="vimspector.html"
+                        title="次の章へ">vimspector</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/debugger/nvim-dap.md.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="vimspector.html" title="vimspector"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../lsp/lsp.html" title="lsp"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">nvim-dap</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, ousttrue.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>

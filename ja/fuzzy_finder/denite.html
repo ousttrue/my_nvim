@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>denite &#8212; vim memo  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/translations.js"></script>
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="vim-lsp" href="../lsp/vim-lsp.html" />
+    <link rel="prev" title="FuzzyFinder" href="fuzzy_finder.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../lsp/vim-lsp.html" title="vim-lsp"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="fuzzy_finder.html" title="FuzzyFinder"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">denite</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="denite">
+<h1>denite<a class="headerlink" href="#denite" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><a class="reference external" href="https://github.com/Shougo/denite.nvim">https://github.com/Shougo/denite.nvim</a></p>
+<section id="id1">
+<h2>設定<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>dein.toml</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span>[[plugins]]
+repo = &#39;Shougo/denite.nvim&#39;
+hook_add = &#39;&#39;&#39;
+&quot;
+&quot; Define mappings
+&quot;
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; &lt;CR&gt;
+                \ denite#do_map(&#39;do_action&#39;)
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; d
+                \ denite#do_map(&#39;do_action&#39;, &#39;delete&#39;)
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; p
+                \ denite#do_map(&#39;do_action&#39;, &#39;preview&#39;)
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; q
+                \ denite#do_map(&#39;quit&#39;)
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; i
+                \ denite#do_map(&#39;open_filter_buffer&#39;)
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; &lt;Space&gt;
+                \ denite#do_map(&#39;toggle_select&#39;).&#39;j&#39;
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; ..
+                \ denite#do_map(&#39;move_up_path&#39;)
+
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; &lt;C-n&gt;
+                \ denite#do_map(&#39;move_to_next_line&#39;)
+    nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;expr&gt; &lt;C-p&gt;
+                \ denite#do_map(&#39;move_to_previous_line&#39;)
+endfunction
+
+&quot;
+&quot; custom
+&quot;
+call denite#custom#var(&#39;file/rec&#39;, &#39;command&#39;,[&#39;rg&#39;, &#39;--files&#39;, &#39;--glob&#39;, &#39;!.git&#39;])
+call denite#custom#var(&#39;grep&#39;, &#39;command&#39;, [&#39;rg&#39;, &#39;--threads&#39;, &#39;1&#39;])
+&quot; call denite#custom#kind(&#39;directory&#39;, &#39;default_action&#39;, &#39;cd&#39;)
+
+&quot;
+&quot; start denite
+&quot;
+nmap &lt;silent&gt; [prefix]&lt;Space&gt; :&lt;C-u&gt;DeniteProjectDir -buffer-name=files file/rec buffer&lt;CR&gt;
+nmap &lt;silent&gt; [prefix]b :&lt;C-u&gt;Denite buffer&lt;CR&gt;
+nmap &lt;silent&gt; [prefix]g :&lt;C-u&gt;Denite ghq&lt;CR&gt;
+&#39;&#39;&#39;
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>https://secret-garden.hatenablog.com/entry/2021/05/16/152715</p></li>
+</ul>
+</section>
+<section id="floating-window">
+<h2>floating-window<a class="headerlink" href="#floating-window" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>(denite.nvimのFloating Windowオプションを使おう)[https://qiita.com/lighttiger2505/items/d4a3371399cfe6dbdd56]</p></li>
+</ul>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> s:denite_win_width_percent <span class="p">=</span> <span class="m">0</span>.<span class="m">85</span>
+<span class="k">let</span> s:denite_win_height_percent <span class="p">=</span> <span class="m">0</span>.<span class="m">7</span>
+<span class="k">call</span> denite#custom#<span class="k">option</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> {
+    \ <span class="s1">&#39;split&#39;</span>: <span class="s1">&#39;floating&#39;</span><span class="p">,</span>
+    \ <span class="s1">&#39;winwidth&#39;</span>: float2nr<span class="p">(</span>&amp;<span class="nb">columns</span> * s:denite_win_width_percent<span class="p">),</span>
+    \ <span class="s1">&#39;wincol&#39;</span>: float2nr<span class="p">((</span>&amp;<span class="nb">columns</span> <span class="p">-</span> <span class="p">(</span>&amp;<span class="nb">columns</span> * s:denite_win_width_percent<span class="p">))</span> / <span class="m">2</span><span class="p">),</span>
+    \ <span class="s1">&#39;winheight&#39;</span>: float2nr<span class="p">(</span>&amp;<span class="nb">lines</span> * s:denite_win_height_percent<span class="p">),</span>
+    \ <span class="s1">&#39;winrow&#39;</span>: float2nr<span class="p">((</span>&amp;<span class="nb">lines</span> <span class="p">-</span> <span class="p">(</span>&amp;<span class="nb">lines</span> * s:denite_win_height_percent<span class="p">))</span> / <span class="m">2</span><span class="p">),</span>
+    \ }<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>概要<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>source =&gt; filter =&gt; sort =&gt; match =&gt; action</p>
+</section>
+<section id="source">
+<h2>source<a class="headerlink" href="#source" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference external" href="https://github.com/Shougo/denite.nvim/wiki/External-Sources">https://github.com/Shougo/denite.nvim/wiki/External-Sources</a></p>
+<ul class="simple">
+<li><p>https://qiita.com/iyuuya/items/8a7e9cc0c9dd6d0e4c32</p></li>
+<li><p><a class="reference external" href="https://endaaman.me/tips/denite-extension">https://endaaman.me/tips/denite-extension</a></p></li>
+</ul>
+<section id="ghq">
+<h3>ghq<a class="headerlink" href="#ghq" title="このヘッドラインへのパーマリンク">¶</a></h3>
+</section>
+</section>
+<section id="bookmark">
+<h2>bookmark<a class="headerlink" href="#bookmark" title="このヘッドラインへのパーマリンク">¶</a></h2>
+</section>
+<section id="action">
+<h2>action<a class="headerlink" href="#action" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</section>
+<section id="auto-action">
+<h2>auto-action<a class="headerlink" href="#auto-action" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>https://zenn.dev/matsui54/articles/2021-03-24-denite-auto-action</p></li>
+</ul>
+</section>
+<section id="preview">
+<h2>preview<a class="headerlink" href="#preview" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>https://zenn.dev/matsui54/articles/f6adb2a6f4c963637949</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">denite</a><ul>
+<li><a class="reference internal" href="#id1">設定</a></li>
+<li><a class="reference internal" href="#floating-window">floating-window</a></li>
+<li><a class="reference internal" href="#id2">概要</a></li>
+<li><a class="reference internal" href="#source">source</a><ul>
+<li><a class="reference internal" href="#ghq">ghq</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bookmark">bookmark</a></li>
+<li><a class="reference internal" href="#action">action</a></li>
+<li><a class="reference internal" href="#auto-action">auto-action</a></li>
+<li><a class="reference internal" href="#preview">preview</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="fuzzy_finder.html"
+                        title="前の章へ">FuzzyFinder</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="../lsp/vim-lsp.html"
+                        title="次の章へ">vim-lsp</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/fuzzy_finder/denite.md.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../lsp/vim-lsp.html" title="vim-lsp"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="fuzzy_finder.html" title="FuzzyFinder"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">denite</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, ousttrue.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>

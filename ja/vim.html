@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>vim &#8212; vim memo  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="nvim" href="nvim.html" />
+    <link rel="prev" title="Vimメモ" href="prefix.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="nvim.html" title="nvim"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="prefix.html" title="Vimメモ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">vim</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="vim">
+<h1>vim<a class="headerlink" href="#vim" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<section id="gvimrc">
+<h2>.gvimrc<a class="headerlink" href="#gvimrc" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">iminsert</span><span class="p">=</span><span class="m">0</span>
+<span class="k">set</span> <span class="nb">imsearch</span><span class="p">=</span><span class="m">-1</span>
+<span class="k">set</span> <span class="nb">lines</span><span class="p">=</span><span class="m">40</span>
+<span class="k">set</span> <span class="nb">columns</span><span class="p">=</span><span class="m">80</span>
+<span class="k">set</span> <span class="nb">guicursor</span><span class="p">+=</span><span class="k">a</span>:blinkon0
+<span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span><span class="k">r</span>  <span class="c">&quot;remove right-hand scroll bar</span>
+<span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span>L  <span class="c">&quot;remove left-hand scroll bar</span>
+<span class="k">set</span> <span class="nb">guifont</span><span class="p">=</span>Cica:h14:cANSI:qDRAFT
+<span class="k">set</span> renderoptions<span class="p">=</span>type:directx<span class="p">,</span>renmode:<span class="m">5</span>
+
+<span class="c">&quot; メニューの文字化け回避</span>
+<span class="k">set</span> <span class="nb">encoding</span><span class="p">=</span>utf<span class="m">-8</span>
+source $VIMRUNTIME/delmenu.<span class="k">vim</span>
+<span class="k">set</span> <span class="nb">langmenu</span><span class="p">=</span>ja_jp.utf<span class="m">-8</span>
+source $VIMRUNTIME/menu.<span class="k">vim</span>
+</pre></div>
+</div>
+</section>
+<section id="vimrc">
+<h2>.vimrc<a class="headerlink" href="#vimrc" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">filetype</span> plugin indent <span class="k">on</span>
+<span class="nb">syntax</span> enable
+
+<span class="k">set</span> belloff<span class="p">=</span><span class="k">all</span>
+<span class="k">set</span> <span class="nb">hidden</span>
+<span class="k">set</span> <span class="nb">noswapfile</span> <span class="nb">nobackup</span> <span class="nb">noundofile</span>
+<span class="k">set</span> <span class="nb">laststatus</span><span class="p">=</span><span class="m">2</span>
+<span class="k">set</span> <span class="k">ts</span><span class="p">=</span><span class="m">4</span> <span class="k">sw</span><span class="p">=</span><span class="m">4</span> <span class="k">sts</span><span class="p">=</span><span class="m">4</span> <span class="nb">expandtab</span>
+<span class="k">set</span> <span class="nb">hlsearch</span>
+<span class="k">set</span> <span class="nb">clipboard</span><span class="p">=</span>
+<span class="k">set</span> <span class="nb">ambiwidth</span><span class="p">=</span>double
+<span class="k">set</span> <span class="nb">autochdir</span>
+<span class="k">set</span> <span class="nb">list</span>
+<span class="k">set</span> <span class="nb">listchars</span><span class="p">=</span><span class="k">tab</span>:»<span class="p">-,</span>trail:<span class="p">-,</span><span class="nb">eol</span>:↲<span class="p">,</span>extends:»<span class="p">,</span>precedes:«<span class="p">,</span>nbsp:%
+<span class="k">if</span> has<span class="p">(</span><span class="s1">&#39;win32&#39;</span><span class="p">)</span>
+    <span class="k">set</span> <span class="nb">clipboard</span><span class="p">=</span>unnamed
+<span class="k">else</span>
+    <span class="k">set</span> <span class="nb">clipboard</span><span class="p">=</span>unnamedplus
+<span class="k">endif</span>
+<span class="k">if</span> has<span class="p">(</span><span class="s1">&#39;nvim&#39;</span><span class="p">)</span>
+    <span class="k">set</span> <span class="nb">nopaste</span>
+    <span class="nb">noremap</span><span class="p">!</span> <span class="p">&lt;</span>S<span class="p">-</span>Insert<span class="p">&gt;</span> <span class="p">&lt;</span>C<span class="p">-</span>R<span class="p">&gt;+</span>
+<span class="k">else</span>
+    <span class="k">set</span> <span class="nb">t_Co</span><span class="p">=</span><span class="m">256</span>
+<span class="k">endif</span>
+
+<span class="k">au</span> <span class="nb">ColorScheme</span> * <span class="k">hi</span> MatchParen cterm<span class="p">=</span><span class="nb">bold</span> ctermfg<span class="p">=</span><span class="m">214</span> ctermbg<span class="p">=</span>black
+
+<span class="k">set</span> <span class="nb">conceallevel</span><span class="p">=</span><span class="m">0</span>
+<span class="k">set</span> <span class="k">ts</span><span class="p">=</span><span class="m">4</span> <span class="k">sw</span><span class="p">=</span><span class="m">4</span> <span class="k">sts</span><span class="p">=</span><span class="m">4</span> <span class="nb">expandtab</span>
+<span class="k">set</span> <span class="nb">hidden</span>
+<span class="k">set</span> <span class="nb">list</span>
+<span class="k">set</span> <span class="nb">listchars</span><span class="p">=</span><span class="k">tab</span>:»<span class="p">-,</span>trail:<span class="p">-,</span>extends:»<span class="p">,</span>precedes:«<span class="p">,</span>nbsp:%<span class="p">,</span><span class="nb">eol</span>:↲
+<span class="k">set</span> <span class="nb">foldmethod</span><span class="p">=</span>marker
+<span class="k">set</span> <span class="nb">autochdir</span>
+<span class="k">set</span> <span class="nb">showmatch</span>
+<span class="k">set</span> <span class="nb">matchtime</span><span class="p">=</span><span class="m">3</span>
+<span class="k">set</span> <span class="nb">noswapfile</span> <span class="nb">nobackup</span> <span class="nb">noundofile</span> <span class="nb">nowritebackup</span>
+<span class="k">set</span> <span class="nb">noeb</span> <span class="nb">vb</span> <span class="nb">t_vb</span><span class="p">=</span>
+<span class="k">set</span> belloff<span class="p">=</span><span class="k">all</span>
+<span class="k">set</span> <span class="nb">laststatus</span><span class="p">=</span><span class="m">2</span>
+<span class="k">set</span> <span class="nb">hlsearch</span>
+<span class="k">set</span> <span class="nb">clipboard</span><span class="p">+=</span>unnamed
+<span class="k">set</span> <span class="nb">ambiwidth</span><span class="p">=</span>double
+<span class="k">set</span> <span class="nb">ignorecase</span>
+<span class="k">set</span> <span class="nb">iskeyword</span><span class="p">+=-</span>
+<span class="c">&quot;set virtualedit=all</span>
+<span class="k">set</span> <span class="nb">background</span><span class="p">=</span><span class="nb">dark</span>
+<span class="c">&quot;if </span>
+<span class="k">set</span> termguicolors
+<span class="c">&quot;set autoindent</span>
+<span class="k">set</span> <span class="nb">fileencodings</span><span class="p">=</span>utf<span class="m">-8</span><span class="p">,</span>ucs<span class="p">-</span>bom<span class="p">,</span>default<span class="p">,</span>latin1
+<span class="k">set</span> <span class="nb">fileformats</span><span class="p">=</span>unix<span class="p">,</span>dos
+<span class="k">if</span> <span class="p">(</span>exists<span class="p">(</span><span class="s1">&#39;+colorcolumn&#39;</span><span class="p">))</span>
+	<span class="k">set</span> <span class="nb">colorcolumn</span><span class="p">=</span><span class="m">80</span>
+	<span class="nb">highlight</span> ColorColumn ctermbg<span class="p">=</span><span class="m">9</span>
+<span class="k">endif</span>
+<span class="k">set</span> <span class="nb">previewheight</span><span class="p">=</span><span class="m">8</span>
+<span class="c">&quot; Shift-K</span>
+<span class="k">set</span> <span class="nb">keywordprg</span><span class="p">=</span>:help
+</pre></div>
+</div>
+</section>
+<section id="source-init-vim">
+<h2>source init.vim<a class="headerlink" href="#source-init-vim" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">encoding</span><span class="p">=</span>utf8
+<span class="k">let</span> s:nvim_init <span class="p">=</span> expand<span class="p">(</span><span class="s1">&#39;~/AppData/Local/nvim/init.vim&#39;</span><span class="p">)</span>
+<span class="k">if</span> filereadable<span class="p">(</span>s:nvim_init<span class="p">)</span>
+    execute <span class="s1">&#39;source &#39;</span> . s:nvim_init
+<span class="k">endif</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">vim</a><ul>
+<li><a class="reference internal" href="#gvimrc">.gvimrc</a></li>
+<li><a class="reference internal" href="#vimrc">.vimrc</a></li>
+<li><a class="reference internal" href="#source-init-vim">source init.vim</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="prefix.html"
+                        title="前の章へ">Vimメモ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="nvim.html"
+                        title="次の章へ">nvim</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/vim.md.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="nvim.html" title="nvim"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="prefix.html" title="Vimメモ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">vim</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, ousttrue.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>

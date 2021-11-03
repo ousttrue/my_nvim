@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>completion &#8212; vim memo  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="filetypes" href="filetypes.html" />
+    <link rel="prev" title="ale" href="lsp/ale.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="filetypes.html" title="filetypes"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="lsp/ale.html" title="ale"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">completion</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="completion">
+<h1>completion<a class="headerlink" href="#completion" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<section id="omnifunc">
+<h2>omnifunc<a class="headerlink" href="#omnifunc" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>http://vimdoc.sourceforge.net/htmldoc/version7.html#new-omni-completion
+https://vim.fandom.com/wiki/Omni_completion
+https://vim.fandom.com/wiki/Omni_completion_popup_menu</p>
+<p>インテリセンスみたいな文脈を考慮した補完。素の completion とのインターフェース上の違いは？</p>
+<p>code:.vim
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">&lt;C-X&gt;&lt;C-O&gt;</span></code> while open in Insert mode</p>
+</div></blockquote>
+<p>[* vim-lsp]
+https://qiita.com/yami_beta/items/1bb1341113e12bcfb1b8</p>
+<p>[* 補完関数の実装]
+[Vim の complete-functions でハマった http://d.hatena.ne.jp/osyo-manga/20140806/1407291600]</p>
+<p>[* 補完の呼び出し]
+vimに以下の種類の挿入モード補完がある
+Whole lines						|i_CTRL-X_CTRL-L|
+keywords in the current file				|i_CTRL-X_CTRL-N|
+keywords in 'dictionary'				|i_CTRL-X_CTRL-K|
+keywords in 'thesaurus', thesaurus-style		|i_CTRL-X_CTRL-T|
+keywords in the current and included files		|i_CTRL-X_CTRL-I|
+tags							|i_CTRL-X_CTRL-]|
+file names						|i_CTRL-X_CTRL-F|
+definitions or macros				|i_CTRL-X_CTRL-D|
+Vim command-line					|i_CTRL-X_CTRL-V|
+User defined completion				|i_CTRL-X_CTRL-U|
+omni completion					|i_CTRL-X_CTRL-O|
+Spelling suggestions				|i_CTRL-X_s|
+keywords in 'complete'				|i_CTRL-N| |i_CTRL-P| これしか使ってなかった</p>
+<p>https://www.xmisao.com/2014/05/04/vim-completefunc.html
+https://github.com/neoclide/coc.nvim</p>
+<p>[* 起動方法で異なる補完が出る]</p>
+<p>File completion: <C-X><C-F>
+Line completion: <C-X><C-L>
+Omni completion: <C-X><C-O></p>
+<p>どの補完を使うか考えずに使いたい</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>deoplete 複数のソースを統合する。強い
+一方で十分な量のバッファが開かれていればの `C-n` `C-p` で十分強い。むしろこれより弱くしたくない。
+</pre></div>
+</div>
+<p>[* complete]
+<code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">complete=.,w,b,u,t</span></code></p>
+<p>[* completeopt]
+<code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">completeopt+=menu,preview</span></code></p>
+<p>[* pumvisible]
+<code class="docutils literal notranslate"><span class="pre">pumvisible()</span></code>  pop up menu のことらしい</p>
+<p>code:.vim
+inoremap <expr> <Esc>      pumvisible() ? &quot;&lt;C-e&gt;&quot; : &quot;&lt;Esc&gt;&quot;
+inoremap <expr> <CR>       pumvisible() ? &quot;&lt;C-y&gt;&quot; : &quot;&lt;CR&gt;&quot;
+inoremap <expr> <Down>     pumvisible() ? &quot;&lt;C-n&gt;&quot; : &quot;&lt;Down&gt;&quot;
+inoremap <expr> <Up>       pumvisible() ? &quot;&lt;C-p&gt;&quot; : &quot;&lt;Up&gt;&quot;
+inoremap <expr> <PageDown> pumvisible() ? &quot;&lt;PageDown&gt;&lt;C-p&gt;&lt;C-n&gt;&quot; : &quot;&lt;PageDown&gt;&quot;
+inoremap <expr> <PageUp>   pumvisible() ? &quot;&lt;PageUp&gt;&lt;C-p&gt;&lt;C-n&gt;&quot; : &quot;&lt;PageUp&gt;&quot;</p>
+<p>[* keyword]
+<code class="docutils literal notranslate"><span class="pre">C-N</span></code>, <code class="docutils literal notranslate"><span class="pre">C-P</span></code>
+<code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">i^n,</span> <span class="pre">i^p</span></code></p>
+<p>[* 対象を自動で振り分ける例]
+https://vim.fandom.com/wiki/Smart_mapping_for_tab_completion</p>
+<p>code:.vim
+function! Smart_TabComplete()
+let line = getline('.')                         &quot; current line</p>
+<p>let substr = strpart(line, -1, col('.')+1)      &quot; from the start of the current
+&quot; line to one character right
+&quot; of the cursor
+let substr = matchstr(substr, &quot;[^ \t]*$&quot;)       &quot; word till cursor
+if (strlen(substr)==0)                          &quot; nothing to match on empty string
+return &quot;&lt;tab&gt;&quot;
+endif
+let has_period = match(substr, '.') != -1      &quot; position of period, if any
+let has_slash = match(substr, '/') != -1       &quot; position of slash, if any
+if (!has_period &amp;&amp; !has_slash)
+return &quot;&lt;C-X&gt;&lt;C-P&gt;&quot;                         &quot; existing text matching
+elseif ( has_slash )
+return &quot;&lt;C-X&gt;&lt;C-F&gt;&quot;                         &quot; file matching
+else
+return &quot;&lt;C-X&gt;&lt;C-O&gt;&quot;                         &quot; plugin matching
+endif
+endfunction</p>
+<p><code class="docutils literal notranslate"><span class="pre">inoremap</span> <span class="pre">&lt;tab&gt;</span> <span class="pre">&lt;c-r&gt;=Smart_TabComplete()&lt;CR&gt;</span></code></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">completion</a><ul>
+<li><a class="reference internal" href="#omnifunc">omnifunc</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="lsp/ale.html"
+                        title="前の章へ">ale</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="filetypes.html"
+                        title="次の章へ">filetypes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/completion.md.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="filetypes.html" title="filetypes"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="lsp/ale.html" title="ale"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">completion</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, ousttrue.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>
