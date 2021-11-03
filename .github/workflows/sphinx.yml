@@ -15,9 +15,9 @@ jobs:
       - uses: actions/checkout@v1
       - run: pip install sphinx
       - run: pip install myst-parser
-      - name: sphinx build(ja)
+      - name: sphinx build
         working-directory: ./docs
-        run: sphinx-build . ../public/ja
+        run: sphinx-build . ../public
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
