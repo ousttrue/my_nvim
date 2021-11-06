@@ -131,3 +131,8 @@ vim.api.nvim_set_var("terminal_ansi_colors", {
     "#93a1a1", -- cyan (bright)
     "#fdf6e3", -- white (bright)
 })
+
+-- grep & quickfix
+vim.o.grepprg="rg --vimgrep --smart-case --follow"
+vim.cmd "autocmd QuickFixCmdPost *grep* cwindow"
+

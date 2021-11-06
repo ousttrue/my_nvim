@@ -2,3 +2,4 @@ install
 __pycache__
 *.pyc
 public
+.doit.db

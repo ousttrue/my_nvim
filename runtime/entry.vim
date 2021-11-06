@@ -12,7 +12,7 @@ endif
 
 " lua require 'plugins'
 lua require 'noplugins'
-" lua require 'setup'
+lua require 'setup'
 " lua require 'lang.lua'
 " lua require 'lang.python'
 " lua require 'lang.cpp'
