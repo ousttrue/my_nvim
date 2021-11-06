@@ -34,54 +34,6 @@ def run(c: Context, exe: pathlib.Path, *args: str, **kwargs):
         c.run(cmd, **kwargs)
 
 
-@task
-def tools(c):
-    '''
-    install apt, pip, cargo
-    '''
-
-    if platform.system() == 'Windows':
-        pass
-    else:
-        # ubuntu
-        run(c,
-            pathlib.Path('/usr/bin/apt'),
-            'install',
-            '-y',
-            'libtool-bin',
-            'cmake',
-            'python3',
-            'python3-pip',
-            'ninja-build',
-            'clangd',
-            sudo=True)
-        '''
-        $ sudo apt install -y nodejs npm
-        $ sudo npm install n -g
-        $ sudo n stable
-        $ sudo apt purge -y nodejs npm
-        $ node -v
-        v14.17.3
-
-        $ curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux -o ~/bin/rust-analyzer
-        $ chmod +x ~/bin/rust-analyzer
-        '''
-
-    # pip
-    pip.main(['install', 'pynvim', 'neovim-remote', 'yapf', 'debugpy'])
-
-    # cargo
-    run(
-        c,
-        MY.cargo_exe,
-        'install',
-        'bat',
-        'stylua',
-        'ripgrep',
-        #'rhq',
-    )
-
-
 def clean_deps(my: MyNVim):
     if my.deps.exists():
         shutil.rmtree(my.deps)
