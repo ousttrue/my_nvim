@@ -1,4 +1,4 @@
-# vim
+# vimrc
 
 ## .gvimrc
 

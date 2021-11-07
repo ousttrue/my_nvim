@@ -37,8 +37,8 @@ end
 
 vim.api.nvim_set_keymap("n", "[prefix]", "<Nop>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<Space>", "[prefix]", {})
-vim.api.nvim_set_keymap("n", "[bookmark]", "<Nop>", { noremap = true })
-vim.api.nvim_set_keymap("n", ",", "[bookmark]", {})
+-- vim.api.nvim_set_keymap("n", "[bookmark]", "<Nop>", { noremap = true })
+-- vim.api.nvim_set_keymap("n", ",", "[bookmark]", {})
 vim.api.nvim_set_keymap("n", "[external]", "<Nop>", { noremap = true })
 vim.api.nvim_set_keymap("n", "'", "[external]", {})
 

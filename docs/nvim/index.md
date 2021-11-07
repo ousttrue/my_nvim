@@ -1,0 +1,8 @@
+# nvim
+
+```{toctree}
+lua
+articles
+```
+
+

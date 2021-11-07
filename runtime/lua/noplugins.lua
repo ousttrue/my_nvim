@@ -11,8 +11,14 @@ packer.startup(function()
     use "nvim-lua/plenary.nvim"
     use "wbthomason/packer.nvim"
 
-    -- pckage
+    -- package
     require "plugins.use_core"(use)
+    require "plugins.use_treesitter"(use)
+    require "plugins.use_lsp"(use)
+    require "plugins.use_dap"(use)
+
+    use "neoclide/jsonc.vim"
 end)
 
 vim.cmd "PackerInstall"
+

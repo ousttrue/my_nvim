@@ -1,0 +1,6 @@
+# vim
+
+```{toctree}
+vimrc
+```
+

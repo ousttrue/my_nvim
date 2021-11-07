@@ -1,5 +1,9 @@
 # lsp
 
+```{toctree}
+nvim-lsp
+```
+
 ## vim-lsp
 
 <https://github.com/prabirshrestha/vim-lsp>

@@ -1,8 +1,8 @@
 return function(use)
     use "Shougo/context_filetype.vim"
     use "osyo-manga/vim-precious"
-
     use "cespare/vim-toml"
+
     use "tpope/vim-fugitive"
     use {
         "tpope/vim-commentary",
@@ -32,7 +32,7 @@ return function(use)
     use {
         "preservim/nerdtree",
         config = function()
-            vim.api.nvim_set_keymap("n", ",,", ":NERDTreeFind<CR>", { noremap = true })
+            -- vim.api.nvim_set_keymap("n", ",,", ":NERDTreeFind<CR>", { noremap = true })
         end,
     }
 
@@ -44,4 +44,13 @@ return function(use)
             -- vim.api.nvim_set_var("winresizer_start_key", "<C-T>")
         end,
     }
+
+    use "godlygeek/tabular"
+    use {
+        "plasticboy/vim-markdown",
+        config = function()
+            vim.api.nvim_set_var("vim_markdown_folding_disabled", 1)
+        end,
+    }
+    use "tyru/open-browser.vim"
 end
