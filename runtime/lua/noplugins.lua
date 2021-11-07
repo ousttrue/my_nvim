@@ -12,6 +12,9 @@ packer.startup(function()
     use "nvim-lua/plenary.nvim"
     use "wbthomason/packer.nvim"
 
+    use "Shougo/context_filetype.vim"
+    use "osyo-manga/vim-precious"
+
     use "cespare/vim-toml"
     use "tpope/vim-fugitive"
     use {
@@ -48,8 +51,12 @@ packer.startup(function()
 
     use "nathanaelkane/vim-indent-guides"
 
-    -- use "jremmen/vim-ripgrep"
-
+    use {
+        "simeji/winresizer",
+        config = function()
+            -- vim.api.nvim_set_var("winresizer_start_key", "<C-T>")
+        end,
+    }
 end)
 
 vim.cmd "PackerInstall"
