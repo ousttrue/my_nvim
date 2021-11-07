@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>LanguageServer(nvim built-in) &#8212; vim memo  ドキュメント</title>
+    <title>nvim built-in &#8212; vim memo  ドキュメント</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
@@ -18,8 +18,8 @@
     
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
-    <link rel="next" title="lsp" href="lsp.html" />
-    <link rel="prev" title="rust" href="../languages/rust.html" /> 
+    <link rel="next" title="lang" href="../languages/index.html" />
+    <link rel="prev" title="lsp" href="index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
@@ -28,13 +28,14 @@
           <a href="../genindex.html" title="総合索引"
              accesskey="I">索引</a></li>
         <li class="right" >
-          <a href="lsp.html" title="lsp"
+          <a href="../languages/index.html" title="lang"
              accesskey="N">次へ</a> |</li>
         <li class="right" >
-          <a href="../languages/rust.html" title="rust"
+          <a href="index.html" title="lsp"
              accesskey="P">前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">LanguageServer(nvim built-in)</a></li> 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">lsp</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">nvim built-in</a></li> 
       </ul>
     </div>  
 
@@ -43,8 +44,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section class="tex2jax_ignore mathjax_ignore" id="languageserver-nvim-built-in">
-<h1>LanguageServer(nvim built-in)<a class="headerlink" href="#languageserver-nvim-built-in" title="このヘッドラインへのパーマリンク">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="nvim-built-in">
+<h1>nvim built-in<a class="headerlink" href="#nvim-built-in" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">neovim-0.5</span></code> から組み込みの LSP-Client 機能が実装される。</p>
 <p><a class="reference external" href="https://neovim.io/doc/user/lsp.html">https://neovim.io/doc/user/lsp.html</a></p>
 <p>各言語ごとの LanguageServer の自動起動などを担うのが lspconfig。</p>
@@ -58,6 +59,44 @@
 <li><p>format</p></li>
 <li><p>refactor</p></li>
 </ul>
+<section id="lspinfo">
+<h2>:LspInfo<a class="headerlink" href="#lspinfo" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>status 確認</p>
+</section>
+<section id="lspconfig">
+<h2>lspconfig<a class="headerlink" href="#lspconfig" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference external" href="https://github.com/neovim/nvim-lspconfig">https://github.com/neovim/nvim-lspconfig</a></p>
+<section id="packer-install">
+<h3>packer による install<a class="headerlink" href="#packer-install" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">packer</span><span class="p">.</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+    <span class="n">use</span> <span class="p">{</span>
+        <span class="s2">&quot;neovim/nvim-lspconfig&quot;</span><span class="p">,</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="kr">function</span><span class="p">()</span>
+            <span class="n">vim</span><span class="p">.</span><span class="n">api</span><span class="p">.</span><span class="n">nvim_set_var</span><span class="p">(</span><span class="s2">&quot;lsp_signs_enabled&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">vim</span><span class="p">.</span><span class="n">api</span><span class="p">.</span><span class="n">nvim_set_var</span><span class="p">(</span><span class="s2">&quot;lsp_diagnostics_enabled&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">vim</span><span class="p">.</span><span class="n">api</span><span class="p">.</span><span class="n">nvim_set_var</span><span class="p">(</span><span class="s2">&quot;lsp_diagnostics_echo_cursor&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">vim</span><span class="p">.</span><span class="n">api</span><span class="p">.</span><span class="n">nvim_set_var</span><span class="p">(</span><span class="s2">&quot;lsp_virtual_text_enabled&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1">-- vim.api.nvim_set_var(&quot;lsp_signs_error&quot;, { text = &quot;✗&quot; })</span>
+            <span class="c1">-- vim.api.nvim_set_var(&quot;lsp_signs_warning&quot;, { text = &quot;‼&quot; })</span>
+            <span class="c1">-- vim.api.nvim_set_var(&quot;lsp_signs_information&quot;, { text = &quot;i&quot; })</span>
+            <span class="c1">-- vim.api.nvim_set_var(&quot;lsp_signs_hint&quot;, { text = &quot;?&quot; })</span>
+        <span class="kr">end</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="kr">end</span><span class="p">)</span>
+<span class="n">vim</span><span class="p">.</span><span class="n">cmd</span> <span class="s2">&quot;PackerInstall&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="languageserver">
+<h2>言語毎の LanguageServer<a class="headerlink" href="#languageserver" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<section id="python">
+<h3>python<a class="headerlink" href="#python" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ npm i -g pyright
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
 
@@ -67,12 +106,28 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nvim built-in</a><ul>
+<li><a class="reference internal" href="#lspinfo">:LspInfo</a></li>
+<li><a class="reference internal" href="#lspconfig">lspconfig</a><ul>
+<li><a class="reference internal" href="#packer-install">packer による install</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#languageserver">言語毎の LanguageServer</a><ul>
+<li><a class="reference internal" href="#python">python</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
   <h4>前のトピックへ</h4>
-  <p class="topless"><a href="../languages/rust.html"
-                        title="前の章へ">rust</a></p>
+  <p class="topless"><a href="index.html"
+                        title="前の章へ">lsp</a></p>
   <h4>次のトピックへ</h4>
-  <p class="topless"><a href="lsp.html"
-                        title="次の章へ">lsp</a></p>
+  <p class="topless"><a href="../languages/index.html"
+                        title="次の章へ">lang</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
@@ -101,13 +156,14 @@
           <a href="../genindex.html" title="総合索引"
              >索引</a></li>
         <li class="right" >
-          <a href="lsp.html" title="lsp"
+          <a href="../languages/index.html" title="lang"
              >次へ</a> |</li>
         <li class="right" >
-          <a href="../languages/rust.html" title="rust"
+          <a href="index.html" title="lsp"
              >前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">LanguageServer(nvim built-in)</a></li> 
+          <li class="nav-item nav-item-1"><a href="index.html" >lsp</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">nvim built-in</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

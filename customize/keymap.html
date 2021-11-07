@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>keymap &#8212; vim memo  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/translations.js"></script>
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="nvim" href="../nvim/index.html" />
+    <link rel="prev" title="vimrc" href="vimrc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../nvim/index.html" title="nvim"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="vimrc.html" title="vimrc"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">keymap</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="keymap">
+<h1>keymap<a class="headerlink" href="#keymap" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<section id="index-0">
+<span id="id1"></span><h2>例<a class="headerlink" href="#index-0" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="c">&quot; ex mode を無効に</span>
+<span class="nb">nnoremap</span> Q <span class="p">&lt;</span>Nop<span class="p">&gt;</span>
+<span class="c">&quot; close window, but not delete buffer</span>
+<span class="nb">nnoremap</span> <span class="k">q</span> :<span class="k">close</span><span class="p">&lt;</span>CR<span class="p">&gt;</span>
+<span class="c">&quot; terminal normal mode by escape</span>
+tnoremap <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span> <span class="p">&lt;</span>ESC<span class="p">&gt;</span> <span class="p">&lt;</span>C<span class="p">-</span>\<span class="p">&gt;&lt;</span>C<span class="p">-</span><span class="k">n</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>関数呼び出し</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="p">!</span> s:some<span class="p">()</span>
+    echo <span class="s2">&quot;some&quot;</span>
+<span class="k">endfunction</span>
+<span class="nb">nnoremap</span> <span class="p">&lt;</span>F5<span class="p">&gt;</span> :<span class="k">call</span> <span class="p">&lt;</span>SID<span class="p">&gt;</span>some<span class="p">()&lt;</span>CR<span class="p">&gt;</span>
+👇
+<span class="nb">nnoremap</span> <span class="p">&lt;</span>F5<span class="p">&gt;</span> :echo <span class="s2">&quot;some&quot;</span><span class="p">&lt;</span>CR<span class="p">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="prefix">
+<h2>Prefix<a class="headerlink" href="#prefix" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="nb">nnoremap</span> [prefix] <span class="p">&lt;</span>Nop<span class="p">&gt;</span>
+nmap <span class="p">&lt;</span>Space<span class="p">&gt;</span> [prefix]
+nmap <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span> [prefix]<span class="k">n</span> :<span class="p">&lt;</span>C<span class="p">-</span><span class="k">u</span><span class="p">&gt;</span><span class="k">e</span> <span class="p">~</span><span class="sr">/.config/</span>nvim/init.<span class="k">vim</span><span class="p">&lt;</span>CR<span class="p">&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span>nmap <span class="p">&lt;</span>C<span class="p">-</span><span class="k">n</span><span class="p">&gt;</span> :lnext<span class="p">&lt;</span>CR<span class="p">&gt;</span>
+nmap <span class="p">&lt;</span>C<span class="p">-</span><span class="k">p</span><span class="p">&gt;</span> :lprevious<span class="p">&lt;</span>CR<span class="p">&gt;</span>
+<span class="nb">nnoremap</span> <span class="p">&lt;</span>C<span class="p">-</span><span class="k">l</span><span class="p">&gt;</span> :<span class="k">nohlsearch</span><span class="p">&lt;</span>CR<span class="p">&gt;&lt;</span>C<span class="p">-</span><span class="k">l</span><span class="p">&gt;</span>
+<span class="nb">nnoremap</span> <span class="k">q</span> :<span class="k">close</span><span class="p">&lt;</span>CR<span class="p">&gt;</span> 
+</pre></div>
+</div>
+</section>
+<section id="leader">
+<h2>Leader<a class="headerlink" href="#leader" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>vim leader</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="c">&quot; 先に設定する必要あり</span>
+<span class="k">let</span> mapleader <span class="p">=</span> <span class="s2">&quot;&lt;Space&gt;&quot;</span>
+
+nmap <span class="p">&lt;</span>Leader<span class="p">&gt;</span><span class="k">f</span> <span class="p">&lt;</span>Plug<span class="p">&gt;(</span>easymotion<span class="p">-</span>overwin<span class="p">-</span><span class="k">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="c-space">
+<h2>&lt;C-Space&gt;<a class="headerlink" href="#c-space" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://h-miyako.hatenablog.com/entry/2014/01/20/053327">端末上のvimでctrl+space（ついでにプラグインの上書き回避）</a></p></li>
+<li><p>https://vim.fandom.com/wiki/Avoid_the_escape_key</p></li>
+<li><p><a class="reference external" href="http://d.hatena.ne.jp/dgdg/20080109/1199891258">vim のkeymapでCtrl-Spaceが設定できなかったので調べてみた</a></p></li>
+<li><p><a class="reference external" href="http://h-miyako.hatenablog.com/entry/2014/01/20/053327">端末上のvimでctrl+space（ついでにプラグインの上書き回避）</a></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;c-&#64;&gt;</span></code> に変換されて insert される？</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span>imap <span class="p">&lt;</span>Nul<span class="p">&gt;</span> <span class="p">&lt;</span>Nop<span class="p">&gt;</span>
+<span class="nb">inoremap</span> <span class="p">&lt;</span>C<span class="p">-</span>Space<span class="p">&gt;</span> <span class="p">&lt;</span><span class="k">c</span><span class="p">-</span><span class="k">x</span><span class="p">&gt;&lt;</span><span class="k">c</span><span class="p">-</span><span class="k">o</span><span class="p">&gt;</span>
+imap <span class="p">&lt;</span>C<span class="p">-</span>@<span class="p">&gt;</span> <span class="p">&lt;</span>C<span class="p">-</span>Space<span class="p">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="articles">
+<h2>Articles<a class="headerlink" href="#articles" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://deris.hatenablog.jp/entry/2013/05/02/192415">vimでキーマッピングする際に考えたほうがいいこと</a></p></li>
+<li><p><a class="reference external" href="https://postd.cc/how-to-boost-your-vim-productivity/">Vimの生産性を高める12の方法</a></p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">keymap</a><ul>
+<li><a class="reference internal" href="#index-0">例</a></li>
+<li><a class="reference internal" href="#prefix">Prefix</a></li>
+<li><a class="reference internal" href="#leader">Leader</a></li>
+<li><a class="reference internal" href="#c-space">&lt;C-Space&gt;</a></li>
+<li><a class="reference internal" href="#articles">Articles</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="vimrc.html"
+                        title="前の章へ">vimrc</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="../nvim/index.html"
+                        title="次の章へ">nvim</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/customize/keymap.md.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../nvim/index.html" title="nvim"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="vimrc.html" title="vimrc"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">keymap</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, ousttrue.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>my_nvim &#8212; vim memo  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/translations.js"></script>
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="vimrc" href="../customize/vimrc.html" />
+    <link rel="prev" title="VimMemo" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../customize/vimrc.html" title="vimrc"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="VimMemo"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">my_nvim</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="my-nvim">
+<h1>my_nvim<a class="headerlink" href="#my-nvim" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<section id="windows10-64bit">
+<h3>Windows10(64bit)<a class="headerlink" href="#windows10-64bit" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ul class="simple">
+<li><p>VC2019</p></li>
+<li><p>CMake, ninja</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C:/Python38</span></code></p></li>
+<li><p>rustup</p></li>
+<li><p>go, ghq</p></li>
+<li><p>LLVM(treesitter, cland)</p></li>
+<li><p>nodejs 14(pyright)</p></li>
+</ul>
+</section>
+<section id="ubuntu-20-04-wsl2">
+<h3>Ubuntu-20.04(WSL2)<a class="headerlink" href="#ubuntu-20-04-wsl2" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ul class="simple">
+<li><p>gcc</p></li>
+<li><p>cmake, ninja</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/usr/bin/python3</span></code></p></li>
+<li><p>rustup</p></li>
+<li><p>go, ghq</p></li>
+<li><p>nodejs 14(pyright)</p></li>
+</ul>
+</section>
+</section>
+<section id="tasks-py">
+<h2>tasks.py<a class="headerlink" href="#tasks-py" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install invoke
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>❯ invoke -l
+Available tasks:
+
+  clean          clean ./neovim/build, ./neovim/.deps, ./install
+  hererocks      copy lualocks from ./neovim/.deps
+  init-files     install neovim init.vim &amp; ginti.vim
+  install        install neovim to ./install
+  ls             setup language servers
+  neovim-build   build ./neovim/build
+  neovim-deps    build ./neovim/.deps third-party dependencies
+  update         git pull
+</pre></div>
+</div>
+</section>
+<section id="languages-lsp-dap">
+<h2>Languages(lsp &amp; dap)<a class="headerlink" href="#languages-lsp-dap" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>[x] Lua: LanguageServer(<a class="reference external" href="https://github.com/sumneko/lua-language-server">sumneko_lua</a>)</p></li>
+<li><p>[x] Python: LanguageServer(<a class="reference external" href="https://github.com/python-lsp/python-lsp-server">pylsp</a>)</p></li>
+<li><p>[x] Python: LanguageServer(<a class="reference external" href="https://github.com/Microsoft/pyright">pyright</a>)</p></li>
+<li><p>[x] Python: DebugAdatper(<a class="reference external" href="https://github.com/microsoft/debugpy">debugpy</a>)</p></li>
+<li><p>[x] C++: LanguageServer(clangd)</p></li>
+<li><p>[x] C++: DebugAdapter(<a class="reference external" href="https://github.com/vadimcn/vscode-lldb">codelldb</a>)</p></li>
+<li><p>[x] Rust: LanguageServer(<a class="reference external" href="https://github.com/rust-analyzer/rust-analyzer">rust_analyzer</a>)</p></li>
+<li><p>[x] C#: LanguageServer(<a class="reference external" href="https://github.com/omnisharp/omnisharp-roslyn">OmniSharp</a>)</p></li>
+<li><p>[x] C#: DebugAdapter(<a class="reference external" href="https://github.com/Samsung/netcoredbg">netcoredbg</a>)</p></li>
+<li><p>[ ] Unity: DebugAdapter(<a class="reference external" href="https://github.com/Unity-Technologies/vscode-unity-debug">unitydebug</a>)</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">my_nvim</a><ul>
+<li><a class="reference internal" href="#dependencies">Dependencies</a><ul>
+<li><a class="reference internal" href="#windows10-64bit">Windows10(64bit)</a></li>
+<li><a class="reference internal" href="#ubuntu-20-04-wsl2">Ubuntu-20.04(WSL2)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tasks-py">tasks.py</a></li>
+<li><a class="reference internal" href="#languages-lsp-dap">Languages(lsp &amp; dap)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="../index.html"
+                        title="前の章へ">VimMemo</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="../customize/vimrc.html"
+                        title="次の章へ">vimrc</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/my_nvim/build.md.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../customize/vimrc.html" title="vimrc"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="VimMemo"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">vim memo  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">my_nvim</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, ousttrue.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>
