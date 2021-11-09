@@ -1,18 +1,15 @@
 # plugins
 
-## open-browser.vim
-
-* <https://github.com/tyru/open-browser.vim>
-
-```toml
-[[plugins]]
-repo = 'tyru/open-browser.vim'
+```{toctree}
+git
+comment
+statusline
+fuzzy_finder/index
 ```
+
+## open-browser.vim
 
 gx でカーソル下のURLを開く
 
-## vim-session
-
-* <https://gokuraku104robot.hatenablog.com/entry/vim-session>
-
+* [tyru/open-browser.vim](https://github.com/tyru/open-browser.vim)
 

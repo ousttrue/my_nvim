@@ -10,6 +10,8 @@ if exists("g:nvy")
     set guifont=Cica:h14
 endif
 
+let mapleader=" "
+nnoremap <Space> <Nop>
 " lua require 'plugins'
 lua require 'noplugins'
 lua require 'setup'

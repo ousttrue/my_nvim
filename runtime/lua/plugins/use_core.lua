@@ -32,7 +32,9 @@ return function(use)
     use {
         "preservim/nerdtree",
         config = function()
-            -- vim.api.nvim_set_keymap("n", ",,", ":NERDTreeFind<CR>", { noremap = true })
+            vim.api.nvim_set_var("NERDTreeGitStatusUseNerdFonts", 1)
+            vim.api.nvim_set_var("NERDTreeBookmarksFile", 1)
+            -- vim.api.nvim_set_keymap("n", "<space><space>", ":NERDTreeVCS<CR>", { noremap = true })
         end,
     }
 
@@ -53,4 +55,42 @@ return function(use)
         end,
     }
     use "tyru/open-browser.vim"
+
+    use {
+        "nvim-telescope/telescope.nvim",
+        requires = { { "nvim-lua/plenary.nvim" } },
+        config = function()
+            -- Using Lua functions
+            vim.api.nvim_set_keymap(
+                "n",
+                "<leader><space>",
+                "<cmd>lua require('telescope.builtin').file_browser()<cr>",
+                { noremap = true }
+            )
+            vim.api.nvim_set_keymap(
+                "n",
+                "<leader>ff",
+                "<cmd>lua require('telescope.builtin').git_files()<cr>",
+                { noremap = true }
+            )
+            vim.api.nvim_set_keymap(
+                "n",
+                "<leader>fg",
+                "<cmd>lua require('telescope.builtin').live_grep()<cr>",
+                { noremap = true }
+            )
+            vim.api.nvim_set_keymap(
+                "n",
+                "<leader>fb",
+                "<cmd>lua require('telescope.builtin').buffers()<cr>",
+                { noremap = true }
+            )
+            vim.api.nvim_set_keymap(
+                "n",
+                "<leader>fh",
+                "<cmd>lua require('telescope.builtin').help_tags()<cr>",
+                { noremap = true }
+            )
+        end,
+    }
 end
