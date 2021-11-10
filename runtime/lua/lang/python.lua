@@ -2,6 +2,7 @@
 -- 	on_attach = require("lsp_on_attach"),
 -- })
 require("lspconfig").pyright.setup({
+    autostart = false,
 	on_attach = require("lsp_on_attach"),
 })
 

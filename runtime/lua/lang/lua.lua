@@ -24,7 +24,7 @@ else
 end
 
 require("lspconfig").sumneko_lua.setup({
-
+    autostart = false,
 	cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
 	settings = {
 		Lua = {

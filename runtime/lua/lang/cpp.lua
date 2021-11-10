@@ -8,6 +8,7 @@ else
 	lsp_bin = "/usr/bin/clangd"
 end
 require("lspconfig").clangd.setup({
+    autostart = false,
 	cmd = { lsp_bin, "--background-index" },
 	on_attach = require("lsp_on_attach"),
 })
