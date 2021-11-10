@@ -16,6 +16,7 @@ packer.startup(function()
     require "plugins.use_treesitter"(use)
     require "plugins.use_lsp"(use)
     require "plugins.use_dap"(use)
+    require "plugins.use_skk"(use)
 
     use "neoclide/jsonc.vim"
 end)

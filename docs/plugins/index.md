@@ -4,6 +4,7 @@
 git
 comment
 statusline
+skk
 fuzzy_finder/index
 ```
 
