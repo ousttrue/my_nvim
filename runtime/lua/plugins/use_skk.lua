@@ -33,8 +33,8 @@ augroup END
 
 let g:md_auto_eskk = 1
 
-imap jk <Plug>(eskk:toggle)
-cmap jk <Plug>(eskk:toggle)
+imap <C-j> <Plug>(eskk:toggle)
+cmap <C-j> <Plug>(eskk:toggle)
 ]]
         end,
     }
