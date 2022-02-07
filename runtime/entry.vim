@@ -10,6 +10,8 @@ if exists("g:nvy")
     set guifont=Cica:h14
 endif
 
+au BufNewFile,BufRead .xonshrc setf python
+
 let mapleader=" "
 nnoremap <Space> <Nop>
 " lua require 'plugins'
