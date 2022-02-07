@@ -134,5 +134,7 @@ vim.api.nvim_set_var("terminal_ansi_colors", {
 
 -- grep & quickfix
 vim.o.grepprg="rg --vimgrep --smart-case --follow"
-vim.cmd "autocmd QuickFixCmdPost *grep* cwindow"
+vim.cmd [[
+autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
+]]
 

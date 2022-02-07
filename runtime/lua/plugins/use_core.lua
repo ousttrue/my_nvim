@@ -3,6 +3,7 @@ return function(use)
     use "osyo-manga/vim-precious"
     use "cespare/vim-toml"
 
+    use "tpope/vim-surround"
     use "tpope/vim-fugitive"
     use {
         "tpope/vim-commentary",
@@ -52,6 +53,7 @@ return function(use)
         "plasticboy/vim-markdown",
         config = function()
             vim.api.nvim_set_var("vim_markdown_folding_disabled", 1)
+            vim.api.nvim_set_var("vim_markdown_new_list_item_indent", 0)
         end,
     }
     use "tyru/open-browser.vim"

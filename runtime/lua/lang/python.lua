@@ -23,3 +23,15 @@ dap.configurations.python = {
 		end,
 	},
 }
+
+vim.cmd [[
+augroup ErrorFormat
+    autocmd BufNewFile,BufRead *.py
+        \ set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+augroup END
+augroup vimrc_python
+  au!
+  au FileType python set makeprg=python3\ %
+augroup END
+]]
+
