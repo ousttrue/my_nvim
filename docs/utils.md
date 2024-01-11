@@ -1,12 +1,3 @@
-# plugins
-
-```{toctree}
-git
-comment
-statusline
-skk
-fuzzy_finder/index
-```
 
 ## open-browser.vim
 

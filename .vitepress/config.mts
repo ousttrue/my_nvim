@@ -13,89 +13,21 @@ export default defineConfig({
     ],
 
     sidebar: [
+      { text: 'windows', link: '/windows' },
+      { text: 'package_manager', link: '/package_manager' },
+      { text: 'comment', link: '/comment' },
+      { text: 'tree-sitter', link: '/tree-sitter/' },
       {
-        text: 'customize',
-        link: '/customize/',
+        text: 'lsp & formatter', link: '/lsp_formatter/',
+        collapsed: true,
         items: [
-          { text: 'keymap', link: '/customize/keymap' },
-          { text: 'vimrc', link: '/customize/vimrc' },
+          { text: 'lspconfig', link: '/lsp_formatter/lspconfig/' },
+          { text: 'formatter', link: '/lsp_formatter/formatter/' },
         ]
       },
-      {
-        text: 'nvim',
-        link: '/nvim/',
-        items: [
-          { text: 'articles', link: '/nvim/articles' },
-          { text: 'lua', link: '/nvim/lua' },
-          { text: 'luv', link: '/nvim/luv' },
-          { text: 'nivm', link: '/nvim/nvim' },
-          { text: 'terminal', link: '/nvim/terminal' },
-        ]
-      },
-      {
-        text: 'lsp',
-        link: '/lsp/',
-        items: [
-          { text: 'ale', link: '/lsp/ale' },
-          { text: 'coc', link: '/lsp/coc' },
-          { text: 'nvim-lsp', link: '/lsp/nvim-lsp' },
-          { text: 'vim-lsp', link: '/lsp/vim-lsp' },
-        ]
-      },
-      {
-        text: 'languages',
-        link: '/languages/',
-        items: [
-          { text: 'markdown', link: '/languages/markdown' },
-          { text: 'python', link: '/languages/python' },
-          { text: 'rust', link: '/languages/rust' },
-        ]
-      },
-      {
-        text: 'plugins',
-        link: '/plugins/',
-        items: [
-          { text: 'comment', link: '/plugins/comment' },
-          { text: 'dein', link: '/plugins/dein' },
-          { text: 'git', link: '/plugins/git' },
-          { text: 'skk', link: '/plugins/skk' },
-          { text: 'statusline', link: '/plugins/statusline' },
-          {
-            text: 'FuzzyFinder',
-            link: '/plugins/fuzzy_finder/',
-            items: [
-              { text: 'denite', link: '/plugins/fuzzy_finder/denite' },
-              { text: 'telescope', link: '/plugins/fuzzy_finder/telescope' },
-            ]
-          },
-        ]
-      },
-      {
-        text: 'Debugger',
-        items: [
-          { text: 'nvim-dap', link: '/debugger/nvim-dap' },
-          { text: 'vimspector', link: '/debugger/vimspector' },
-        ]
-      },
-      {
-        text: 'Vim',
-        link: '/vim/',
-        items: [
-          { text: 'autocmd', link: '/vim/autocmd' },
-          { text: 'buffer', link: '/vim/buffer' },
-          { text: 'colorschema', link: '/vim/colorschema' },
-          { text: 'completion', link: '/vim/completion' },
-          { text: 'env', link: '/vim/env' },
-          { text: 'filetypes', link: '/vim/filetypes' },
-          { text: 'fold', link: '/vim/fold' },
-          { text: 'index', link: '/vim/index' },
-          { text: 'nvim', link: '/vim/nvim' },
-          { text: 'packer', link: '/vim/packer' },
-          { text: 'quickfix', link: '/vim/quickfix' },
-          { text: 'signcolumn', link: '/vim/signcolumn' },
-          { text: 'terminal', link: '/vim/terminal' },
-        ]
-      },
+      { text: 'telescope', link: '/telescope' },
+      { text: 'completion', link: '/completion' },
+      { text: 'filer', link: '/filer' },
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ousttrue/my_nvim' }
