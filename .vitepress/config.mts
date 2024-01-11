@@ -5,6 +5,7 @@ export default defineConfig({
   title: "vim memo",
   description: "my nvim info",
   srcDir: "docs",
+  base: "/my_nvim/",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
