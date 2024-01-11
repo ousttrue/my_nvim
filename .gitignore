@@ -1,0 +1,9 @@
+/node_modules/
+install
+__pycache__
+*.pyc
+public
+.doit.db
+.vitepress/cache
+.vitepress/dist
+

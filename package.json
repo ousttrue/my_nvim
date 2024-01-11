@@ -1,0 +1,28 @@
+{
+  "name": "my_nvim",
+  "version": "0.0.1",
+  "description": "<https://ousttrue.github.io/my_nvim/>",
+  "main": "index.js",
+  "authors": {
+    "name": "",
+    "email": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "/my_nvim"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.0.0-rc.36"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "keywords": [],
+  "author": ""
+}
