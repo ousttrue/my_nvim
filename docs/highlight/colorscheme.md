@@ -34,3 +34,9 @@ set t_Co=256 " reset
 autocmd colorscheme * highlight ErrorMsg ctermfg=213 ctermbg=16
 ```
 
+## color schemes
+
+- https://github.com/dylanaraps/wal.vim
+
+- https://github.com/catppuccin/nvim
+

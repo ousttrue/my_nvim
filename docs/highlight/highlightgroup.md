@@ -1,5 +1,9 @@
 # highlight-group
 
+## 分類
+
+highlightgroup は buffer の内容に由来するものとそれ以外に分けられそう。
+
 ## name
 
 ```vim
@@ -16,23 +20,61 @@ minor group => link +
 
 `[a-zA-Z0-9_.@-]`
 
-## preferred group
+## syntax
 
+### preferred group
 - https://neovim.io/doc/user/syntax.html#highlight-default
 
-### Comment
-### Constant
-### Identifier
-### Statement
-### PreProc
-### Type
-### Special
-### Underlined
-### Ignore
-### Error
-### Todo
+- Comment
+- Constant
+- Identifier
+- Statement
+- PreProc
+- Type
+- Special
+- Underlined
+- Ignore
+- Error
+- Todo
 
-## lsp
+### パターンマッチ
+
+### ExtMark
+
+- [【Neovim】好きな位置にテキストを埋め込んだりハイライトできる「ExtMark」の使い方 - ハイパーマッスルエンジニア](https://www.rasukarusan.com/entry/2021/08/22/202248)
+
+#### verbose
+
+["TODO:" を目立たせたいと思った、どのファイルでも - ばかもりだし](https://baqamore.hatenablog.com/entry/2016/11/15/220358)
+
+### tree-sitter
+
+tree-sitter を主にしてよさそう。
+
+### lsp の semantic token
+
+- [LSP: semantic tokens support by jdrouhard · Pull Request #21100 · neovim/neovim · GitHub](https://github.com/neovim/neovim/pull/21100)
+
+- [lsp-vimでエラーハイライトの見た目を変える方法 - ヘンゼルのパンくず](https://tmls.hatenablog.com/entry/2021/02/21/050729)
+- [Neovim LSPでカーソル下の変数をハイライトする機能](https://zenn.dev/botamotch/scraps/62eda54e7fba90)
+
+## userinterface
+
+UI部品や、marker など。
+git, column, conceal... etc
+
+- text
+- bg
+- statusbar
+- winbar
+- tabbar
+- filer
+- border
+- scrollbar
+- popup
+- floating
+
+### lsp
 
 ```vim
 :h diagnostic-highlights
@@ -40,7 +82,7 @@ minor group => link +
 :h expr-highlight
 ```
 
-## focus
+### focus
 
 ```
 NormalNC
@@ -48,11 +90,13 @@ StatusLineNC
 WinBarNC
 ```
 
-## plugin highlight-groups
+### plugin highlight-groups
 
 plugin の定義するカスタムグループ
 
 https://github.com/EdenEast/nightfox.nvim?tab=readme-ov-file#supported-plugins
+
+### example
 
 ```
 Highlighting groups for various occasions
