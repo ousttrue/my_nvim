@@ -22,12 +22,23 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: 'lspconfig', link: '/lsp_formatter/lspconfig/' },
+          { text: 'null-ls', link: '/lsp_formatter/null-ls' },
           { text: 'formatter', link: '/lsp_formatter/formatter/' },
         ]
       },
       { text: 'telescope', link: '/telescope' },
       { text: 'completion', link: '/completion' },
       { text: 'filer', link: '/filer' },
+      {
+        text: 'highlight', items: [
+          { text: 'colorenv', link: '/highlight/colorenv' },
+          { text: 'inspect', link: '/highlight/inspect' },
+          { text: 'highlightgroup', link: '/highlight/highlightgroup' },
+          { text: 'syntax', link: '/highlight/syntax' },
+          { text: 'colorscheme', link: '/highlight/colorscheme' },
+          { text: 'make_colorscheme', link: '/highlight/make_colorscheme' },
+        ]
+      },
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ousttrue/my_nvim' }
