@@ -1,17 +1,25 @@
 # comment
 
+::: tip builtin comment `v0.10.0`
+
+https://neovim.io/doc/user/various.html#_3.-commenting
+
+```lua
+-- keymap
+vim.keymap.set("n", "<C-/>", "gcc", { remap = true })
+vim.keymap.set("x", "<C-/>", "gc", { remap = true })
+vim.keymap.set("n", "<C-_>", "gcc", { remap = true })
+vim.keymap.set("x", "<C-_>", "gc", { remap = true })
+```
+
+:::
+
 ::: warning `<c-/>` `<c-_>` 両方設定する
 term では `<C-_>` など代替コードが来る。
 gui では `<C-/>` が来る。
 
 - @2014 [\[vim\] Ctrl + / (スラッシュ) キーをマップする #Vim - Qiita](https://qiita.com/castaneai/items/42e917d1fdf6d83b717c)
 
-:::
-
-::: tip ほぼ行コメントしか使わない
-:::
-
-::: tip tree-sitter が使えるのでは？
 :::
 
 https://github.com/numToStr/Comment.nvim
