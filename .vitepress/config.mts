@@ -13,6 +13,12 @@ export default defineConfig({
     ],
 
     sidebar: [
+      {
+        text: 'lua', items: [
+          { text: "vim_module", link: '/lua/vim_module' },
+          { text: "lua_module", link: '/lua/lua_module' },
+        ]
+      },
       { text: 'windows', link: '/windows' },
       { text: 'package_manager', link: '/package_manager' },
       { text: 'comment', link: '/comment' },
