@@ -16,6 +16,7 @@ export default defineConfig({
       {
         text: 'lua', items: [
           { text: "vim_module", link: '/lua/vim_module' },
+          { text: "lua_module", link: '/lua/vim_lua_util' },
           { text: "lua_module", link: '/lua/lua_module' },
         ]
       },

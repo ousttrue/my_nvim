@@ -1,5 +1,7 @@
 # string
 
+https://www.lua.org/manual/5.1/manual.html#5.4
+
 # table
 
 ## debug
