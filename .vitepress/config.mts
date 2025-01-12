@@ -41,9 +41,10 @@ export default defineConfig({
           { text: 'colorenv', link: '/highlight/colorenv' },
           { text: 'inspect', link: '/highlight/inspect' },
           { text: 'highlightgroup', link: '/highlight/highlightgroup' },
-          { text: 'syntax', link: '/highlight/syntax' },
           { text: 'colorscheme', link: '/highlight/colorscheme' },
           { text: 'make_colorscheme', link: '/highlight/make_colorscheme' },
+          { text: 'syntax', link: '/highlight/syntax' },
+          { text: 'floating', link: '/highlight/floating_window' },
         ]
       },
     ],

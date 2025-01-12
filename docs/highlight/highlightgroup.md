@@ -1,8 +1,18 @@
 # highlight-group
 
-## 分類
+```vim
+" Background colors for active vs inactive windows
+hi ActiveWindow guibg=#17252c
+hi InactiveWindow guibg=#0D1B22
+```
 
-highlightgroup は buffer の内容に由来するものとそれ以外に分けられそう。
+```lua
+-- link
+vim.api.nvim_set_hl(0, "MatchParen", { link = "Title" })
+
+-- new
+vim.api.nvim_set_hl(0, "NonText", { fg = "#444444" })
+```
 
 ## name
 
@@ -20,9 +30,8 @@ minor group => link +
 
 `[a-zA-Z0-9_.@-]`
 
-## syntax
+### preferred group(syntax)
 
-### preferred group
 - https://neovim.io/doc/user/syntax.html#highlight-default
 
 - Comment

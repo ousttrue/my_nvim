@@ -1,8 +1,9 @@
-# 色環境
+# Highlight関連の設定
 
 - @2020 [NeoVimのカラースキームが思った色と違うときの解決方法 #neovim - Qiita](https://qiita.com/mitsu-yuki/items/4d16f2efdb017cc1f996)
 
 ## background
+
 dark, light
 
 ```vim
@@ -24,4 +25,3 @@ gui, base256, base16, base8
 ### color term
 
 ### gui
-
